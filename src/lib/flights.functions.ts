@@ -23,8 +23,17 @@ const schema = z.object({
 export const searchFlightsFn = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => schema.parse(input))
   .handler(async ({ data }) => {
-    // Import inside the handler so providers (which may reference server-only
-    // envs / SDKs) don't leak into the client bundle.
     const { searchFlights } = await import("./flights");
     return searchFlights(data);
   });
+
+/**
+ * Health snapshot of every registered flight provider. Used by admin
+ * surfaces to verify which upstream is currently serving real prices.
+ */
+export const getFlightProvidersStatusFn = createServerFn({ method: "GET" }).handler(
+  async () => {
+    const { getFlightProvidersStatus } = await import("./flights");
+    return getFlightProvidersStatus();
+  },
+);
