@@ -561,7 +561,7 @@ function ItineraryCard({
           const sm = seg.durationMin % 60;
           return (
             <li key={i}>
-              <div className="grid gap-4 md:grid-cols-[100px_1fr_100px] md:items-center">
+              <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3 md:grid-cols-[100px_1fr_100px] md:gap-4">
                 <div>
                   <div className="font-display text-2xl font-bold leading-none">{formatTime(dep)}</div>
                   <div className="mt-1 text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
