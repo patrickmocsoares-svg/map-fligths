@@ -113,41 +113,6 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
   );
 }
 
-function AirportField({
-  label,
-  value,
-  onChange,
-  icon,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  icon: React.ReactNode;
-}) {
-  const airport = useMemo(() => AIRPORTS.find((a) => a.code === value), [value]);
-  return (
-    <label className="block rounded-xl border border-border bg-input/50 px-4 py-3 focus-within:border-gold transition">
-      <div className="flex items-center justify-between text-[10px] uppercase tracking-widest text-muted-foreground">
-        <span>{label}</span>
-        <span className="text-gold/70">{icon}</span>
-      </div>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="mt-1 w-full bg-transparent text-lg font-semibold text-foreground outline-none appearance-none"
-      >
-        {AIRPORTS.map((a) => (
-          <option key={a.code} value={a.code} className="bg-card">
-            {a.code} · {a.city}
-          </option>
-        ))}
-      </select>
-      <div className="mt-0.5 truncate text-xs text-muted-foreground">
-        {airport ? `${airport.name} · ${airport.country}` : ""}
-      </div>
-    </label>
-  );
-}
 
 function DateField({ label, value, onChange, min }: { label: string; value: string; onChange: (v: string) => void; min?: string }) {
   return (
