@@ -273,48 +273,49 @@ function Detail({
   const affiliateUrl = buildAffiliateUrl({ offer, params: searchParamsFull });
 
   return (
-    <div>
+    <div className="pb-24 lg:pb-0">
       {/* Hero */}
-      <div className="relative h-[42vh] min-h-[320px] w-full overflow-hidden">
+      <div className="relative h-[38vh] min-h-[280px] w-full overflow-hidden md:h-[42vh]">
         <img
           src={cover}
           alt={destination?.city ?? offer.outbound.segments.at(-1)!.destinationCode}
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background" />
-        <div className="relative mx-auto max-w-6xl px-4 pt-6 md:px-8">
+        <div className="relative mx-auto max-w-6xl px-4 pt-4 md:px-8 md:pt-6">
           <Link
             to="/search"
             search={params}
-            className="inline-flex items-center gap-1.5 text-xs text-white/80 hover:text-gold transition"
+            className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full bg-black/40 px-3 py-1.5 text-xs text-white/90 backdrop-blur hover:text-gold transition"
           >
-            <ArrowLeft className="h-3.5 w-3.5" /> Voltar aos resultados
+            <ArrowLeft className="h-3.5 w-3.5" /> Voltar
           </Link>
         </div>
-        <div className="relative mx-auto flex h-full max-w-6xl flex-col justify-end px-4 pb-8 md:px-8">
+        <div className="relative mx-auto flex h-full max-w-6xl flex-col justify-end px-4 pb-6 md:px-8 md:pb-8">
           <div className="text-[10px] font-medium uppercase tracking-[0.32em] text-gold">
             Detalhes da oferta
           </div>
-          <h1 className="mt-2 font-display text-4xl font-bold leading-tight md:text-6xl">
-            {origin?.city ?? offer.outbound.segments[0].originCode}
-            <span className="mx-3 font-serif italic font-normal text-gold-gradient">→</span>
-            {destination?.city ?? offer.outbound.segments.at(-1)!.destinationCode}
+          <h1 className="mt-2 font-display text-3xl font-bold leading-tight sm:text-4xl md:text-6xl">
+            <span className="block sm:inline">{origin?.city ?? offer.outbound.segments[0].originCode}</span>
+            <span className="mx-2 font-serif italic font-normal text-gold-gradient sm:mx-3">→</span>
+            <span className="block sm:inline">{destination?.city ?? offer.outbound.segments.at(-1)!.destinationCode}</span>
           </h1>
-          <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-white/70">
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-white/70">
             <span className="inline-flex items-center gap-1.5">
               <Plane className="h-3.5 w-3.5 text-gold" /> {offer.airline.name}
             </span>
-            <span>·</span>
+            <span className="hidden sm:inline">·</span>
             <span>{cabinLabel(offer.cabin)}</span>
-            <span>·</span>
+            <span className="hidden sm:inline">·</span>
             <span className="inline-flex items-center gap-1.5">
-              <Users className="h-3.5 w-3.5" /> {passengers} {passengers === 1 ? "passageiro" : "passageiros"}
+              <Users className="h-3.5 w-3.5" /> {passengers} {passengers === 1 ? "pax" : "pax"}
             </span>
           </div>
         </div>
       </div>
 
-      <div className="mx-auto max-w-6xl px-4 py-10 md:px-8">
+      <div className="mx-auto max-w-6xl px-4 py-6 md:py-10 md:px-8">
+
         <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
           {/* Itinerary */}
           <div className="space-y-6">
