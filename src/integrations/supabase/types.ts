@@ -14,13 +14,49 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      airports: {
+        Row: {
+          airport_name: string
+          city: string | null
+          country: string | null
+          created_at: string
+          iata_code: string
+          icao_code: string | null
+          id: number
+          latitude: number | null
+          longitude: number | null
+        }
+        Insert: {
+          airport_name: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          iata_code: string
+          icao_code?: string | null
+          id?: number
+          latitude?: number | null
+          longitude?: number | null
+        }
+        Update: {
+          airport_name?: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          iata_code?: string
+          icao_code?: string | null
+          id?: number
+          latitude?: number | null
+          longitude?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
     }
     Enums: {
       [_ in never]: never
