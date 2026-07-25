@@ -218,7 +218,7 @@ function FlightRow({
         <div className="flex items-center gap-3">
           <span
             className="grid h-12 w-12 shrink-0 place-items-center rounded-xl text-sm font-bold text-white"
-            style={{ backgroundColor: o.airline.color ?? "#c9a84c" }}
+            style={{ backgroundColor: "#c9a84c" }}
           >
             {o.airline.code}
           </span>
