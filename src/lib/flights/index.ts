@@ -9,25 +9,34 @@
  * (see `src/lib/flights.functions.ts`), never directly from browser code.
  */
 import { mockProvider } from "./providers/mock";
+import { devProvider } from "./providers/dev";
 import { kiwiProvider } from "./providers/kiwi";
 import { amadeusProvider } from "./providers/amadeus";
 import { ProviderError, type FlightProvider } from "./provider";
 import type { FlightSearchParams, FlightSearchResult } from "./types";
 
-// Order matters for auto-selection: Kiwi is the primary real provider,
-// Amadeus is kept as an optional future adapter, mock is the fallback.
+// Order matters for auto-selection: real upstreams first (Kiwi is primary,
+// Amadeus is kept as an optional future adapter), then the realistic dev
+// provider that also feeds price_history for MAB Score + opportunities,
+// then the fixture-backed mock as a last resort.
 const providers: Record<string, FlightProvider> = {
   kiwi: kiwiProvider,
   amadeus: amadeusProvider,
+  dev: devProvider,
   mock: mockProvider,
 };
+
+const REAL_PROVIDERS = new Set(["kiwi", "amadeus"]);
 
 function pickProvider(): FlightProvider {
   const requested = process.env.FLIGHT_PROVIDER;
   if (requested && providers[requested]?.isConfigured()) return providers[requested];
-  // Fall back to any configured real provider, then mock as last resort.
-  const real = Object.values(providers).find((p) => p.id !== "mock" && p.isConfigured());
-  return real ?? mockProvider;
+  // Prefer any configured real provider, otherwise use the realistic dev
+  // provider so the app is fully functional without any API keys.
+  const real = Object.values(providers).find(
+    (p) => REAL_PROVIDERS.has(p.id) && p.isConfigured(),
+  );
+  return real ?? devProvider;
 }
 
 function normalize(params: FlightSearchParams): FlightSearchParams {
