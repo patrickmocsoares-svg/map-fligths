@@ -50,12 +50,69 @@ export type Database = {
         }
         Relationships: []
       }
+      price_history: {
+        Row: {
+          airline: string | null
+          cabin: string
+          currency: string
+          destination_iata: string
+          flight_date: string
+          id: number
+          origin_iata: string
+          price: number
+          searched_at: string
+          source: string
+        }
+        Insert: {
+          airline?: string | null
+          cabin?: string
+          currency?: string
+          destination_iata: string
+          flight_date: string
+          id?: number
+          origin_iata: string
+          price: number
+          searched_at?: string
+          source?: string
+        }
+        Update: {
+          airline?: string | null
+          cabin?: string
+          currency?: string
+          destination_iata?: string
+          flight_date?: string
+          id?: number
+          origin_iata?: string
+          price?: number
+          searched_at?: string
+          source?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      route_price_stats: {
+        Args: {
+          _cabin?: string
+          _days?: number
+          _destination: string
+          _origin: string
+        }
+        Returns: {
+          avg_price: number
+          last_price: number
+          last_searched_at: string
+          max_price: number
+          min_price: number
+          p25_price: number
+          p50_price: number
+          p75_price: number
+          samples: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
