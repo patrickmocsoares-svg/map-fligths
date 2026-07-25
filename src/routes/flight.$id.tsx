@@ -526,8 +526,9 @@ function ItineraryCard({
   const dh = Math.floor(itinerary.durationMin / 60);
   const dm = itinerary.durationMin % 60;
   return (
-    <div className="card-luxe rounded-2xl p-6 md:p-8">
-      <div className="flex items-baseline justify-between">
+    <div className="card-luxe rounded-2xl p-4 sm:p-6 md:p-8">
+      <div className="flex items-baseline justify-between gap-3">
+
         <div>
           <div className="text-[10px] font-semibold uppercase tracking-[0.24em] text-gold">
             {title}
