@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useLocalStorage, KEYS, type SavedRoute, type PriceAlert } from "@/lib/storage";
-import { AIRPORTS } from "@/lib/mock-data";
+import { getAirportByCode } from "@/lib/airports";
 import { formatBRL, t } from "@/lib/i18n";
 import { Heart, Bell, Trash2, User } from "lucide-react";
 
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/account")({
 });
 
 function cityOf(code: string) {
-  return AIRPORTS.find((a) => a.code === code)?.city ?? code;
+  return getAirportByCode(code)?.city ?? code;
 }
 
 function Account() {
