@@ -84,8 +84,8 @@ export type FlightOffer = {
   /** Optional: mileage/points alternative. */
   miles?: number;
 
-  /** Free-form provider payload for debugging / re-quoting. Never trust in UI. */
-  raw?: unknown;
+
+
 };
 
 export type FlightSearchResult = {
