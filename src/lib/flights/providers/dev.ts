@@ -219,9 +219,22 @@ async function recordObservations(
 
 export const devProvider: FlightProvider = {
   id: "dev",
+  label: "Development (synthetic)",
+  real: false,
 
   // Always available — this is the development fallback.
   isConfigured: () => true,
+
+  async status() {
+    return {
+      id: "dev",
+      label: "Development (synthetic)",
+      state: "connected",
+      real: false,
+      message: "Synthetic offers — enable a real provider for production.",
+    };
+  },
+
 
   async search(params: FlightSearchParams): Promise<FlightSearchResult> {
     const currency = params.currency ?? "BRL";

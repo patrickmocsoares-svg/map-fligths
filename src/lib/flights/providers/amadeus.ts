@@ -22,10 +22,34 @@ const BASE_URL = "https://test.api.amadeus.com";
 
 export const amadeusProvider: FlightProvider = {
   id: "amadeus",
+  label: "Amadeus Self-Service",
+  real: true,
+  requiredSecrets: ["AMADEUS_CLIENT_ID", "AMADEUS_CLIENT_SECRET"],
 
   isConfigured() {
     return Boolean(process.env.AMADEUS_CLIENT_ID && process.env.AMADEUS_CLIENT_SECRET);
   },
+
+  async status() {
+    if (!this.isConfigured()) {
+      return {
+        id: "amadeus",
+        label: "Amadeus Self-Service",
+        state: "missing_credentials",
+        real: true,
+        requiredSecrets: ["AMADEUS_CLIENT_ID", "AMADEUS_CLIENT_SECRET"],
+        message: "Adapter present but not activated.",
+      };
+    }
+    return {
+      id: "amadeus",
+      label: "Amadeus Self-Service",
+      state: "disabled",
+      real: true,
+      message: "Adapter stubbed — implementation pending.",
+    };
+  },
+
 
   async search(_params: FlightSearchParams): Promise<FlightSearchResult> {
     if (!this.isConfigured()) {

@@ -1,9 +1,16 @@
 /**
  * Flight search service — public entry point.
  *
- * Picks an adapter based on the `FLIGHT_PROVIDER` env var (defaults to
- * `"mock"` in development). Add a new provider by dropping an adapter into
- * `./providers/` and registering it in the `providers` map below.
+ * Selection order:
+ *   1. `FLIGHT_PROVIDER` env override, if that provider is configured.
+ *   2. First real, configured upstream provider (Duffel → Kiwi → Amadeus).
+ *   3. Development synthetic provider (fallback so the app is never broken).
+ *
+ * The realistic dev provider stays as a strict fallback. When any real
+ * upstream is configured via secrets, real prices replace fake ones
+ * without any UI change — every result funnels through the neutral
+ * `FlightOffer` shape and feeds price_history, MAB Score and deal
+ * discovery automatically.
  *
  * The service is pure server code — call it from a `createServerFn` handler
  * (see `src/lib/flights.functions.ts`), never directly from browser code.
@@ -12,30 +19,28 @@ import { mockProvider } from "./providers/mock";
 import { devProvider } from "./providers/dev";
 import { kiwiProvider } from "./providers/kiwi";
 import { amadeusProvider } from "./providers/amadeus";
-import { ProviderError, type FlightProvider } from "./provider";
+import { duffelProvider } from "./providers/duffel";
+import { ProviderError, type FlightProvider, type ProviderStatus } from "./provider";
 import type { FlightSearchParams, FlightSearchResult } from "./types";
 
-// Order matters for auto-selection: real upstreams first (Kiwi is primary,
-// Amadeus is kept as an optional future adapter), then the realistic dev
-// provider that also feeds price_history for MAB Score + opportunities,
-// then the fixture-backed mock as a last resort.
-const providers: Record<string, FlightProvider> = {
-  kiwi: kiwiProvider,
-  amadeus: amadeusProvider,
-  dev: devProvider,
-  mock: mockProvider,
-};
+// Order matters for auto-selection. Real upstreams first; dev is the
+// fallback and mock is kept only for fixture-driven local demos.
+const REGISTRY: FlightProvider[] = [
+  duffelProvider,
+  kiwiProvider,
+  amadeusProvider,
+  devProvider,
+  mockProvider,
+];
 
-const REAL_PROVIDERS = new Set(["kiwi", "amadeus"]);
+const providers: Record<string, FlightProvider> = Object.fromEntries(
+  REGISTRY.map((p) => [p.id, p]),
+);
 
 function pickProvider(): FlightProvider {
   const requested = process.env.FLIGHT_PROVIDER;
   if (requested && providers[requested]?.isConfigured()) return providers[requested];
-  // Prefer any configured real provider, otherwise use the realistic dev
-  // provider so the app is fully functional without any API keys.
-  const real = Object.values(providers).find(
-    (p) => REAL_PROVIDERS.has(p.id) && p.isConfigured(),
-  );
+  const real = REGISTRY.find((p) => p.real && p.isConfigured());
   return real ?? devProvider;
 }
 
@@ -62,11 +67,50 @@ export async function searchFlights(
     throw new ProviderError("service", "invalid_params", "origin equals destination");
   }
   const provider = pickProvider();
-  return provider.search(p);
+  try {
+    return await provider.search(p);
+  } catch (err) {
+    // If a real upstream fails mid-request, keep the app usable by falling
+    // back to synthetic offers rather than surfacing an empty results page.
+    if (provider.real) {
+      console.error(`[flights] real provider ${provider.id} failed, falling back to dev:`, err);
+      return devProvider.search(p);
+    }
+    throw err;
+  }
+}
+
+/**
+ * Snapshot of every registered provider's health. Safe to expose to
+ * authenticated admin UIs — never returns secret values.
+ */
+export type FlightProvidersStatus = {
+  active: string;
+  providers: ProviderStatus[];
+};
+
+export async function getFlightProvidersStatus(): Promise<FlightProvidersStatus> {
+  const statuses = await Promise.all(
+    REGISTRY.map(async (p) => {
+      try {
+        return await p.status();
+      } catch (e) {
+        return {
+          id: p.id,
+          label: p.label,
+          state: "error" as const,
+          real: p.real,
+          requiredSecrets: p.requiredSecrets,
+          message: (e as Error).message,
+        };
+      }
+    }),
+  );
+  return { active: pickProvider().id, providers: statuses };
 }
 
 export { ProviderError };
-export type { FlightProvider };
+export type { FlightProvider, ProviderStatus };
 export type {
   CabinClass,
   FlightOffer,

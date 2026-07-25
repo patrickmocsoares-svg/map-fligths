@@ -79,7 +79,12 @@ function buildOffer(dealIndex: number, params: FlightSearchParams): FlightOffer 
 
 export const mockProvider: FlightProvider = {
   id: "mock",
+  label: "Fixture (mock)",
+  real: false,
   isConfigured: () => true,
+  async status() {
+    return { id: "mock", label: "Fixture (mock)", state: "connected", real: false };
+  },
   async search(params) {
     const limit = params.limit ?? 12;
     const offers = Array.from({ length: Math.min(limit, DEALS.length) }, (_, i) =>
