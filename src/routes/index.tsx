@@ -1,56 +1,165 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Sparkles } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FlightSearchForm } from "@/components/FlightSearchForm";
+import { DealCard } from "@/components/DealCard";
+import { DEALS } from "@/lib/mock-data";
+import { heroImage, destinationImage } from "@/lib/destination-images";
+
+const HERO_URL = heroImage(2400);
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "MAB Flights — Busque voos premium com o MAB Score" },
+      { title: "MAB Flights — Transformando milhas em oportunidades" },
       {
         name: "description",
         content:
-          "Busca inteligente de voos: adultos, crianças e bebês, classe, ida e volta, multi-destinos e datas flexíveis em uma barra única.",
+          "Plataforma premium de passagens: busque voos, monitore preços e descubra as melhores oportunidades curadas pelo MAB Score.",
       },
-      { property: "og:title", content: "MAB Flights — Transformando milhas em oportunidades" },
+      { property: "og:title", content: "MAB Flights — Premium Travel Marketplace" },
       {
         property: "og:description",
-        content: "Busca de voos estilo Google Flights com o exclusivo MAB Score.",
+        content: "Busque voos, descubra oportunidades e viaje melhor. Curadoria premium pelo MAB Score.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: HERO_URL },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: HERO_URL },
     ],
   }),
   component: Home,
 });
 
 function Home() {
+  const featured = DEALS.filter((d) => d.category === "international").slice(0, 3);
+  const inspire = DEALS.slice(0, 6);
+
   return (
     <div className="min-h-screen">
       <Header />
 
-      <section className="relative overflow-hidden">
+      {/* ============================== HERO ============================== */}
+      <section className="relative isolate overflow-hidden">
         <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_oklch(0.82_0.13_88/0.15),_transparent_60%)]" />
+          <img
+            src={HERO_URL}
+            alt=""
+            aria-hidden
+            className="h-full w-full object-cover animate-kenburns"
+          />
+          <div className="absolute inset-0 hero-overlay" />
+          <div className="absolute inset-0 bg-background/40" />
         </div>
 
-        <div className="mx-auto max-w-6xl px-4 pt-16 pb-8 md:px-8 md:pt-24 md:pb-14">
-          <div className="mx-auto max-w-3xl text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/5 px-4 py-1.5 text-[10px] uppercase tracking-[0.25em] text-gold">
-              <Sparkles className="h-3 w-3" /> Premium Travel Marketplace
+        <div className="mx-auto max-w-7xl px-4 pb-8 pt-16 md:px-8 md:pb-16 md:pt-28">
+          <div className="max-w-3xl animate-rise">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-white/75 backdrop-blur">
+              <Sparkles className="h-3 w-3 text-gold" /> Premium Travel Marketplace
             </div>
-            <h1 className="mt-6 font-display text-4xl md:text-6xl leading-[1.05]">
-              Transformando <span className="text-gold-gradient">milhas</span>
-              <br />em oportunidades.
+            <h1 className="mt-6 font-display text-5xl font-extrabold leading-[1.02] tracking-tight text-white md:text-7xl">
+              Transformando <span className="font-serif font-normal text-gold-gradient">milhas</span>
+              <br className="hidden sm:block" /> em <span className="font-serif font-normal">oportunidades.</span>
             </h1>
-            <p className="mx-auto mt-4 max-w-xl text-base text-muted-foreground">
-              Uma única barra de busca — passageiros, classe, multi-destinos e datas flexíveis.
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-white/70 md:text-lg">
+              Passagens curadas, preços monitorados em tempo real e o exclusivo MAB Score
+              para revelar quando uma tarifa é realmente uma oportunidade.
             </p>
           </div>
 
-          <div className="mx-auto mt-10 max-w-5xl">
+          {/* Floating search card */}
+          <div
+            className="mx-auto mt-10 max-w-6xl animate-rise md:mt-14"
+            style={{ animationDelay: "150ms" }}
+          >
             <FlightSearchForm />
+          </div>
+        </div>
+      </section>
+
+      {/* ============================== FEATURED ============================== */}
+      <section className="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+        <div className="flex items-end justify-between gap-6">
+          <div>
+            <div className="text-[10px] uppercase tracking-[0.28em] text-gold">
+              Curadoria da semana
+            </div>
+            <h2 className="mt-3 font-display text-3xl font-bold leading-tight tracking-tight md:text-5xl">
+              Destinos que estão <span className="font-serif font-normal">valendo a viagem</span>.
+            </h2>
+          </div>
+          <Link
+            to="/deals"
+            className="hidden shrink-0 items-center gap-2 text-sm font-medium text-gold hover:text-gold-soft md:inline-flex"
+          >
+            Ver todas as ofertas <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((d, i) => (
+            <div
+              key={d.id}
+              className="animate-rise"
+              style={{ animationDelay: `${i * 80}ms` }}
+            >
+              <DealCard deal={d} />
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-8 md:hidden">
+          <Link
+            to="/deals"
+            className="inline-flex items-center gap-2 text-sm font-medium text-gold"
+          >
+            Ver todas as ofertas <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </section>
+
+      {/* ============================== INSPIRE ============================== */}
+      <section className="border-t border-white/5 bg-background/60">
+        <div className="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+          <div className="max-w-2xl">
+            <div className="text-[10px] uppercase tracking-[0.28em] text-gold">
+              Inspiração
+            </div>
+            <h2 className="mt-3 font-display text-3xl font-bold leading-tight tracking-tight md:text-5xl">
+              Para onde a sua próxima <span className="font-serif font-normal">história</span> acontece?
+            </h2>
+            <p className="mt-4 text-base text-muted-foreground">
+              Uma seleção editorial de destinos com tarifas monitoradas — clique para explorar.
+            </p>
+          </div>
+
+          <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+            {inspire.map((d, i) => (
+              <Link
+                key={d.id}
+                to="/flight/$id"
+                params={{ id: d.id }}
+                className="group relative block aspect-[3/4] overflow-hidden rounded-2xl animate-rise"
+                style={{ animationDelay: `${i * 60}ms` }}
+              >
+                <img
+                  src={destinationImage(d.destination.code, 500, 700)}
+                  alt={d.destination.city}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-3">
+                  <div className="text-[9px] font-medium uppercase tracking-[0.22em] text-white/60">
+                    {d.destination.country}
+                  </div>
+                  <div className="mt-0.5 font-display text-sm font-bold text-white">
+                    {d.destination.city}
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

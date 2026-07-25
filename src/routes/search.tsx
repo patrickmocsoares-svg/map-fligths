@@ -9,7 +9,7 @@ import { FlightSearchForm } from "@/components/FlightSearchForm";
 import { searchFlightsFn } from "@/lib/flights.functions";
 import type { FlightOffer } from "@/lib/flights/types";
 import { formatBRL, t } from "@/lib/i18n";
-import { Plane, ChevronRight, Loader2, SearchX } from "lucide-react";
+import { Plane, ArrowRight, SearchX, Sparkles, Briefcase } from "lucide-react";
 
 const cabinEnum = z.enum(["economy", "premium", "business", "first"]);
 
@@ -81,46 +81,64 @@ function SearchResults() {
   });
 
   const offers: FlightOffer[] = query.data?.offers ?? [];
+  const cheapest = offers.length ? Math.min(...offers.map((o) => o.price)) : 0;
+
   const sorted = [...offers].sort((a, b) => {
     if (sort === "price") return a.price - b.price;
     if (sort === "duration") return a.durationMin - b.durationMin;
-    // score sort: cheaper + shorter as heuristic (score computed elsewhere)
     return a.price - b.price;
   });
 
   return (
     <div className="min-h-screen">
       <Header />
-      <div className="mx-auto max-w-7xl px-4 py-8 md:px-8">
-        <FlightSearchForm compact />
+
+      {/* Compact search bar */}
+      <div className="border-b border-white/5 bg-background/70 backdrop-blur">
+        <div className="mx-auto max-w-7xl px-4 py-6 md:px-8">
+          <FlightSearchForm compact />
+        </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 md:px-8">
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+      <div className="mx-auto max-w-6xl px-4 py-10 md:px-8">
+        {/* Header row */}
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
           <div>
-            <h1 className="font-display text-2xl md:text-3xl">{t("results.title")}</h1>
-            <p className="text-sm text-muted-foreground">
-              {params.origin && params.destination
-                ? `${params.origin} → ${params.destination} · `
-                : ""}
+            <div className="text-[10px] uppercase tracking-[0.28em] text-gold">
+              {t("results.title")}
+            </div>
+            <h1 className="mt-2 font-display text-3xl font-bold leading-tight md:text-4xl">
+              {params.origin && params.destination ? (
+                <>
+                  <span className="font-mono">{params.origin}</span>
+                  <span className="mx-3 font-serif font-normal text-gold-gradient">→</span>
+                  <span className="font-mono">{params.destination}</span>
+                </>
+              ) : (
+                "Buscar voos"
+              )}
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
               {query.isLoading
-                ? "Buscando..."
+                ? "Analisando tarifas em tempo real…"
                 : `${sorted.length} ${t("results.found")}`}
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs uppercase tracking-widest text-muted-foreground">
-              {t("results.sort")}
-            </span>
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value as Sort)}
-              className="rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground outline-none focus:border-gold"
-            >
-              <option value="score">{t("results.sort.score")}</option>
-              <option value="price">{t("results.sort.price")}</option>
-              <option value="duration">{t("results.sort.duration")}</option>
-            </select>
+
+          <div className="flex items-center gap-2 rounded-full border border-white/10 bg-card/60 p-1 backdrop-blur">
+            {(["score", "price", "duration"] as Sort[]).map((s) => (
+              <button
+                key={s}
+                onClick={() => setSort(s)}
+                className={`rounded-full px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider transition ${
+                  sort === s
+                    ? "bg-gold text-primary-foreground shadow"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {t(`results.sort.${s}`)}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -132,9 +150,10 @@ function SearchResults() {
         )}
 
         {ready && query.isLoading && (
-          <div className="flex items-center justify-center gap-3 rounded-xl card-luxe p-10 text-muted-foreground">
-            <Loader2 className="h-5 w-5 animate-spin text-gold" />
-            Buscando as melhores tarifas...
+          <div className="space-y-3">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <SkeletonRow key={i} />
+            ))}
           </div>
         )}
 
@@ -152,75 +171,10 @@ function SearchResults() {
           />
         )}
 
-        <div className="space-y-3 pb-16">
-          {sorted.map((o) => {
-            const dh = Math.floor(o.durationMin / 60);
-            const dm = o.durationMin % 60;
-            const dep = new Date(o.departureTime);
-            const arr = new Date(o.arrivalTime);
-            const fmt = (d: Date) =>
-              d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
-            return (
-              <Link
-                key={o.id}
-                to="/flight/$id"
-                params={{ id: o.id }}
-                className="grid md:grid-cols-[auto_1fr_auto] items-center gap-4 md:gap-6 rounded-xl card-luxe p-4 md:p-5 hover:border-gold/40 transition"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="grid h-10 w-10 place-items-center rounded-lg bg-gold/10 text-xs font-bold text-gold">
-                    {o.airline.code}
-                  </span>
-                  <div className="text-xs">
-                    <div className="font-medium">{o.airline.name}</div>
-                    <div className="text-muted-foreground">
-                      {o.stops === 0
-                        ? t("flight.direct")
-                        : `${o.stops} ${o.stops === 1 ? t("flight.stop") : t("flight.stops_plural")}`}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="text-center min-w-16">
-                    <div className="font-display text-xl">{fmt(dep)}</div>
-                    <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                      {o.outbound.segments[0]?.originCode ?? params.origin}
-                    </div>
-                  </div>
-                  <div className="flex-1 flex items-center gap-2 text-xs text-muted-foreground">
-                    <span className="h-px flex-1 bg-gold/20" />
-                    <Plane className="h-3 w-3 text-gold" />
-                    <span>
-                      {dh}h{dm.toString().padStart(2, "0")}
-                    </span>
-                    <span className="h-px flex-1 bg-gold/20" />
-                  </div>
-                  <div className="text-center min-w-16">
-                    <div className="font-display text-xl">{fmt(arr)}</div>
-                    <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                      {o.outbound.segments[o.outbound.segments.length - 1]?.destinationCode ??
-                        params.destination}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between md:justify-end gap-3">
-                  <div className="text-right">
-                    <div className="font-display text-2xl text-gold-gradient">
-                      {o.currency === "BRL" ? formatBRL(o.price) : `${o.currency} ${o.price.toFixed(0)}`}
-                    </div>
-                    {o.miles && (
-                      <div className="text-[10px] text-muted-foreground">
-                        ou {o.miles.toLocaleString("pt-BR")} milhas
-                      </div>
-                    )}
-                  </div>
-                  <ChevronRight className="h-4 w-4 text-gold" />
-                </div>
-              </Link>
-            );
-          })}
+        <div className="space-y-3 pb-20">
+          {sorted.map((o, idx) => (
+            <FlightRow key={o.id} offer={o} cheapest={cheapest} index={idx} />
+          ))}
         </div>
       </div>
       <Footer />
@@ -228,12 +182,157 @@ function SearchResults() {
   );
 }
 
+function FlightRow({
+  offer: o,
+  cheapest,
+  index,
+}: {
+  offer: FlightOffer;
+  cheapest: number;
+  index: number;
+}) {
+  const dh = Math.floor(o.durationMin / 60);
+  const dm = o.durationMin % 60;
+  const dep = new Date(o.departureTime);
+  const arr = new Date(o.arrivalTime);
+  const fmt = (d: Date) =>
+    d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  const isBest = o.price === cheapest;
+  const firstSeg = o.outbound.segments[0];
+  const lastSeg = o.outbound.segments[o.outbound.segments.length - 1];
+
+  return (
+    <Link
+      to="/flight/$id"
+      params={{ id: o.id }}
+      className="group relative block overflow-hidden rounded-2xl card-luxe transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/30 hover:shadow-luxe animate-rise"
+      style={{ animationDelay: `${index * 40}ms` }}
+    >
+      {isBest && (
+        <span className="absolute left-0 top-0 rounded-br-lg bg-gold px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-primary-foreground">
+          Melhor preço
+        </span>
+      )}
+      <div className="grid gap-5 p-5 md:grid-cols-[220px_1fr_200px] md:items-center md:gap-8 md:p-6">
+        {/* Airline */}
+        <div className="flex items-center gap-3">
+          <span
+            className="grid h-12 w-12 shrink-0 place-items-center rounded-xl text-sm font-bold text-white"
+            style={{ backgroundColor: "#c9a84c" }}
+          >
+            {o.airline.code}
+          </span>
+          <div className="min-w-0">
+            <div className="truncate text-sm font-semibold text-foreground">{o.airline.name}</div>
+            <div className="text-[11px] text-muted-foreground">
+              {o.cabin ? cabinLabel(o.cabin) : "Econômica"}
+            </div>
+          </div>
+        </div>
+
+        {/* Route */}
+        <div className="flex items-center gap-4">
+          <div className="text-left">
+            <div className="font-display text-3xl font-bold leading-none tracking-tight">
+              {fmt(dep)}
+            </div>
+            <div className="mt-1 text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+              {firstSeg?.originCode}
+            </div>
+          </div>
+          <div className="flex flex-1 flex-col items-center gap-1">
+            <div className="text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+              {dh}h{dm.toString().padStart(2, "0")}
+            </div>
+            <div className="relative flex w-full items-center">
+              <span className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+              <Plane className="h-3.5 w-3.5 rotate-90 text-gold" />
+              <span className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+            </div>
+            <div className="text-[10px] text-muted-foreground">
+              {o.stops === 0
+                ? t("flight.direct")
+                : `${o.stops} ${o.stops === 1 ? t("flight.stop") : t("flight.stops_plural")}`}
+            </div>
+          </div>
+          <div className="text-right">
+            <div className="font-display text-3xl font-bold leading-none tracking-tight">
+              {fmt(arr)}
+            </div>
+            <div className="mt-1 text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+              {lastSeg?.destinationCode}
+            </div>
+          </div>
+        </div>
+
+        {/* Price + CTA */}
+        <div className="flex items-center justify-between gap-3 border-t border-white/5 pt-4 md:flex-col md:items-end md:border-l md:border-t-0 md:pl-6 md:pt-0">
+          <div className="text-right">
+            <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+              Total
+            </div>
+            <div className="mt-0.5 font-display text-3xl font-extrabold tracking-tight text-foreground">
+              {o.currency === "BRL"
+                ? formatBRL(o.price)
+                : `${o.currency} ${o.price.toFixed(0)}`}
+            </div>
+            {o.miles && (
+              <div className="mt-1 inline-flex items-center gap-1 rounded-full border border-gold/25 bg-gold/5 px-2 py-0.5 text-[10px] text-gold-soft">
+                <Sparkles className="h-2.5 w-2.5" /> {o.miles.toLocaleString("pt-BR")} milhas
+              </div>
+            )}
+            <div className="mt-1 inline-flex items-center gap-1 text-[10px] text-muted-foreground">
+              <Briefcase className="h-3 w-3" /> Bagagem de mão inclusa
+            </div>
+          </div>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-gold px-4 py-2 text-xs font-bold text-primary-foreground shadow transition group-hover:gap-2.5">
+            Selecionar <ArrowRight className="h-3.5 w-3.5" />
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function cabinLabel(c: string) {
+  return c === "business"
+    ? "Executiva"
+    : c === "first"
+      ? "Primeira Classe"
+      : c === "premium"
+        ? "Premium Economy"
+        : "Econômica";
+}
+
+function SkeletonRow() {
+  return (
+    <div className="grid gap-5 rounded-2xl card-luxe p-5 md:grid-cols-[220px_1fr_200px] md:items-center md:gap-8 md:p-6">
+      <div className="flex items-center gap-3">
+        <div className="skeleton skeleton-shimmer h-12 w-12 rounded-xl" />
+        <div className="space-y-2">
+          <div className="skeleton skeleton-shimmer h-3 w-24 rounded" />
+          <div className="skeleton skeleton-shimmer h-2 w-16 rounded" />
+        </div>
+      </div>
+      <div className="flex items-center gap-4">
+        <div className="skeleton skeleton-shimmer h-9 w-16 rounded" />
+        <div className="skeleton skeleton-shimmer h-px flex-1 rounded" />
+        <div className="skeleton skeleton-shimmer h-9 w-16 rounded" />
+      </div>
+      <div className="flex items-center justify-between gap-3 md:flex-col md:items-end">
+        <div className="skeleton skeleton-shimmer h-8 w-24 rounded" />
+        <div className="skeleton skeleton-shimmer h-8 w-28 rounded-full" />
+      </div>
+    </div>
+  );
+}
+
 function EmptyState({ title, body }: { title: string; body: string }) {
   return (
-    <div className="rounded-xl card-luxe p-10 text-center">
-      <SearchX className="mx-auto h-8 w-8 text-gold/70" />
-      <h2 className="mt-3 font-display text-xl">{title}</h2>
-      <p className="mt-1 text-sm text-muted-foreground">{body}</p>
+    <div className="rounded-2xl card-luxe p-16 text-center">
+      <SearchX className="mx-auto h-10 w-10 text-gold/60" />
+      <h2 className="mt-4 font-display text-2xl font-bold">{title}</h2>
+      <p className="mt-2 text-sm text-muted-foreground">{body}</p>
     </div>
   );
 }
