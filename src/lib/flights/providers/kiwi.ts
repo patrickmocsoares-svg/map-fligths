@@ -180,10 +180,47 @@ async function recordObservations(
 
 export const kiwiProvider: FlightProvider = {
   id: "kiwi",
+  label: "Kiwi Tequila",
+  real: true,
+  requiredSecrets: ["KIWI_API_KEY"],
 
   isConfigured() {
     return Boolean(process.env.KIWI_API_KEY);
   },
+
+  async status() {
+    if (!this.isConfigured()) {
+      return {
+        id: "kiwi",
+        label: "Kiwi Tequila",
+        state: "missing_credentials",
+        real: true,
+        requiredSecrets: ["KIWI_API_KEY"],
+        message: "Set KIWI_API_KEY to activate.",
+      };
+    }
+    // Lightweight ping — Tequila responds to /locations with a query.
+    try {
+      const base = process.env.KIWI_BASE_URL ?? DEFAULT_BASE_URL;
+      const url = new URL(`${base}/locations/query`);
+      url.searchParams.set("term", "GRU");
+      url.searchParams.set("location_types", "airport");
+      url.searchParams.set("limit", "1");
+      const res = await fetch(url, {
+        headers: { apikey: process.env.KIWI_API_KEY!, accept: "application/json" },
+      });
+      if (res.status === 401 || res.status === 403) {
+        return { id: "kiwi", label: "Kiwi Tequila", state: "error", real: true, message: "API key rejected." };
+      }
+      if (!res.ok) {
+        return { id: "kiwi", label: "Kiwi Tequila", state: "error", real: true, message: `Upstream HTTP ${res.status}.` };
+      }
+      return { id: "kiwi", label: "Kiwi Tequila", state: "connected", real: true };
+    } catch (e) {
+      return { id: "kiwi", label: "Kiwi Tequila", state: "error", real: true, message: (e as Error).message };
+    }
+  },
+
 
   async search(params: FlightSearchParams): Promise<FlightSearchResult> {
     const apiKey = process.env.KIWI_API_KEY;
