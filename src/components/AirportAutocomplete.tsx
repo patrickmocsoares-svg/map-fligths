@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Plane, Search, X } from "lucide-react";
-import { type Airport, getAirportByCode, searchAirports } from "@/lib/airports";
+import { type Airport, searchAirports, useAirport } from "@/lib/airports";
 
 type Props = {
   label: string;
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export function AirportAutocomplete({ label, value, onChange, icon, placeholder }: Props) {
-  const selected = useMemo(() => getAirportByCode(value), [value]);
+  const selected = useAirport(value);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Airport[]>([]);
