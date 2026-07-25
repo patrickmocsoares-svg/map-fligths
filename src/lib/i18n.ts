@@ -16,6 +16,7 @@ const ptBR: Dict = {
   "brand.slogan": "Transformando milhas em oportunidades.",
   "nav.home": "Início",
   "nav.deals": "Ofertas",
+  "nav.opportunities": "Oportunidades do dia",
   "nav.alerts": "Alertas de preço",
   "nav.account": "Minha conta",
   "nav.search": "Buscar voos",

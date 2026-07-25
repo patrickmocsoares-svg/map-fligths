@@ -10,15 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
+import { Route as OpportunitiesRouteImport } from './routes/opportunities'
 import { Route as DealsRouteImport } from './routes/deals'
 import { Route as AlertsRouteImport } from './routes/alerts'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as FlightIdRouteImport } from './routes/flight.$id'
+import { Route as ApiPublicHooksDiscoverPricesRouteImport } from './routes/api/public/hooks/discover-prices'
 
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OpportunitiesRoute = OpportunitiesRouteImport.update({
+  id: '/opportunities',
+  path: '/opportunities',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DealsRoute = DealsRouteImport.update({
@@ -46,22 +53,32 @@ const FlightIdRoute = FlightIdRouteImport.update({
   path: '/flight/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHooksDiscoverPricesRoute =
+  ApiPublicHooksDiscoverPricesRouteImport.update({
+    id: '/api/public/hooks/discover-prices',
+    path: '/api/public/hooks/discover-prices',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/alerts': typeof AlertsRoute
   '/deals': typeof DealsRoute
+  '/opportunities': typeof OpportunitiesRoute
   '/search': typeof SearchRoute
   '/flight/$id': typeof FlightIdRoute
+  '/api/public/hooks/discover-prices': typeof ApiPublicHooksDiscoverPricesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/alerts': typeof AlertsRoute
   '/deals': typeof DealsRoute
+  '/opportunities': typeof OpportunitiesRoute
   '/search': typeof SearchRoute
   '/flight/$id': typeof FlightIdRoute
+  '/api/public/hooks/discover-prices': typeof ApiPublicHooksDiscoverPricesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -69,22 +86,42 @@ export interface FileRoutesById {
   '/account': typeof AccountRoute
   '/alerts': typeof AlertsRoute
   '/deals': typeof DealsRoute
+  '/opportunities': typeof OpportunitiesRoute
   '/search': typeof SearchRoute
   '/flight/$id': typeof FlightIdRoute
+  '/api/public/hooks/discover-prices': typeof ApiPublicHooksDiscoverPricesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/account' | '/alerts' | '/deals' | '/search' | '/flight/$id'
+  fullPaths:
+    | '/'
+    | '/account'
+    | '/alerts'
+    | '/deals'
+    | '/opportunities'
+    | '/search'
+    | '/flight/$id'
+    | '/api/public/hooks/discover-prices'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/account' | '/alerts' | '/deals' | '/search' | '/flight/$id'
+  to:
+    | '/'
+    | '/account'
+    | '/alerts'
+    | '/deals'
+    | '/opportunities'
+    | '/search'
+    | '/flight/$id'
+    | '/api/public/hooks/discover-prices'
   id:
     | '__root__'
     | '/'
     | '/account'
     | '/alerts'
     | '/deals'
+    | '/opportunities'
     | '/search'
     | '/flight/$id'
+    | '/api/public/hooks/discover-prices'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -92,8 +129,10 @@ export interface RootRouteChildren {
   AccountRoute: typeof AccountRoute
   AlertsRoute: typeof AlertsRoute
   DealsRoute: typeof DealsRoute
+  OpportunitiesRoute: typeof OpportunitiesRoute
   SearchRoute: typeof SearchRoute
   FlightIdRoute: typeof FlightIdRoute
+  ApiPublicHooksDiscoverPricesRoute: typeof ApiPublicHooksDiscoverPricesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -103,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/opportunities': {
+      id: '/opportunities'
+      path: '/opportunities'
+      fullPath: '/opportunities'
+      preLoaderRoute: typeof OpportunitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/deals': {
@@ -140,6 +186,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FlightIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/discover-prices': {
+      id: '/api/public/hooks/discover-prices'
+      path: '/api/public/hooks/discover-prices'
+      fullPath: '/api/public/hooks/discover-prices'
+      preLoaderRoute: typeof ApiPublicHooksDiscoverPricesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -148,8 +201,10 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRoute: AccountRoute,
   AlertsRoute: AlertsRoute,
   DealsRoute: DealsRoute,
+  OpportunitiesRoute: OpportunitiesRoute,
   SearchRoute: SearchRoute,
   FlightIdRoute: FlightIdRoute,
+  ApiPublicHooksDiscoverPricesRoute: ApiPublicHooksDiscoverPricesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
