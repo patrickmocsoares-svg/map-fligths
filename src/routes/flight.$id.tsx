@@ -483,9 +483,32 @@ function Detail({
           </aside>
         </div>
       </div>
+
+      {/* Sticky mobile CTA */}
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-card/95 backdrop-blur-xl safe-bottom lg:hidden">
+        <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 pt-3">
+          <div className="min-w-0 flex-1">
+            <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">Total</div>
+            <div className="truncate font-display text-2xl font-extrabold tracking-tight text-gold-gradient">
+              {offer.currency === "BRL"
+                ? formatBRL(offer.price)
+                : `${offer.currency} ${offer.price.toFixed(0)}`}
+            </div>
+          </div>
+          <a
+            href={affiliateUrl}
+            target="_blank"
+            rel="noopener sponsored"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl gold-gradient px-5 py-3.5 text-sm font-bold text-primary-foreground shadow-luxe"
+          >
+            Continuar <ArrowRight className="h-4 w-4" />
+          </a>
+        </div>
+      </div>
     </div>
   );
 }
+
 
 function ItineraryCard({
   title,
