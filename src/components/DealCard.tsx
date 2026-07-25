@@ -57,7 +57,13 @@ export function DealCard({ deal }: { deal: Deal }) {
         </div>
       </div>
 
-      <div className="mt-5 flex items-end justify-between">
+      <div className="mt-4 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+        <Calendar className="h-3 w-3 text-gold/70" />
+        <span>{fmtDate(deal.departDate)}{deal.returnDate ? ` — ${fmtDate(deal.returnDate)}` : ""}</span>
+      </div>
+
+      <div className="mt-4 flex items-end justify-between">
+
         <div>
           <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{t("misc.from")}</div>
           <div className="mt-0.5 flex items-baseline gap-1.5">
