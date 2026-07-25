@@ -15,7 +15,6 @@ import { Route as AlertsRouteImport } from './routes/alerts'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as FlightIdRouteImport } from './routes/flight.$id'
-import { Route as ApiPublicSeedAirportsRouteImport } from './routes/api/public/seed-airports'
 
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
@@ -47,11 +46,6 @@ const FlightIdRoute = FlightIdRouteImport.update({
   path: '/flight/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicSeedAirportsRoute = ApiPublicSeedAirportsRouteImport.update({
-  id: '/api/public/seed-airports',
-  path: '/api/public/seed-airports',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,7 +54,6 @@ export interface FileRoutesByFullPath {
   '/deals': typeof DealsRoute
   '/search': typeof SearchRoute
   '/flight/$id': typeof FlightIdRoute
-  '/api/public/seed-airports': typeof ApiPublicSeedAirportsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -69,7 +62,6 @@ export interface FileRoutesByTo {
   '/deals': typeof DealsRoute
   '/search': typeof SearchRoute
   '/flight/$id': typeof FlightIdRoute
-  '/api/public/seed-airports': typeof ApiPublicSeedAirportsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -79,27 +71,12 @@ export interface FileRoutesById {
   '/deals': typeof DealsRoute
   '/search': typeof SearchRoute
   '/flight/$id': typeof FlightIdRoute
-  '/api/public/seed-airports': typeof ApiPublicSeedAirportsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/account'
-    | '/alerts'
-    | '/deals'
-    | '/search'
-    | '/flight/$id'
-    | '/api/public/seed-airports'
+  fullPaths: '/' | '/account' | '/alerts' | '/deals' | '/search' | '/flight/$id'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/account'
-    | '/alerts'
-    | '/deals'
-    | '/search'
-    | '/flight/$id'
-    | '/api/public/seed-airports'
+  to: '/' | '/account' | '/alerts' | '/deals' | '/search' | '/flight/$id'
   id:
     | '__root__'
     | '/'
@@ -108,7 +85,6 @@ export interface FileRouteTypes {
     | '/deals'
     | '/search'
     | '/flight/$id'
-    | '/api/public/seed-airports'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -118,7 +94,6 @@ export interface RootRouteChildren {
   DealsRoute: typeof DealsRoute
   SearchRoute: typeof SearchRoute
   FlightIdRoute: typeof FlightIdRoute
-  ApiPublicSeedAirportsRoute: typeof ApiPublicSeedAirportsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -165,13 +140,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FlightIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/seed-airports': {
-      id: '/api/public/seed-airports'
-      path: '/api/public/seed-airports'
-      fullPath: '/api/public/seed-airports'
-      preLoaderRoute: typeof ApiPublicSeedAirportsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -182,7 +150,6 @@ const rootRouteChildren: RootRouteChildren = {
   DealsRoute: DealsRoute,
   SearchRoute: SearchRoute,
   FlightIdRoute: FlightIdRoute,
-  ApiPublicSeedAirportsRoute: ApiPublicSeedAirportsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
