@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight, ArrowLeftRight, Calendar, Users, Plane } from "lucide-react";
-import { AIRPORTS } from "@/lib/mock-data";
+import { AirportAutocomplete } from "@/components/AirportAutocomplete";
 import { t } from "@/lib/i18n";
 
 type Trip = "roundtrip" | "oneway";
