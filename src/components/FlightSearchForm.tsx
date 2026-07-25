@@ -117,8 +117,9 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
   return (
     <form
       onSubmit={submit}
-      className={`card-luxe rounded-2xl p-4 md:p-6 ${compact ? "" : "shadow-luxe"}`}
+      className={`rounded-3xl border border-white/10 bg-card/85 p-5 backdrop-blur-2xl md:p-7 ${compact ? "shadow-card" : "shadow-luxe"}`}
     >
+
       {/* Top control bar: trip type · passengers · cabin */}
       <div className="flex flex-wrap items-center gap-2">
         <TripTypeMenu value={trip} onChange={setTrip} />
@@ -240,11 +241,11 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
         </div>
       )}
 
-      {/* Search CTA — Google Flights style floating pill */}
-      <div className="mt-6 flex justify-center">
+      {/* Search CTA */}
+      <div className="mt-7 flex justify-center">
         <button
           type="submit"
-          className="inline-flex items-center gap-2 rounded-full gold-gradient text-primary-foreground font-semibold px-8 py-3 shadow-luxe hover:opacity-95 transition"
+          className="btn-primary btn-primary-hover px-10 py-4 text-sm uppercase tracking-[0.18em]"
         >
           <Search className="h-4 w-4" />
           {t("search.cta")}
@@ -253,6 +254,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
     </form>
   );
 }
+
 
 /* ============================== Menus ============================== */
 
