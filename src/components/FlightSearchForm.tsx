@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight, ArrowLeftRight, Calendar, Users, Plane } from "lucide-react";
-import { AIRPORTS } from "@/lib/mock-data";
+import { AirportAutocomplete } from "@/components/AirportAutocomplete";
 import { t } from "@/lib/i18n";
 
 type Trip = "roundtrip" | "oneway";
@@ -63,7 +63,12 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
       </div>
 
       <div className="grid gap-3 md:grid-cols-[1fr_auto_1fr]">
-        <AirportField label={t("search.origin")} value={origin} onChange={setOrigin} icon={<Plane className="h-4 w-4 -rotate-45" />} />
+        <AirportAutocomplete
+          label={t("search.origin")}
+          value={origin}
+          onChange={setOrigin}
+          icon={<Plane className="h-4 w-4 -rotate-45" />}
+        />
         <button
           type="button"
           onClick={swap}
@@ -72,7 +77,12 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
         >
           <ArrowLeftRight className="h-4 w-4" />
         </button>
-        <AirportField label={t("search.destination")} value={destination} onChange={setDestination} icon={<Plane className="h-4 w-4 rotate-45" />} />
+        <AirportAutocomplete
+          label={t("search.destination")}
+          value={destination}
+          onChange={setDestination}
+          icon={<Plane className="h-4 w-4 rotate-45" />}
+        />
       </div>
 
       <div className={`mt-3 grid gap-3 ${trip === "roundtrip" ? "md:grid-cols-4" : "md:grid-cols-3"}`}>
@@ -103,41 +113,6 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
   );
 }
 
-function AirportField({
-  label,
-  value,
-  onChange,
-  icon,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  icon: React.ReactNode;
-}) {
-  const airport = useMemo(() => AIRPORTS.find((a) => a.code === value), [value]);
-  return (
-    <label className="block rounded-xl border border-border bg-input/50 px-4 py-3 focus-within:border-gold transition">
-      <div className="flex items-center justify-between text-[10px] uppercase tracking-widest text-muted-foreground">
-        <span>{label}</span>
-        <span className="text-gold/70">{icon}</span>
-      </div>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="mt-1 w-full bg-transparent text-lg font-semibold text-foreground outline-none appearance-none"
-      >
-        {AIRPORTS.map((a) => (
-          <option key={a.code} value={a.code} className="bg-card">
-            {a.code} · {a.city}
-          </option>
-        ))}
-      </select>
-      <div className="mt-0.5 truncate text-xs text-muted-foreground">
-        {airport ? `${airport.name} · ${airport.country}` : ""}
-      </div>
-    </label>
-  );
-}
 
 function DateField({ label, value, onChange, min }: { label: string; value: string; onChange: (v: string) => void; min?: string }) {
   return (

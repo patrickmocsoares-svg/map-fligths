@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { AIRPORTS } from "@/lib/mock-data";
+import { AirportAutocomplete } from "@/components/AirportAutocomplete";
 import { useLocalStorage, KEYS, type PriceAlert } from "@/lib/storage";
 import { formatBRL, t } from "@/lib/i18n";
 import { Bell, Trash2, Plus } from "lucide-react";
@@ -46,18 +46,9 @@ function Alerts() {
 
         <div className="mt-8 card-luxe rounded-2xl p-6">
           <div className="grid gap-3 md:grid-cols-[1fr_1fr_1fr_auto]">
-            <label className="block rounded-xl border border-border bg-input/50 px-4 py-3">
-              <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{t("search.origin")}</div>
-              <select value={origin} onChange={(e) => setOrigin(e.target.value)} className="mt-1 w-full bg-transparent text-base font-semibold outline-none">
-                {AIRPORTS.map((a) => <option key={a.code} value={a.code} className="bg-card">{a.code} · {a.city}</option>)}
-              </select>
-            </label>
-            <label className="block rounded-xl border border-border bg-input/50 px-4 py-3">
-              <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{t("search.destination")}</div>
-              <select value={destination} onChange={(e) => setDestination(e.target.value)} className="mt-1 w-full bg-transparent text-base font-semibold outline-none">
-                {AIRPORTS.map((a) => <option key={a.code} value={a.code} className="bg-card">{a.code} · {a.city}</option>)}
-              </select>
-            </label>
+            <AirportAutocomplete label={t("search.origin")} value={origin} onChange={setOrigin} />
+            <AirportAutocomplete label={t("search.destination")} value={destination} onChange={setDestination} />
+
             <label className="block rounded-xl border border-border bg-input/50 px-4 py-3">
               <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{t("alerts.target")}</div>
               <input type="number" value={target} onChange={(e) => setTarget(Number(e.target.value))} className="mt-1 w-full bg-transparent text-base font-semibold outline-none" />
