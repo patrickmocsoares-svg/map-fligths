@@ -178,10 +178,9 @@ function OpportunityCard({ o }: { o: OpportunityInsight }) {
       search={{
         origin: o.origin,
         destination: o.destination,
-        depart: new Date().toISOString().slice(0, 10),
-        passengers: 1,
+        depart: new Date(Date.now() + 21 * 86_400_000).toISOString().slice(0, 10),
+        pax: 1,
         cabin: "economy" as const,
-        trip: "oneway" as const,
       }}
       className="group block overflow-hidden rounded-3xl card-luxe transition-all duration-500 hover:-translate-y-1 hover:shadow-luxe hover:border-gold/25"
     >
