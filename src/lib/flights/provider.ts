@@ -14,11 +14,33 @@
  */
 import type { FlightSearchParams, FlightSearchResult } from "./types";
 
+export type ProviderState = "connected" | "missing_credentials" | "error" | "disabled";
+
+export type ProviderStatus = {
+  id: string;
+  label: string;
+  state: ProviderState;
+  /** Human-readable detail — safe to surface in admin UIs. Never includes secrets. */
+  message?: string;
+  /** True for real upstream providers; false for dev/mock fallbacks. */
+  real: boolean;
+  /** Names of the env secrets this provider needs, for admin UX. */
+  requiredSecrets?: string[];
+};
+
 export interface FlightProvider {
   /** Stable identifier, e.g. `"mock"`, `"amadeus"`, `"duffel"`. */
   readonly id: string;
+  /** Human-readable name, e.g. `"Duffel"`. */
+  readonly label: string;
+  /** True for real upstream providers; false for dev/mock fallbacks. */
+  readonly real: boolean;
+  /** Env secrets required for `isConfigured()` to succeed. */
+  readonly requiredSecrets?: string[];
   /** Whether this provider has enough config (env, secrets) to run. */
   isConfigured(): boolean;
+  /** Lightweight health probe. Must never throw. */
+  status(): Promise<ProviderStatus>;
   search(params: FlightSearchParams): Promise<FlightSearchResult>;
 }
 
