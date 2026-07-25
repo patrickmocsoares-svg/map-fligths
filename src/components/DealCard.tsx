@@ -1,8 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { Plane, TrendingDown, Sparkles } from "lucide-react";
+import { Plane, TrendingDown, Sparkles, Calendar } from "lucide-react";
 import type { Deal } from "@/lib/mock-data";
 import { computeMabScore, scoreColorClass, scoreLabelKey } from "@/lib/mab-score";
 import { formatBRL, formatMiles, t } from "@/lib/i18n";
+
+function fmtDate(iso: string) {
+  const d = new Date(`${iso}T00:00:00`);
+  return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
+}
 
 export function DealCard({ deal }: { deal: Deal }) {
   const score = computeMabScore(deal);
