@@ -3,6 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import {
   ArrowLeftRight,
   Calendar,
+  Check,
   ChevronDown,
   Plane,
   Plus,
@@ -12,6 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { AirportAutocomplete } from "@/components/AirportAutocomplete";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { t } from "@/lib/i18n";
 
 type TripType = "roundtrip" | "oneway" | "multicity";
@@ -35,13 +37,11 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
   const [infants, setInfants] = useState(0);
   const [flexible, setFlexible] = useState(false);
 
-  // Simple trip legs
   const [origin, setOrigin] = useState("GRU");
   const [destination, setDestination] = useState("MIA");
   const [depart, setDepart] = useState(() => addDaysISO(21));
   const [ret, setRet] = useState(() => addDaysISO(28));
 
-  // Multi-city legs (starts with the two above merged in)
   const [legs, setLegs] = useState<Leg[]>(() => [
     { origin: "GRU", destination: "MIA", depart: addDaysISO(21) },
     { origin: "MIA", destination: "GRU", depart: addDaysISO(28) },
@@ -117,16 +117,15 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
   return (
     <form
       onSubmit={submit}
-      className={`rounded-3xl border border-white/10 bg-card/85 p-5 backdrop-blur-2xl md:p-7 ${compact ? "shadow-card" : "shadow-luxe"}`}
+      className={`rounded-3xl border border-white/10 bg-card/85 p-4 backdrop-blur-2xl sm:p-5 md:p-7 ${compact ? "shadow-card" : "shadow-luxe"}`}
     >
-
-      {/* Top control bar: trip type · passengers · cabin */}
+      {/* Top control bar */}
       <div className="flex flex-wrap items-center gap-2">
         <TripTypeMenu value={trip} onChange={setTrip} />
         <PassengerMenu
           adults={adults}
           setAdults={setAdults}
-          children={children}
+          childrenCount={children}
           setChildren={setChildren}
           infants={infants}
           setInfants={setInfants}
@@ -136,7 +135,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
         <button
           type="button"
           onClick={() => setFlexible((f) => !f)}
-          className={`ml-auto inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+          className={`ml-auto inline-flex min-h-[36px] items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition ${
             flexible
               ? "border-gold/60 bg-gold/10 text-gold"
               : "border-border text-muted-foreground hover:border-gold/40 hover:text-gold"
@@ -144,10 +143,8 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
           aria-pressed={flexible}
         >
           <Sparkles className="h-3.5 w-3.5" />
-          Datas flexíveis
-          <span className="hidden sm:inline text-[10px] text-muted-foreground/80">
-            ±3 dias
-          </span>
+          <span className="hidden xs:inline sm:inline">Datas flexíveis</span>
+          <span className="xs:hidden sm:hidden">Flex ±3d</span>
         </button>
       </div>
 
@@ -188,7 +185,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
                 type="button"
                 onClick={() => removeLeg(i)}
                 disabled={legs.length <= 2}
-                className="justify-self-end md:justify-self-auto rounded-full border border-border text-muted-foreground hover:text-foreground hover:border-gold/40 h-10 w-10 grid place-items-center disabled:opacity-30 disabled:cursor-not-allowed"
+                className="justify-self-end md:justify-self-auto rounded-full border border-border text-muted-foreground hover:text-foreground hover:border-gold/40 h-11 w-11 grid place-items-center disabled:opacity-30 disabled:cursor-not-allowed"
                 aria-label="Remover trecho"
               >
                 <X className="h-4 w-4" />
@@ -198,7 +195,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
           <button
             type="button"
             onClick={addLeg}
-            className="inline-flex items-center gap-2 rounded-full border border-dashed border-gold/40 px-4 py-2 text-xs uppercase tracking-widest text-gold hover:bg-gold/5 transition"
+            className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-dashed border-gold/40 px-4 py-2 text-xs uppercase tracking-widest text-gold hover:bg-gold/5 transition"
           >
             <Plus className="h-3.5 w-3.5" /> Adicionar trecho
           </button>
@@ -215,6 +212,15 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
             type="button"
             onClick={swap}
             className="hidden md:grid place-items-center rounded-full border border-gold/30 text-gold hover:bg-gold/10 transition h-10 w-10 self-end mb-1"
+            aria-label="Trocar origem e destino"
+          >
+            <ArrowLeftRight className="h-4 w-4" />
+          </button>
+          {/* Mobile swap */}
+          <button
+            type="button"
+            onClick={swap}
+            className="md:hidden mx-auto -my-1 grid h-9 w-9 place-items-center rounded-full border border-gold/30 bg-card text-gold"
             aria-label="Trocar origem e destino"
           >
             <ArrowLeftRight className="h-4 w-4" />
@@ -242,10 +248,10 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
       )}
 
       {/* Search CTA */}
-      <div className="mt-7 flex justify-center">
+      <div className="mt-6 flex justify-center md:mt-7">
         <button
           type="submit"
-          className="btn-primary btn-primary-hover px-10 py-4 text-sm uppercase tracking-[0.18em]"
+          className="btn-primary btn-primary-hover w-full sm:w-auto px-6 sm:px-10 py-4 text-sm uppercase tracking-[0.18em]"
         >
           <Search className="h-4 w-4" />
           {t("search.cta")}
@@ -272,7 +278,7 @@ function TripTypeMenu({
         ? t("search.oneway")
         : "Multi-destinos";
   return (
-    <Menu label={label} icon={<Plane className="h-4 w-4" />}>
+    <Menu label={label} icon={<Plane className="h-4 w-4" />} sheetTitle="Tipo de viagem">
       {(close) => (
         <div className="p-1">
           <MenuItem selected={value === "roundtrip"} onClick={() => { onChange("roundtrip"); close(); }}>
@@ -292,7 +298,7 @@ function TripTypeMenu({
 
 function CabinMenu({ value, onChange }: { value: Cabin; onChange: (v: Cabin) => void }) {
   return (
-    <Menu label={t(CABIN_LABEL[value])} icon={<Sparkles className="h-4 w-4" />}>
+    <Menu label={t(CABIN_LABEL[value])} icon={<Sparkles className="h-4 w-4" />} sheetTitle="Classe">
       {(close) => (
         <div className="p-1">
           {(Object.keys(CABIN_LABEL) as Cabin[]).map((c) => (
@@ -309,24 +315,32 @@ function CabinMenu({ value, onChange }: { value: Cabin; onChange: (v: Cabin) => 
 function PassengerMenu({
   adults,
   setAdults,
-  children,
+  childrenCount,
   setChildren,
   infants,
   setInfants,
 }: {
   adults: number;
   setAdults: (n: number) => void;
-  children: number;
+  childrenCount: number;
   setChildren: (n: number) => void;
   infants: number;
   setInfants: (n: number) => void;
 }) {
-  const total = adults + children + infants;
+  const total = adults + childrenCount + infants;
   const label = `${total} ${total === 1 ? "passageiro" : "passageiros"}`;
   return (
-    <Menu label={label} icon={<Users className="h-4 w-4" />}>
-      {() => (
-        <div className="w-72 p-2">
+    <Menu
+      label={label}
+      icon={<Users className="h-4 w-4" />}
+      sheetTitle="Passageiros"
+      showConfirm
+    >
+      {(close) => (
+        <div className="w-full md:w-72 p-2">
+          <div className="hidden md:block px-3 pt-1 pb-2 text-[10px] uppercase tracking-widest text-muted-foreground">
+            Total: {total}
+          </div>
           <PaxRow
             label="Adultos"
             hint="13+ anos"
@@ -337,7 +351,7 @@ function PassengerMenu({
           <PaxRow
             label="Crianças"
             hint="2 – 12 anos"
-            value={children}
+            value={childrenCount}
             onChange={setChildren}
             min={0}
           />
@@ -349,6 +363,15 @@ function PassengerMenu({
             min={0}
             max={adults}
           />
+          <div className="hidden md:block px-1 pt-2">
+            <button
+              type="button"
+              onClick={close}
+              className="w-full rounded-lg gold-gradient py-2 text-xs font-bold uppercase tracking-widest text-primary-foreground"
+            >
+              Confirmar
+            </button>
+          </div>
         </div>
       )}
     </Menu>
@@ -371,12 +394,12 @@ function PaxRow({
   max?: number;
 }) {
   return (
-    <div className="flex items-center justify-between gap-4 rounded-lg px-3 py-2.5 hover:bg-muted/30">
-      <div>
-        <div className="text-sm font-semibold text-foreground">{label}</div>
-        <div className="text-[11px] text-muted-foreground">{hint}</div>
+    <div className="flex items-center justify-between gap-4 rounded-xl px-3 py-3 md:py-2.5 hover:bg-muted/30">
+      <div className="min-w-0">
+        <div className="text-base md:text-sm font-semibold text-foreground">{label}</div>
+        <div className="text-xs md:text-[11px] text-muted-foreground">{hint}</div>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3 md:gap-2">
         <StepButton
           disabled={value <= min}
           onClick={() => onChange(Math.max(min, value - 1))}
@@ -384,7 +407,7 @@ function PaxRow({
         >
           −
         </StepButton>
-        <span className="w-6 text-center text-sm font-semibold tabular-nums">{value}</span>
+        <span className="w-7 text-center text-base md:text-sm font-semibold tabular-nums">{value}</span>
         <StepButton
           disabled={value >= max}
           onClick={() => onChange(Math.min(max, value + 1))}
@@ -405,50 +428,112 @@ function StepButton({
     <button
       type="button"
       {...rest}
-      className="grid h-8 w-8 place-items-center rounded-full border border-gold/40 text-gold hover:bg-gold/10 disabled:opacity-30 disabled:cursor-not-allowed transition"
+      className="grid h-11 w-11 md:h-8 md:w-8 place-items-center rounded-full border border-gold/40 text-lg md:text-base text-gold hover:bg-gold/10 active:bg-gold/20 disabled:opacity-30 disabled:cursor-not-allowed transition"
     >
       {children}
     </button>
   );
 }
 
-/* ============================== Menu shell ============================== */
+/* ============================== Menu shell (bottom sheet on mobile) ============================== */
 
 function Menu({
   label,
   icon,
   children,
+  sheetTitle,
+  showConfirm,
 }: {
   label: string;
   icon: React.ReactNode;
   children: (close: () => void) => React.ReactNode;
+  sheetTitle?: string;
+  showConfirm?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const isMobile = useIsMobile();
   const ref = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
+    if (isMobile) return;
     function onDown(e: MouseEvent) {
       if (!ref.current) return;
       if (!ref.current.contains(e.target as Node)) setOpen(false);
     }
     document.addEventListener("mousedown", onDown);
     return () => document.removeEventListener("mousedown", onDown);
-  }, []);
+  }, [isMobile]);
+
+  // Lock body scroll when mobile sheet open
+  useEffect(() => {
+    if (!open || !isMobile) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open, isMobile]);
+
+  const close = () => setOpen(false);
+
   return (
     <div className="relative" ref={ref}>
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+        className={`inline-flex min-h-[36px] items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition ${
           open ? "border-gold text-gold" : "border-border text-foreground hover:border-gold/40"
         }`}
       >
         <span className="text-gold/70">{icon}</span>
-        {label}
+        <span className="truncate max-w-[9rem]">{label}</span>
         <ChevronDown className="h-3.5 w-3.5 opacity-70" />
       </button>
-      {open && (
+
+      {open && !isMobile && (
         <div className="absolute z-50 mt-2 min-w-[12rem] rounded-xl border border-border bg-card shadow-luxe">
-          {children(() => setOpen(false))}
+          {children(close)}
+        </div>
+      )}
+
+      {open && isMobile && (
+        <div className="fixed inset-0 z-[100] md:hidden">
+          <button
+            type="button"
+            aria-label="Fechar"
+            onClick={close}
+            className="absolute inset-0 bg-black/60 animate-fade"
+          />
+          <div className="absolute inset-x-0 bottom-0 max-h-[85vh] overflow-hidden rounded-t-3xl border-t border-white/10 bg-card shadow-luxe animate-slide-up flex flex-col">
+            <div className="flex items-center justify-between px-5 pt-3 pb-2">
+              <div className="mx-auto h-1.5 w-10 rounded-full bg-white/15" />
+            </div>
+            <div className="flex items-center justify-between px-5 pb-3">
+              <h3 className="font-display text-lg font-bold">{sheetTitle ?? label}</h3>
+              <button
+                type="button"
+                onClick={close}
+                aria-label="Fechar"
+                className="grid h-9 w-9 place-items-center rounded-full border border-border text-muted-foreground"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="overflow-y-auto px-3 pb-2">
+              {children(close)}
+            </div>
+            {showConfirm && (
+              <div className="border-t border-white/5 bg-card px-4 pt-3 safe-bottom">
+                <button
+                  type="button"
+                  onClick={close}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl gold-gradient px-4 py-3.5 text-sm font-bold uppercase tracking-[0.18em] text-primary-foreground shadow-luxe"
+                >
+                  <Check className="h-4 w-4" /> Confirmar
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
@@ -468,7 +553,7 @@ function MenuItem({
     <button
       type="button"
       onClick={onClick}
-      className={`block w-full rounded-lg px-3 py-2 text-left text-sm transition ${
+      className={`block w-full rounded-lg px-4 py-3 md:py-2 text-left text-base md:text-sm transition ${
         selected ? "bg-gold/10 text-gold" : "text-foreground hover:bg-muted/40"
       }`}
     >
@@ -491,7 +576,7 @@ function DateField({
   min?: string;
 }) {
   return (
-    <label className="block rounded-xl border border-border bg-input/50 px-4 py-3 focus-within:border-gold transition">
+    <label className="block min-w-0 rounded-xl border border-border bg-input/50 px-4 py-3 focus-within:border-gold transition">
       <div className="flex items-center justify-between text-[10px] uppercase tracking-widest text-muted-foreground">
         <span>{label}</span>
         <Calendar className="h-3.5 w-3.5 text-gold/70" />
@@ -501,7 +586,7 @@ function DateField({
         value={value}
         min={min}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-1 w-full bg-transparent text-base font-semibold text-foreground outline-none [color-scheme:dark]"
+        className="mt-1 w-full min-w-0 bg-transparent text-base font-semibold text-foreground outline-none [color-scheme:dark]"
       />
     </label>
   );
