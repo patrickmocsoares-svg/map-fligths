@@ -9,13 +9,17 @@
  * (see `src/lib/flights.functions.ts`), never directly from browser code.
  */
 import { mockProvider } from "./providers/mock";
+import { kiwiProvider } from "./providers/kiwi";
 import { amadeusProvider } from "./providers/amadeus";
 import { ProviderError, type FlightProvider } from "./provider";
 import type { FlightSearchParams, FlightSearchResult } from "./types";
 
+// Order matters for auto-selection: Kiwi is the primary real provider,
+// Amadeus is kept as an optional future adapter, mock is the fallback.
 const providers: Record<string, FlightProvider> = {
-  mock: mockProvider,
+  kiwi: kiwiProvider,
   amadeus: amadeusProvider,
+  mock: mockProvider,
 };
 
 function pickProvider(): FlightProvider {
