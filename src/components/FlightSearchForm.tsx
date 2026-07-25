@@ -63,7 +63,12 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
       </div>
 
       <div className="grid gap-3 md:grid-cols-[1fr_auto_1fr]">
-        <AirportField label={t("search.origin")} value={origin} onChange={setOrigin} icon={<Plane className="h-4 w-4 -rotate-45" />} />
+        <AirportAutocomplete
+          label={t("search.origin")}
+          value={origin}
+          onChange={setOrigin}
+          icon={<Plane className="h-4 w-4 -rotate-45" />}
+        />
         <button
           type="button"
           onClick={swap}
@@ -72,7 +77,12 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
         >
           <ArrowLeftRight className="h-4 w-4" />
         </button>
-        <AirportField label={t("search.destination")} value={destination} onChange={setDestination} icon={<Plane className="h-4 w-4 rotate-45" />} />
+        <AirportAutocomplete
+          label={t("search.destination")}
+          value={destination}
+          onChange={setDestination}
+          icon={<Plane className="h-4 w-4 rotate-45" />}
+        />
       </div>
 
       <div className={`mt-3 grid gap-3 ${trip === "roundtrip" ? "md:grid-cols-4" : "md:grid-cols-3"}`}>
