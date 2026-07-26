@@ -20,7 +20,7 @@ export function DealCard({ deal }: { deal: Deal }) {
     <Link
       to="/flight/$id"
       params={{ id: deal.id }}
-      className="group block overflow-hidden rounded-3xl card-luxe transition-all duration-500 hover:-translate-y-1 hover:shadow-luxe hover:border-gold/25"
+      className="group block overflow-hidden rounded-3xl card-luxe card-hover"
     >
       {/* Cover */}
       <div className="relative aspect-[5/4] overflow-hidden">
