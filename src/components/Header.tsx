@@ -1,12 +1,13 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Plane, Menu, X, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
-import { t, getLocale, setLocale, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n";
+import { useT, useLocale, setLocale, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n";
 
 export function Header() {
+  const t = useT();
+  const currentLoc = useLocale();
   const [open, setOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
-  const [, force] = useState(0);
   const [scrolled, setScrolled] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
