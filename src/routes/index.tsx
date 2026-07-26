@@ -53,16 +53,16 @@ function Home() {
           <div className="absolute inset-0 bg-background/40" />
         </div>
 
-        <div className="mx-auto max-w-7xl px-4 pb-8 pt-16 md:px-8 md:pb-16 md:pt-28">
+        <div className="mx-auto max-w-7xl px-5 pb-10 pt-14 md:px-8 md:pb-16 md:pt-28">
           <div className="max-w-3xl animate-rise">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-white/75 backdrop-blur">
               <Sparkles className="h-3 w-3 text-gold" /> Premium Travel Marketplace
             </div>
-            <h1 className="mt-6 font-display text-5xl font-extrabold leading-[1.02] tracking-tight text-white md:text-7xl">
+            <h1 className="mt-6 font-display text-[2.6rem] font-extrabold leading-[1.02] tracking-tight text-white text-balance sm:text-5xl md:text-7xl">
               Transformando <span className="font-serif font-normal text-gold-gradient">milhas</span>
               <br className="hidden sm:block" /> em <span className="font-serif font-normal">oportunidades.</span>
             </h1>
-            <p className="mt-5 max-w-xl text-base leading-relaxed text-white/70 md:text-lg">
+            <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-white/70 text-balance md:text-lg">
               Passagens curadas, preços monitorados em tempo real e o exclusivo MAB Score
               para revelar quando uma tarifa é realmente uma oportunidade.
             </p>
@@ -70,13 +70,24 @@ function Home() {
 
           {/* Floating search card */}
           <div
-            className="mx-auto mt-10 max-w-6xl animate-rise md:mt-14"
+            className="mx-auto mt-9 max-w-6xl animate-rise md:mt-14"
             style={{ animationDelay: "150ms" }}
           >
             <FlightSearchForm />
           </div>
+
+          {/* Trust strip */}
+          <div
+            className="mx-auto mt-8 flex max-w-6xl flex-wrap items-center justify-center gap-x-8 gap-y-3 text-[11px] uppercase tracking-[0.22em] text-white/55 animate-rise md:mt-12"
+            style={{ animationDelay: "300ms" }}
+          >
+            <span className="inline-flex items-center gap-2"><span className="h-1 w-1 rounded-full bg-gold" /> MAB Score exclusivo</span>
+            <span className="inline-flex items-center gap-2"><span className="h-1 w-1 rounded-full bg-gold" /> Preços monitorados 24/7</span>
+            <span className="inline-flex items-center gap-2"><span className="h-1 w-1 rounded-full bg-gold" /> Curadoria editorial</span>
+          </div>
         </div>
       </section>
+
 
       {/* ============================== FEATURED ============================== */}
       <section className="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
