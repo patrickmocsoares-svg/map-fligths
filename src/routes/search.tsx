@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -6,10 +6,15 @@ import { z } from "zod";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FlightSearchForm } from "@/components/FlightSearchForm";
+import { DealCard } from "@/components/DealCard";
 import { searchFlightsFn } from "@/lib/flights.functions";
+import {
+  getNearbyDatesFn,
+  getPopularFromCityFn,
+} from "@/lib/deals/travelpayouts-deals.functions";
 import type { FlightOffer } from "@/lib/flights/types";
 import { formatBRL, t } from "@/lib/i18n";
-import { Plane, ArrowRight, SearchX, Sparkles, Briefcase } from "lucide-react";
+import { Plane, ArrowRight, SearchX, Sparkles, Briefcase, CalendarDays } from "lucide-react";
 
 const cabinEnum = z.enum(["economy", "premium", "business", "first"]);
 
@@ -165,9 +170,10 @@ function SearchResults() {
         )}
 
         {ready && !query.isLoading && !query.isError && sorted.length === 0 && (
-          <EmptyState
-            title="Nenhum voo encontrado"
-            body="Tente outras datas ou aeroportos próximos."
+          <NoOffersState
+            origin={params.origin!}
+            destination={params.destination!}
+            departDate={params.depart!}
           />
         )}
 
@@ -334,6 +340,109 @@ function EmptyState({ title, body }: { title: string; body: string }) {
       <SearchX className="mx-auto h-10 w-10 text-gold/60" />
       <h2 className="mt-4 font-display text-2xl font-bold">{title}</h2>
       <p className="mt-2 text-sm text-muted-foreground">{body}</p>
+    </div>
+  );
+}
+
+function NoOffersState({
+  origin,
+  destination,
+  departDate,
+}: {
+  origin: string;
+  destination: string;
+  departDate: string;
+}) {
+  const navigate = useNavigate();
+  const fetchNearby = useServerFn(getNearbyDatesFn);
+  const fetchPopular = useServerFn(getPopularFromCityFn);
+
+  const nearby = useQuery({
+    queryKey: ["nearby", origin, destination, departDate],
+    queryFn: () =>
+      fetchNearby({ data: { origin, destination, around: departDate } }),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const popular = useQuery({
+    queryKey: ["popular", origin],
+    queryFn: () => fetchPopular({ data: { origin, limit: 6 } }),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const dates = (nearby.data ?? []).slice(0, 6);
+  const suggestions = popular.data ?? [];
+
+  function fmt(iso: string) {
+    const d = new Date(`${iso}T00:00:00`);
+    return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
+  }
+
+  return (
+    <div className="space-y-10">
+      <div className="rounded-3xl card-luxe p-10 text-center">
+        <SearchX className="mx-auto h-10 w-10 text-gold/60" />
+        <h2 className="mt-4 font-display text-2xl font-bold">
+          Nenhuma oferta disponível para esta rota e data.
+        </h2>
+        <p className="mx-auto mt-2 max-w-lg text-sm text-muted-foreground">
+          Nossos parceiros ainda não possuem tarifas em cache para
+          {" "}
+          <span className="font-mono">{origin}</span> →{" "}
+          <span className="font-mono">{destination}</span> em {fmt(departDate)}.
+          Experimente uma data próxima ou explore destinos com preços disponíveis.
+        </p>
+      </div>
+
+      {dates.length > 0 && (
+        <section>
+          <div className="mb-4 flex items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-gold">
+            <CalendarDays className="h-3.5 w-3.5" /> Datas próximas com tarifa
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+            {dates.map((d) => (
+              <button
+                key={d.date}
+                onClick={() =>
+                  navigate({
+                    to: "/search",
+                    search: { origin, destination, depart: d.date } as never,
+                  })
+                }
+                className="group flex items-center justify-between rounded-2xl border border-gold/15 bg-card/50 p-4 text-left transition hover:border-gold/40"
+              >
+                <div>
+                  <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                    Partida
+                  </div>
+                  <div className="mt-1 font-display text-lg font-bold">{fmt(d.date)}</div>
+                </div>
+                <div className="text-right">
+                  <div className="font-display text-xl font-extrabold text-foreground">
+                    {formatBRL(d.price)}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                    Preço indicativo
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {suggestions.length > 0 && (
+        <section>
+          <div className="mb-4 flex items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-gold">
+            <Sparkles className="h-3.5 w-3.5" /> Destinos populares partindo de {origin}
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {suggestions.map((s) => (
+              <DealCard key={s.id} deal={s} />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }
