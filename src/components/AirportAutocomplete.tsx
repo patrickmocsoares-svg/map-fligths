@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Plane, Search, X } from "lucide-react";
 import { type Airport, searchAirports, useAirport } from "@/lib/airports";
+import { useT } from "@/lib/i18n";
 
 type Props = {
   label: string;
