@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { useLocale } from "@/lib/i18n";
 
 function NotFoundComponent() {
   return (
@@ -127,10 +128,6 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  // Subscribe to locale changes so the full tree re-renders on switch.
-  // Also keyed on locale to force any memoized copy inside pages to refresh.
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { useLocale } = require("@/lib/i18n") as typeof import("@/lib/i18n");
   const locale = useLocale();
 
   return (
