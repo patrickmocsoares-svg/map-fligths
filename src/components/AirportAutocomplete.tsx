@@ -12,6 +12,7 @@ type Props = {
 };
 
 export function AirportAutocomplete({ label, value, onChange, icon, placeholder }: Props) {
+  const t = useT();
   const selected = useAirport(value);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
