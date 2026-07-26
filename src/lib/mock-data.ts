@@ -31,6 +31,7 @@ export const AIRPORTS: Airport[] = [
   { code: "BOG", city: "Bogotá", name: "El Dorado", country: "Colômbia" },
   { code: "MEX", city: "Cidade do México", name: "Benito Juárez", country: "México" },
   { code: "DXB", city: "Dubai", name: "Dubai Intl.", country: "Emirados Árabes" },
+  { code: "VCP", city: "Campinas", name: "Viracopos", country: "Brasil" },
 ];
 
 export type Airline = { code: string; name: string; color: string };
