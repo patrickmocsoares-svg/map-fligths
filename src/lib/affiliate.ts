@@ -1,16 +1,18 @@
 /**
- * Affiliate link builder.
+ * Affiliate link builder + partner selection.
  *
- * Reads the active partner from `src/lib/affiliate-config.ts` and builds
- * the outbound URL for the "Continuar compra" CTA. When the active partner
- * is Aviasales and `VITE_AVIASALES_AFFILIATE_URL` is configured, the user
- * is redirected through the affiliate deep link. Otherwise we fall back to
- * a safe Google Flights search URL so the flow never breaks.
+ * Chooses the best available partner from `PARTNERS` (highest `priority`
+ * with a non-empty baseUrl) unless `ACTIVE_AFFILIATE_PARTNER` forces one.
+ * Returns `null` when no partner is configured so the UI can disable the
+ * CTA instead of silently redirecting to a third party (no more Google
+ * Flights fallback).
  */
 import type { FlightOffer, FlightSearchParams } from "@/lib/flights/types";
 import {
   ACTIVE_AFFILIATE_PARTNER,
-  AFFILIATE_CONFIG,
+  PARTNERS,
+  type AffiliatePartner,
+  type PartnerConfig,
 } from "@/lib/affiliate-config";
 
 export type AffiliateContext = {
@@ -18,40 +20,56 @@ export type AffiliateContext = {
   params: FlightSearchParams;
 };
 
-function buildGoogleFlightsUrl(ctx: AffiliateContext): string {
-  const { offer, params } = ctx;
-  const q = new URLSearchParams({
-    hl: "pt-BR",
-    curr: params.currency ?? "BRL",
-  });
-  const path = `${params.origin}.${params.destination}.${params.departDate}${
-    params.returnDate ? `*${params.destination}.${params.origin}.${params.returnDate}` : ""
-  }`;
-  return `https://www.google.com/travel/flights/${path}?${q.toString()}#mab-${offer.id}`;
+export type AffiliateResolution = {
+  partner: PartnerConfig;
+  url: string;
+};
+
+function isEligible(p: PartnerConfig): boolean {
+  return typeof p.baseUrl === "string" && p.baseUrl.trim().length > 0;
 }
 
-function appendMabMarker(url: string, offerId: string): string {
+/** Resolve the partner that should receive this click, or `null`. */
+export function resolveAffiliatePartner(): PartnerConfig | null {
+  if (ACTIVE_AFFILIATE_PARTNER) {
+    const forced = PARTNERS[ACTIVE_AFFILIATE_PARTNER as AffiliatePartner];
+    return forced && isEligible(forced) ? forced : null;
+  }
+  const eligible = Object.values(PARTNERS).filter(isEligible);
+  if (eligible.length === 0) return null;
+  eligible.sort((a, b) => b.priority - a.priority);
+  return eligible[0];
+}
+
+function appendMarker(url: string, param: string | undefined, value: string): string {
+  if (!param) return url;
   try {
     const u = new URL(url);
-    u.searchParams.set("mab_offer", offerId);
+    u.searchParams.set(param, value);
     return u.toString();
   } catch {
     return url;
   }
 }
 
-export function buildAffiliateUrl(ctx: AffiliateContext): string {
-  const partner = ACTIVE_AFFILIATE_PARTNER;
+/**
+ * Build the outbound affiliate URL for an offer.
+ * Returns `null` when no partner is configured — callers should disable
+ * the CTA and never fall back to a non-affiliate destination.
+ */
+export function buildAffiliateResolution(
+  ctx: AffiliateContext,
+): AffiliateResolution | null {
+  const partner = resolveAffiliatePartner();
+  if (!partner) return null;
+  const url = appendMarker(partner.baseUrl, partner.markerParam, ctx.offer.id);
+  return { partner, url };
+}
 
-  if (partner === "aviasales") {
-    const base = AFFILIATE_CONFIG.aviasales.baseUrl;
-    if (base && base.trim().length > 0) {
-      return appendMabMarker(base, ctx.offer.id);
-    }
-    // Missing env — safe fallback so the CTA still works.
-    return buildGoogleFlightsUrl(ctx);
-  }
-
-  // Default / google / partners without a configured base URL.
-  return buildGoogleFlightsUrl(ctx);
+/**
+ * Back-compat convenience: returns a URL string or `null`.
+ * Prefer `buildAffiliateResolution` when the partner metadata is useful.
+ */
+export function buildAffiliateUrl(ctx: AffiliateContext): string | null {
+  return buildAffiliateResolution(ctx)?.url ?? null;
 }

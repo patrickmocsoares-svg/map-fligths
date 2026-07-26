@@ -44,7 +44,8 @@ import {
   type PriceAlert,
   type SavedRoute,
 } from "@/lib/storage";
-import { buildAffiliateUrl } from "@/lib/affiliate";
+import { buildAffiliateResolution } from "@/lib/affiliate";
+import { trackAffiliateClick } from "@/lib/affiliate-tracking";
 
 const cabinEnum = z.enum(["economy", "premium", "business", "first"]);
 
@@ -270,7 +271,19 @@ function Detail({
     cabin: params.cabin ?? "economy",
     currency: offer.currency,
   };
-  const affiliateUrl = buildAffiliateUrl({ offer, params: searchParamsFull });
+  const affiliate = buildAffiliateResolution({ offer, params: searchParamsFull });
+  const affiliateUrl = affiliate?.url;
+  const affiliateDisabled = !affiliate;
+  const affiliatePartnerName = affiliate?.partner.name;
+  const handleAffiliateClick = () => {
+    if (!affiliate) return;
+    trackAffiliateClick({
+      partner: affiliate.partner,
+      offer,
+      params: searchParamsFull,
+      url: affiliate.url,
+    });
+  };
 
   return (
     <div className="pb-24 lg:pb-0">
@@ -389,16 +402,30 @@ function Detail({
                 </div>
               )}
 
-              <a
-                href={affiliateUrl}
-                target="_blank"
-                rel="noopener sponsored"
-                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl gold-gradient px-4 py-3.5 text-sm font-bold text-primary-foreground shadow-luxe transition hover:opacity-95"
-              >
-                Continuar para compra <ArrowRight className="h-4 w-4" />
-              </a>
+              {affiliateDisabled ? (
+                <button
+                  type="button"
+                  disabled
+                  title="Parceiro de reservas em breve"
+                  className="mt-5 inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-border bg-muted/30 px-4 py-3.5 text-sm font-bold text-muted-foreground"
+                >
+                  Parceiro em breve
+                </button>
+              ) : (
+                <a
+                  href={affiliateUrl}
+                  target="_blank"
+                  rel="noopener sponsored"
+                  onClick={handleAffiliateClick}
+                  className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl gold-gradient px-4 py-3.5 text-sm font-bold text-primary-foreground shadow-luxe transition hover:opacity-95"
+                >
+                  Continuar para compra <ArrowRight className="h-4 w-4" />
+                </a>
+              )}
               <p className="mt-2 text-center text-[10px] text-muted-foreground">
-                Você será direcionado ao parceiro de reservas.
+                {affiliateDisabled
+                  ? "Nenhum parceiro de reservas configurado."
+                  : `Você será direcionado a ${affiliatePartnerName}.`}
               </p>
 
               <div className="mt-4 grid grid-cols-2 gap-2">
@@ -495,14 +522,25 @@ function Detail({
                 : `${offer.currency} ${offer.price.toFixed(0)}`}
             </div>
           </div>
-          <a
-            href={affiliateUrl}
-            target="_blank"
-            rel="noopener sponsored"
-            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl gold-gradient px-5 py-3.5 text-sm font-bold text-primary-foreground shadow-luxe"
-          >
-            Continuar <ArrowRight className="h-4 w-4" />
-          </a>
+          {affiliateDisabled ? (
+            <button
+              type="button"
+              disabled
+              className="inline-flex shrink-0 cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-border bg-muted/30 px-5 py-3.5 text-sm font-bold text-muted-foreground"
+            >
+              Em breve
+            </button>
+          ) : (
+            <a
+              href={affiliateUrl}
+              target="_blank"
+              rel="noopener sponsored"
+              onClick={handleAffiliateClick}
+              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl gold-gradient px-5 py-3.5 text-sm font-bold text-primary-foreground shadow-luxe"
+            >
+              Continuar <ArrowRight className="h-4 w-4" />
+            </a>
+          )}
         </div>
       </div>
     </div>
