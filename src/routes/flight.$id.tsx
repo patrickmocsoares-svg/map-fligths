@@ -547,6 +547,11 @@ function Detail({
             </a>
           )}
         </div>
+        {offer.provider === "travelpayouts" && (
+          <p className="mx-auto max-w-6xl px-4 pt-1.5 pb-1 text-center text-[10px] leading-tight text-muted-foreground">
+            Preço indicativo. Valor final confirmado pelo parceiro no checkout.
+          </p>
+        )}
       </div>
     </div>
   );
