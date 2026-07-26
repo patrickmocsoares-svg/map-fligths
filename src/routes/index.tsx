@@ -152,33 +152,46 @@ function Home() {
             </p>
           </div>
 
-          <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
-            {inspire.map((d, i) => (
-              <Link
-                key={d.id}
-                to="/flight/$id"
-                params={{ id: d.id }}
-                className="group relative block aspect-[3/4] overflow-hidden rounded-2xl animate-rise"
-                style={{ animationDelay: `${i * 60}ms` }}
-              >
-                <img
-                  src={destinationImage(d.destination.code, 500, 700)}
-                  alt={d.destination.city}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-3">
-                  <div className="text-[9px] font-medium uppercase tracking-[0.22em] text-white/60">
-                    {d.destination.country}
+          <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {inspire.map(({ meta, deal }, i) => {
+              const to = deal ? "/flight/$id" : "/search";
+              return (
+                <Link
+                  key={meta.code}
+                  to={to as "/search"}
+                  {...(deal ? ({ params: { id: deal.id } } as unknown as object) : {})}
+                  className="group relative block aspect-[4/5] overflow-hidden rounded-3xl card-luxe animate-rise"
+                  style={{ animationDelay: `${i * 60}ms` }}
+                >
+                  <img
+                    src={destinationPhoto(meta.code, 800, 1000)}
+                    alt={`${meta.city}, ${meta.country}`}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.08]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent" />
+
+                  <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/40 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-white/85 backdrop-blur-md">
+                    <MapPin className="h-3 w-3 text-gold" /> {meta.country}
                   </div>
-                  <div className="mt-0.5 font-display text-sm font-bold text-white">
-                    {d.destination.city}
+
+                  <div className="absolute inset-x-0 bottom-0 p-5">
+                    <h3 className="font-display text-2xl font-bold leading-tight text-white">
+                      {meta.city}
+                    </h3>
+                    <p className="mt-2 text-[13px] leading-relaxed text-white/75 line-clamp-2">
+                      {meta.description}
+                    </p>
+                    <div className="mt-4 inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-gold">
+                      {deal ? "Ver oferta" : "Explorar destino"}
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
+
         </div>
       </section>
 
