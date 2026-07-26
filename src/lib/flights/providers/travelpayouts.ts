@@ -274,6 +274,7 @@ export const travelpayoutsProvider: FlightProvider = {
     const key = cacheKey(params);
     const hit = cache.get(key);
     if (hit && Date.now() - hit.at < CACHE_TTL_MS) {
+      console.log("[travelpayouts][audit] cache hit", { key, offers: hit.result.offers.length });
       return hit.result;
     }
 
@@ -293,14 +294,47 @@ export const travelpayoutsProvider: FlightProvider = {
     url.searchParams.set("page", "1");
     if (marker) url.searchParams.set("marker", marker);
 
+    const sentParams = {
+      origin: params.origin,
+      destination: params.destination,
+      departure_at: params.departDate,
+      return_at: params.returnDate ?? null,
+      currency,
+      one_way: !params.returnDate,
+      unique: "false",
+      sorting: "price",
+      direct: "false",
+      limit: Math.min(params.limit ?? 20, 30),
+      page: 1,
+      marker: marker ?? null,
+    };
+    console.log("[travelpayouts][audit] request", {
+      endpoint: BASE_URL,
+      url: url.toString(),
+      params: sentParams,
+      tokenPreview: `${token.slice(0, 4)}…${token.slice(-4)} (len=${token.length})`,
+    });
+
     let res: Response;
+    const started = Date.now();
     try {
       res = await fetch(url, {
         headers: { "X-Access-Token": token, accept: "application/json" },
       });
     } catch (e) {
+      console.error("[travelpayouts][audit] network error", { message: (e as Error).message });
       throw new ProviderError("travelpayouts", "upstream_error", (e as Error).message);
     }
+
+    const rawBody = await res.text();
+    console.log("[travelpayouts][audit] response", {
+      status: res.status,
+      ok: res.ok,
+      durationMs: Date.now() - started,
+      bodyLength: rawBody.length,
+      body: rawBody.length > 4000 ? `${rawBody.slice(0, 4000)}…[truncated ${rawBody.length}]` : rawBody,
+    });
+
     if (res.status === 401 || res.status === 403) {
       throw new ProviderError("travelpayouts", "unauthorized", "TRAVELPAYOUTS_TOKEN rejected");
     }
@@ -308,17 +342,44 @@ export const travelpayoutsProvider: FlightProvider = {
       throw new ProviderError("travelpayouts", "rate_limited", "Travelpayouts rate limit exceeded");
     }
     if (!res.ok) {
-      const body = await res.text().catch(() => "");
-      throw new ProviderError("travelpayouts", "upstream_error", `HTTP ${res.status}: ${body.slice(0, 200)}`);
+      throw new ProviderError("travelpayouts", "upstream_error", `HTTP ${res.status}: ${rawBody.slice(0, 200)}`);
     }
 
-    const payload = (await res.json()) as TpResponse;
+    let payload: TpResponse;
+    try {
+      payload = JSON.parse(rawBody) as TpResponse;
+    } catch (e) {
+      console.error("[travelpayouts][audit] json parse failed", { message: (e as Error).message });
+      throw new ProviderError("travelpayouts", "upstream_error", "invalid JSON response");
+    }
+
     if (payload.success === false) {
+      console.warn("[travelpayouts][audit] api reported failure", { error: payload.error });
       throw new ProviderError("travelpayouts", "upstream_error", payload.error ?? "unknown error");
     }
     const resCurrency = (payload.currency ?? currency).toUpperCase();
     const items = payload.data ?? [];
     const offers = items.map((it, i) => mapItem(it, params, resCurrency, marker, i));
+
+    if (offers.length === 0) {
+      console.warn("[travelpayouts][audit] empty result", {
+        provider: "travelpayouts",
+        reason:
+          items.length === 0
+            ? "data array vazio — a Data API prices_for_dates só retorna combinações rota+data que já foram buscadas recentemente no Aviasales e ainda estão em cache. Rotas/datas pouco procuradas ou datas fora da janela de cache (~48h) retornam vazio."
+            : "items foram recebidos mas o mapeamento produziu 0 offers",
+        sentParams,
+        payloadKeys: Object.keys(payload),
+        rawItemCount: items.length,
+      });
+    } else {
+      console.log("[travelpayouts][audit] parsed offers", {
+        provider: "travelpayouts",
+        count: offers.length,
+        firstPrice: offers[0]?.price,
+        currency: resCurrency,
+      });
+    }
 
     const result: FlightSearchResult = {
       provider: "travelpayouts",
