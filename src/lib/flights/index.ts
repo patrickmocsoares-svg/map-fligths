@@ -20,15 +20,19 @@ import { devProvider } from "./providers/dev";
 import { kiwiProvider } from "./providers/kiwi";
 import { amadeusProvider } from "./providers/amadeus";
 import { duffelProvider } from "./providers/duffel";
+import { travelpayoutsProvider } from "./providers/travelpayouts";
 import { ProviderError, type FlightProvider, type ProviderStatus } from "./provider";
 import type { FlightSearchParams, FlightSearchResult } from "./types";
 
 // Order matters for auto-selection. Real upstreams first; dev is the
 // fallback and mock is kept only for fixture-driven local demos.
+// Travelpayouts is prioritized as our currently-live affiliate partner —
+// prices are indicative (cache) and confirmed by the partner at checkout.
 const REGISTRY: FlightProvider[] = [
   duffelProvider,
   kiwiProvider,
   amadeusProvider,
+  travelpayoutsProvider,
   devProvider,
   mockProvider,
 ];
