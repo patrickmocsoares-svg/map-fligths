@@ -1,52 +1,95 @@
 /**
  * Centralized affiliate configuration for MAB Flights.
  *
- * This file is the single source of truth for conversion partners.
- * When the Aviasales (or any other) affiliate program is activated,
- * only this file needs to change — `src/lib/affiliate.ts` reads from
- * here to build the outbound URL used by the "Continuar compra" CTA.
+ * Single source of truth for conversion partners. To onboard a new partner
+ * (Trip.com, Booking, Kiwi, etc.), add an entry to `PARTNERS` and — when
+ * ready — bump its `priority` above the current active partner. The
+ * "Continuar compra" CTA reads from this file via `src/lib/affiliate.ts`.
  *
- * Do NOT hardcode partner URLs in components. Import from here.
+ * Do NOT hardcode partner URLs in components.
  */
 
-export type AffiliatePartner = "google" | "aviasales" | "kiwi" | "skyscanner";
+export type AffiliatePartner =
+  | "aviasales"
+  | "tripcom"
+  | "booking"
+  | "kiwi"
+  | "skyscanner";
 
-/**
- * Base URL of the Aviasales / Travelpayouts affiliate deep link.
- *
- * Expected format (example):
- *   https://tp.media/r?marker=XXXXXX&trs=YYYYY&p=ZZZZ&u=https%3A%2F%2Fwww.aviasales.com%2Fsearch
- *
- * The concrete value should come from a build-time env var
- * (VITE_AVIASALES_AFFILIATE_URL) so it can be swapped without code
- * changes once the partner account is approved.
- */
-export const AVIASALES_AFFILIATE_URL: string =
+export type PartnerConfig = {
+  id: AffiliatePartner;
+  /** Human-readable partner name, shown in tooltips / analytics. */
+  name: string;
+  /** Deep-link base URL. Empty string = not configured. */
+  baseUrl: string;
+  /** Higher = preferred. Only partners with a non-empty baseUrl are eligible. */
+  priority: number;
+  /** Optional query param used to tag the outbound offer id for attribution. */
+  markerParam?: string;
+};
+
+const AVIASALES_URL =
   (import.meta.env.VITE_AVIASALES_AFFILIATE_URL as string | undefined) ?? "";
+const TRIPCOM_URL =
+  (import.meta.env.VITE_TRIPCOM_AFFILIATE_URL as string | undefined) ?? "";
+const BOOKING_URL =
+  (import.meta.env.VITE_BOOKING_AFFILIATE_URL as string | undefined) ?? "";
+const KIWI_URL =
+  (import.meta.env.VITE_KIWI_AFFILIATE_URL as string | undefined) ?? "";
+const SKYSCANNER_URL =
+  (import.meta.env.VITE_SKYSCANNER_AFFILIATE_URL as string | undefined) ?? "";
 
 /**
- * Active partner used by `buildAffiliateUrl`.
- * Keep as "google" until Aviasales credentials are configured; then
- * switch to "aviasales" (or drive this from an env flag).
+ * Registry of known partners. Order does not matter — `priority` decides.
+ * Aviasales / Travelpayouts is currently the only live conversion partner.
  */
-export const ACTIVE_AFFILIATE_PARTNER: AffiliatePartner = "aviasales";
-
-/**
- * Optional per-partner settings for future expansion.
- * Add marker/sub-id/campaign fields here as partners are onboarded.
- */
-export const AFFILIATE_CONFIG = {
+export const PARTNERS: Record<AffiliatePartner, PartnerConfig> = {
   aviasales: {
-    baseUrl: AVIASALES_AFFILIATE_URL,
-    // marker, sub_id, campaign_id, etc. — fill when account is live
+    id: "aviasales",
+    name: "Aviasales",
+    baseUrl: AVIASALES_URL,
+    priority: 100,
+    markerParam: "mab_offer",
   },
-  google: {
-    baseUrl: "https://www.google.com/travel/flights/",
+  tripcom: {
+    id: "tripcom",
+    name: "Trip.com",
+    baseUrl: TRIPCOM_URL,
+    priority: 80,
+    markerParam: "mab_offer",
+  },
+  booking: {
+    id: "booking",
+    name: "Booking.com",
+    baseUrl: BOOKING_URL,
+    priority: 70,
+    markerParam: "aid",
   },
   kiwi: {
-    baseUrl: "",
+    id: "kiwi",
+    name: "Kiwi.com",
+    baseUrl: KIWI_URL,
+    priority: 60,
+    markerParam: "mab_offer",
   },
   skyscanner: {
-    baseUrl: "",
+    id: "skyscanner",
+    name: "Skyscanner",
+    baseUrl: SKYSCANNER_URL,
+    priority: 50,
+    markerParam: "associateid",
   },
-} as const;
+};
+
+/**
+ * Optional forced partner override. Leave as `null` to auto-select the
+ * highest-priority partner with a configured baseUrl.
+ */
+export const ACTIVE_AFFILIATE_PARTNER: AffiliatePartner | null = null;
+
+/**
+ * Back-compat: previous versions exposed these two constants directly.
+ * Kept so external references keep compiling; new code should use PARTNERS.
+ */
+export const AVIASALES_AFFILIATE_URL = AVIASALES_URL;
+export const AFFILIATE_CONFIG = PARTNERS;
