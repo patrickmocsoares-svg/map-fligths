@@ -122,7 +122,6 @@ export function Header() {
                   key={l.code}
                   onClick={() => {
                     setLocale(l.code as Locale);
-                    force((x) => x + 1);
                   }}
                   className={`rounded-full border px-3 py-1 text-xs ${
                     l.code === currentLoc ? "border-gold text-gold" : "border-border text-muted-foreground"
