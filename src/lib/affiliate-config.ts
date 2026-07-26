@@ -29,7 +29,7 @@ export const AVIASALES_AFFILIATE_URL: string =
  * Keep as "google" until Aviasales credentials are configured; then
  * switch to "aviasales" (or drive this from an env flag).
  */
-export const ACTIVE_AFFILIATE_PARTNER: AffiliatePartner = "google";
+export const ACTIVE_AFFILIATE_PARTNER: AffiliatePartner = "aviasales";
 
 /**
  * Optional per-partner settings for future expansion.
