@@ -170,9 +170,10 @@ function SearchResults() {
         )}
 
         {ready && !query.isLoading && !query.isError && sorted.length === 0 && (
-          <EmptyState
-            title="Nenhum voo encontrado"
-            body="Tente outras datas ou aeroportos próximos."
+          <NoOffersState
+            origin={params.origin!}
+            destination={params.destination!}
+            departDate={params.depart!}
           />
         )}
 
