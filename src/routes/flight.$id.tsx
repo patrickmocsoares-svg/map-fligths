@@ -427,6 +427,11 @@ function Detail({
                   ? "Nenhum parceiro de reservas configurado."
                   : `Você será direcionado a ${affiliatePartnerName}.`}
               </p>
+              {offer.provider === "travelpayouts" && (
+                <p className="mt-2 rounded-md border border-gold/20 bg-gold/5 px-3 py-2 text-center text-[10px] leading-relaxed text-muted-foreground">
+                  Preço indicativo. O valor final será confirmado pelo parceiro no momento da compra.
+                </p>
+              )}
 
               <div className="mt-4 grid grid-cols-2 gap-2">
                 <button
