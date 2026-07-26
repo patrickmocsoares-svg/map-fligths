@@ -44,7 +44,8 @@ import {
   type PriceAlert,
   type SavedRoute,
 } from "@/lib/storage";
-import { buildAffiliateUrl } from "@/lib/affiliate";
+import { resolveAffiliateTarget } from "@/lib/affiliate";
+import { AffiliateRedirect } from "@/components/AffiliateRedirect";
 
 const cabinEnum = z.enum(["economy", "premium", "business", "first"]);
 
@@ -226,6 +227,7 @@ function Detail({
   const [alerts, setAlerts] = useLocalStorage<PriceAlert[]>(KEYS.alerts, []);
   const [showAlert, setShowAlert] = useState(false);
   const [target, setTarget] = useState(Math.round(offer.price * 0.9));
+  const [redirecting, setRedirecting] = useState(false);
 
   const routeKey = `${offer.outbound.segments[0].originCode}-${offer.outbound.segments.at(-1)!.destinationCode}`;
   const isSaved = saved.some((s) => s.id === routeKey);
@@ -270,7 +272,9 @@ function Detail({
     cabin: params.cabin ?? "economy",
     currency: offer.currency,
   };
-  const affiliateUrl = buildAffiliateUrl({ offer, params: searchParamsFull });
+  const affiliateTarget = resolveAffiliateTarget({ offer, params: searchParamsFull });
+  const partnerReady = !!affiliateTarget;
+  const partnerName = affiliateTarget?.partner.name;
 
   return (
     <div className="pb-24 lg:pb-0">
@@ -389,16 +393,18 @@ function Detail({
                 </div>
               )}
 
-              <a
-                href={affiliateUrl}
-                target="_blank"
-                rel="noopener sponsored"
-                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl gold-gradient px-4 py-3.5 text-sm font-bold text-primary-foreground shadow-luxe transition hover:opacity-95"
+              <button
+                type="button"
+                onClick={() => setRedirecting(true)}
+                disabled={!partnerReady}
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl gold-gradient px-4 py-3.5 text-sm font-bold text-primary-foreground shadow-luxe transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Continuar para compra <ArrowRight className="h-4 w-4" />
-              </a>
+              </button>
               <p className="mt-2 text-center text-[10px] text-muted-foreground">
-                Você será direcionado ao parceiro de reservas.
+                {partnerReady
+                  ? <>Você será direcionado ao parceiro {partnerName}.</>
+                  : "Parceiro em breve."}
               </p>
 
               <div className="mt-4 grid grid-cols-2 gap-2">
@@ -495,16 +501,23 @@ function Detail({
                 : `${offer.currency} ${offer.price.toFixed(0)}`}
             </div>
           </div>
-          <a
-            href={affiliateUrl}
-            target="_blank"
-            rel="noopener sponsored"
-            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl gold-gradient px-5 py-3.5 text-sm font-bold text-primary-foreground shadow-luxe"
+          <button
+            type="button"
+            onClick={() => setRedirecting(true)}
+            disabled={!partnerReady}
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl gold-gradient px-5 py-3.5 text-sm font-bold text-primary-foreground shadow-luxe disabled:cursor-not-allowed disabled:opacity-50"
           >
             Continuar <ArrowRight className="h-4 w-4" />
-          </a>
+          </button>
         </div>
       </div>
+
+      <AffiliateRedirect
+        open={redirecting}
+        offer={offer}
+        params={searchParamsFull}
+        onClose={() => setRedirecting(false)}
+      />
     </div>
   );
 }
