@@ -1,3 +1,18 @@
+/**
+ * i18n runtime with reactive locale subscription.
+ *
+ * Dictionaries live in /src/locales/<code>.ts. Components can call `t(key)`
+ * anywhere; to react to locale changes, either use `useT()` inside a
+ * component (returns a stable `t` and re-renders on change) or subscribe
+ * via `onLocaleChange`.
+ */
+import { useSyncExternalStore } from "react";
+import ptBR from "@/locales/pt-BR";
+import en from "@/locales/en";
+import es from "@/locales/es";
+import fr from "@/locales/fr";
+import it from "@/locales/it";
+
 export type Locale = "pt-BR" | "en" | "es" | "fr" | "it";
 
 export const DEFAULT_LOCALE: Locale = "pt-BR";
@@ -10,97 +25,55 @@ export const SUPPORTED_LOCALES: { code: Locale; label: string; flag: string }[] 
 ];
 
 type Dict = Record<string, string>;
-
-const ptBR: Dict = {
-  "brand.name": "MAB Flights",
-  "brand.slogan": "Transformando milhas em oportunidades.",
-  "nav.home": "Início",
-  "nav.deals": "Ofertas",
-  "nav.opportunities": "Oportunidades do dia",
-  "nav.alerts": "Alertas de preço",
-  "nav.account": "Minha conta",
-  "nav.search": "Buscar voos",
-  "search.title": "Encontre a próxima oportunidade",
-  "search.subtitle": "Compare passagens, milhas e ofertas em tempo real.",
-  "search.origin": "Origem",
-  "search.destination": "Destino",
-  "search.depart": "Ida",
-  "search.return": "Volta",
-  "search.passengers": "Passageiros",
-  "search.cabin": "Classe",
-  "search.cta": "Buscar voos",
-  "search.oneway": "Só ida",
-  "search.roundtrip": "Ida e volta",
-  "cabin.economy": "Econômica",
-  "cabin.premium": "Premium Economy",
-  "cabin.business": "Executiva",
-  "cabin.first": "Primeira Classe",
-  "deals.domestic": "Melhores ofertas no Brasil",
-  "deals.international": "Melhores ofertas internacionais",
-  "deals.miles": "Achados com milhas",
-  "deals.viewAll": "Ver todas",
-  "deal.savings": "Economia estimada",
-  "deal.discount": "de desconto",
-  "score.excellent": "Excelente oportunidade",
-  "score.good": "Boa oportunidade",
-  "score.normal": "Preço normal",
-  "score.label": "MAB Score",
-  "flight.duration": "Duração",
-  "flight.stops": "Paradas",
-  "flight.direct": "Direto",
-  "flight.stop": "parada",
-  "flight.stops_plural": "paradas",
-  "flight.book": "Reservar agora",
-  "flight.save": "Salvar rota",
-  "flight.alert": "Criar alerta",
-  "flight.history": "Histórico de preços",
-  "flight.avgPrice": "Preço médio",
-  "flight.currentPrice": "Preço atual",
-  "account.title": "Minha conta",
-  "account.saved": "Rotas favoritas",
-  "account.alerts": "Meus alertas",
-  "account.empty.saved": "Você ainda não salvou nenhuma rota.",
-  "account.empty.alerts": "Você ainda não criou alertas de preço.",
-  "alerts.title": "Alertas de preço",
-  "alerts.subtitle": "Seja avisado quando o preço cair.",
-  "alerts.create": "Criar alerta",
-  "alerts.target": "Preço-alvo",
-  "alerts.remove": "Remover",
-  "results.title": "Resultados da busca",
-  "results.found": "voos encontrados",
-  "results.sort": "Ordenar por",
-  "results.sort.price": "Menor preço",
-  "results.sort.score": "Melhor MAB Score",
-  "results.sort.duration": "Menor duração",
-  "footer.tagline": "Sua próxima viagem começa aqui.",
-  "misc.from": "a partir de",
-  "misc.perPax": "por passageiro",
-  "misc.miles": "milhas",
-};
-
-// Placeholder dictionaries — real translations to be provided per locale.
-const en: Dict = { ...ptBR };
-const es: Dict = { ...ptBR };
-const fr: Dict = { ...ptBR };
-const it: Dict = { ...ptBR };
-
 const DICTS: Record<Locale, Dict> = { "pt-BR": ptBR, en, es, fr, it };
 
+const STORAGE_KEY = "mab_locale";
+
 let currentLocale: Locale = DEFAULT_LOCALE;
+if (typeof window !== "undefined") {
+  const saved = window.localStorage.getItem(STORAGE_KEY) as Locale | null;
+  if (saved && DICTS[saved]) currentLocale = saved;
+}
+
+const listeners = new Set<() => void>();
 
 export function setLocale(l: Locale) {
+  if (!DICTS[l] || l === currentLocale) return;
   currentLocale = l;
-  if (typeof window !== "undefined") localStorage.setItem("mab_locale", l);
-}
-export function getLocale(): Locale {
   if (typeof window !== "undefined") {
-    const s = localStorage.getItem("mab_locale") as Locale | null;
-    if (s && DICTS[s]) currentLocale = s;
+    window.localStorage.setItem(STORAGE_KEY, l);
+    // Reflect on <html lang> for a11y / SEO.
+    document.documentElement.setAttribute("lang", l);
   }
+  listeners.forEach((fn) => fn());
+}
+
+export function getLocale(): Locale {
   return currentLocale;
 }
+
+export function onLocaleChange(cb: () => void): () => void {
+  listeners.add(cb);
+  return () => listeners.delete(cb);
+}
+
 export function t(key: string): string {
-  return DICTS[getLocale()][key] ?? DICTS[DEFAULT_LOCALE][key] ?? key;
+  return DICTS[currentLocale][key] ?? DICTS[DEFAULT_LOCALE][key] ?? key;
+}
+
+/** Reactive locale hook — subscribes so consumers re-render on switch. */
+export function useLocale(): Locale {
+  return useSyncExternalStore(
+    (cb) => onLocaleChange(cb),
+    () => currentLocale,
+    () => DEFAULT_LOCALE,
+  );
+}
+
+/** Convenience hook: returns a stable `t` bound to the current locale. */
+export function useT(): (key: string) => string {
+  useLocale();
+  return t;
 }
 
 export function formatBRL(n: number): string {

@@ -1,12 +1,13 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Plane, Menu, X, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
-import { t, getLocale, setLocale, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n";
+import { useT, useLocale, setLocale, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n";
 
 export function Header() {
+  const t = useT();
+  const currentLoc = useLocale();
   const [open, setOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
-  const [, force] = useState(0);
   const [scrolled, setScrolled] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
@@ -29,7 +30,7 @@ export function Header() {
     { to: "/account", label: t("nav.account") },
   ];
 
-  const currentLoc = getLocale();
+  
 
   return (
     <header
@@ -81,7 +82,6 @@ export function Header() {
                   onClick={() => {
                     setLocale(l.code as Locale);
                     setLangOpen(false);
-                    force((x) => x + 1);
                   }}
                   className={`flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-muted/60 ${
                     l.code === currentLoc ? "text-gold" : "text-foreground"
@@ -122,7 +122,6 @@ export function Header() {
                   key={l.code}
                   onClick={() => {
                     setLocale(l.code as Locale);
-                    force((x) => x + 1);
                   }}
                   className={`rounded-full border px-3 py-1 text-xs ${
                     l.code === currentLoc ? "border-gold text-gold" : "border-border text-muted-foreground"

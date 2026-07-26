@@ -36,6 +36,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
   const [flexible, setFlexible] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const [origin, setOrigin] = useState("GRU");
   const [destination, setDestination] = useState("MIA");
@@ -86,9 +87,22 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     if (trip === "multicity") {
       const first = legs[0];
       const last = legs[legs.length - 1];
+      if (legs.some((l) => !l.origin || !l.destination)) {
+        setError(t("err.missingAirport"));
+        return;
+      }
+      if (legs.some((l) => l.origin === l.destination)) {
+        setError(t("err.sameAirport"));
+        return;
+      }
+      if (legs.some((l) => !l.depart)) {
+        setError(t("err.missingDate"));
+        return;
+      }
       nav({
         to: "/search",
         search: {
@@ -99,6 +113,22 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
           cabin,
         },
       });
+      return;
+    }
+    if (!origin || !destination) {
+      setError(t("err.missingAirport"));
+      return;
+    }
+    if (origin === destination) {
+      setError(t("err.sameAirport"));
+      return;
+    }
+    if (!depart || (trip === "roundtrip" && !ret)) {
+      setError(t("err.missingDate"));
+      return;
+    }
+    if (trip === "roundtrip" && ret < depart) {
+      setError(t("err.returnBeforeDepart"));
       return;
     }
     nav({
@@ -143,7 +173,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
           aria-pressed={flexible}
         >
           <Sparkles className="h-3.5 w-3.5" />
-          <span className="hidden xs:inline sm:inline">Datas flexíveis</span>
+          <span className="hidden xs:inline sm:inline">{t("search.flexible")}</span>
           <span className="xs:hidden sm:hidden">Flex ±3d</span>
         </button>
       </div>
@@ -244,6 +274,16 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
               />
             )}
           </div>
+        </div>
+      )}
+
+      {/* Validation error */}
+      {error && (
+        <div
+          role="alert"
+          className="mt-5 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-center text-xs font-medium text-red-300"
+        >
+          {error}
         </div>
       )}
 

@@ -1,7 +1,8 @@
 import { Plane } from "lucide-react";
-import { t } from "@/lib/i18n";
+import { useT } from "@/lib/i18n";
 
 export function Footer() {
+  const t = useT();
   return (
     <footer className="border-t border-gold/10 mt-24">
       <div className="mx-auto max-w-7xl px-4 py-12 md:px-8">
@@ -16,23 +17,23 @@ export function Footer() {
             <p className="mt-3 max-w-xs text-sm text-muted-foreground">{t("brand.slogan")}</p>
           </div>
           <div className="text-sm text-muted-foreground">
-            <p className="text-gold/80 uppercase tracking-widest text-xs mb-3">Plataforma</p>
+            <p className="text-gold/80 uppercase tracking-widest text-xs mb-3">{t("footer.platform")}</p>
             <ul className="space-y-2">
-              <li>Ofertas nacionais</li>
-              <li>Ofertas internacionais</li>
-              <li>Achados com milhas</li>
-              <li>Alertas de preço</li>
+              <li>{t("deals.domestic")}</li>
+              <li>{t("deals.international")}</li>
+              <li>{t("deals.miles")}</li>
+              <li>{t("nav.alerts")}</li>
             </ul>
           </div>
           <div className="text-sm text-muted-foreground">
-            <p className="text-gold/80 uppercase tracking-widest text-xs mb-3">Contato</p>
+            <p className="text-gold/80 uppercase tracking-widest text-xs mb-3">{t("footer.contact")}</p>
             <p>contato@mabflights.com</p>
             <p className="mt-1">São Paulo · Brasil</p>
           </div>
         </div>
         <div className="mt-10 border-t border-gold/10 pt-6 text-xs text-muted-foreground/70 flex flex-col md:flex-row justify-between gap-2">
           <span>© {new Date().getFullYear()} MAB Flights. {t("footer.tagline")}</span>
-          <span>Preços indicativos. Sujeitos a disponibilidade.</span>
+          <span>{t("footer.priceNote")}</span>
         </div>
       </div>
     </footer>
