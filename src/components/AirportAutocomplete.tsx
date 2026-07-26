@@ -96,7 +96,7 @@ export function AirportAutocomplete({ label, value, onChange, icon, placeholder 
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={onKey}
-              placeholder={placeholder ?? "Cidade, aeroporto ou IATA"}
+              placeholder={placeholder ?? t("search.placeholder")}
               className="w-full bg-transparent text-base font-semibold text-foreground outline-none placeholder:text-muted-foreground/60"
             />
             {query && (
@@ -120,10 +120,10 @@ export function AirportAutocomplete({ label, value, onChange, icon, placeholder 
             className="mt-1 w-full text-left"
           >
             <div className="text-lg font-semibold text-foreground truncate">
-              {selected ? `${selected.code} · ${selected.city}` : "Selecionar"}
+              {selected ? `${selected.code} · ${selected.city}` : t("search.selectAirport")}
             </div>
             <div className="mt-0.5 truncate text-xs text-muted-foreground">
-              {selected ? `${selected.name} · ${selected.country}` : "Toque para buscar"}
+              {selected ? `${selected.name} · ${selected.country}` : t("search.tapToSearch")}
             </div>
           </button>
         )}
@@ -135,10 +135,10 @@ export function AirportAutocomplete({ label, value, onChange, icon, placeholder 
           className="absolute z-50 mt-2 max-h-80 w-full overflow-auto rounded-xl border border-border bg-card shadow-luxe"
         >
           {loading && results.length === 0 && (
-            <div className="px-4 py-3 text-sm text-muted-foreground">Buscando…</div>
+            <div className="px-4 py-3 text-sm text-muted-foreground">{t("search.searching")}</div>
           )}
           {!loading && results.length === 0 && (
-            <div className="px-4 py-3 text-sm text-muted-foreground">Nenhum aeroporto encontrado.</div>
+            <div className="px-4 py-3 text-sm text-muted-foreground">{t("search.noAirport")}</div>
           )}
           {results.map((a, i) => {
             const active = i === highlight;
