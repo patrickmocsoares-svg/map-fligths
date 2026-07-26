@@ -30,7 +30,7 @@ export function Header() {
     { to: "/account", label: t("nav.account") },
   ];
 
-  const currentLoc = getLocale();
+  
 
   return (
     <header
@@ -82,7 +82,6 @@ export function Header() {
                   onClick={() => {
                     setLocale(l.code as Locale);
                     setLangOpen(false);
-                    force((x) => x + 1);
                   }}
                   className={`flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-muted/60 ${
                     l.code === currentLoc ? "text-gold" : "text-foreground"
