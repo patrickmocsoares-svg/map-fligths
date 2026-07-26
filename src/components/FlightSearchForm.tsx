@@ -173,7 +173,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
           aria-pressed={flexible}
         >
           <Sparkles className="h-3.5 w-3.5" />
-          <span className="hidden xs:inline sm:inline">Datas flexíveis</span>
+          <span className="hidden xs:inline sm:inline">{t("search.flexible")}</span>
           <span className="xs:hidden sm:hidden">Flex ±3d</span>
         </button>
       </div>
