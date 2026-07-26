@@ -7,11 +7,19 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [, force] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const nav = [
     { to: "/", label: t("nav.home") },
@@ -24,32 +32,38 @@ export function Header() {
   const currentLoc = getLocale();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-gold/10 backdrop-blur-xl bg-background/80">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:px-8">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="grid h-9 w-9 place-items-center rounded-md gold-gradient text-primary-foreground shadow-luxe">
+    <header
+      className={`sticky top-0 z-40 border-b border-gold/10 backdrop-blur-xl transition-all duration-300 ${
+        scrolled ? "header-scrolled" : "bg-background/80"
+      }`}
+    >
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 md:px-8 md:py-4">
+        <Link to="/" className="flex items-center gap-2.5 group">
+          <span className="grid h-9 w-9 place-items-center rounded-lg gold-gradient text-primary-foreground shadow-luxe transition-transform duration-500 group-hover:rotate-[-8deg]">
             <Plane className="h-4 w-4" strokeWidth={2.5} />
           </span>
           <span className="flex flex-col leading-none">
-            <span className="font-display text-lg tracking-wide">MAB Flights</span>
-            <span className="text-[10px] uppercase tracking-[0.2em] text-gold/70">Premium Travel</span>
+            <span className="font-display text-lg tracking-tight">MAB Flights</span>
+            <span className="text-[10px] uppercase tracking-[0.22em] text-gold/70">Premium Travel</span>
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-9 md:flex">
           {nav.map((n) => {
             const active = pathname === n.to || (n.to !== "/" && pathname.startsWith(n.to));
             return (
               <Link
                 key={n.to}
                 to={n.to}
-                className={`text-sm transition-colors ${active ? "text-gold" : "text-muted-foreground hover:text-foreground"}`}
+                data-active={active}
+                className={`nav-link text-sm transition-colors ${active ? "text-gold" : "text-muted-foreground hover:text-foreground"}`}
               >
                 {n.label}
               </Link>
             );
           })}
         </nav>
+
 
         <div className="hidden items-center gap-2 md:flex relative">
           <button
