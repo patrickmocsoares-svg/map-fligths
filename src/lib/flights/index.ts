@@ -74,11 +74,18 @@ export async function searchFlights(
   try {
     return await provider.search(p);
   } catch (err) {
-    // If a real upstream fails mid-request, keep the app usable by falling
-    // back to synthetic offers rather than surfacing an empty results page.
+    // Never fabricate prices when a real upstream fails — return an empty
+    // result so the UI can show an honest empty state (nearby dates,
+    // popular destinations) instead of misleading synthetic offers.
     if (provider.real) {
-      console.error(`[flights] real provider ${provider.id} failed, falling back to dev:`, err);
-      return devProvider.search(p);
+      console.error(`[flights] real provider ${provider.id} failed:`, err);
+      return {
+        provider: provider.id,
+        searchedAt: new Date().toISOString(),
+        params: p,
+        currency: p.currency ?? "BRL",
+        offers: [],
+      };
     }
     throw err;
   }
