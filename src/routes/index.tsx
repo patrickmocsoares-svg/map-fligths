@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, MapPin } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FlightSearchForm } from "@/components/FlightSearchForm";
 import { DealCard } from "@/components/DealCard";
 import { DEALS } from "@/lib/mock-data";
-import { heroImage, destinationImage } from "@/lib/destination-images";
+import { heroImage } from "@/lib/destination-images";
+import { getDestination, destinationPhoto } from "@/lib/destinations";
 
 const HERO_URL = heroImage(2400);
 
@@ -34,7 +35,13 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const featured = DEALS.filter((d) => d.category === "international").slice(0, 3);
-  const inspire = DEALS.slice(0, 6);
+  // Curated inspiration: unique destinations with rich editorial metadata.
+  const inspireCodes = ["CDG", "FCO", "JFK", "DXB", "LIS", "MIA"] as const;
+  const inspire = inspireCodes.map((code) => {
+    const meta = getDestination(code);
+    const deal = DEALS.find((d) => d.destination.code === code);
+    return { meta, deal };
+  });
 
   return (
     <div className="min-h-screen">
