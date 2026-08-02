@@ -82,6 +82,18 @@ function Home() {
               Passagens curadas, preços monitorados em tempo real e o exclusivo MAB Score
               para revelar quando uma tarifa é realmente uma oportunidade.
             </p>
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Link
+                to="/solicitar"
+                className="inline-flex items-center justify-center gap-2 rounded-xl gold-gradient px-7 py-4 text-sm font-semibold text-primary-foreground shadow-luxe transition-transform hover:-translate-y-0.5"
+              >
+                Solicitar orçamento <ArrowRight className="h-4 w-4" />
+              </Link>
+              <span className="text-xs leading-relaxed text-white/60 sm:max-w-xs">
+                Orçamento montado e confirmado pela nossa equipe — resposta em até 1 hora no
+                horário de atendimento.
+              </span>
+            </div>
           </div>
 
           <div className="mx-auto mt-9 max-w-6xl animate-rise md:mt-14" style={{ animationDelay: "150ms" }}>
