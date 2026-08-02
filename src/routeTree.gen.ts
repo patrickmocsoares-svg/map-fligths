@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SolicitarRouteImport } from './routes/solicitar'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as OpportunitiesRouteImport } from './routes/opportunities'
 import { Route as DealsRouteImport } from './routes/deals'
@@ -18,6 +19,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as FlightIdRouteImport } from './routes/flight.$id'
 import { Route as ApiPublicHooksDiscoverPricesRouteImport } from './routes/api/public/hooks/discover-prices'
 
+const SolicitarRoute = SolicitarRouteImport.update({
+  id: '/solicitar',
+  path: '/solicitar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/deals': typeof DealsRoute
   '/opportunities': typeof OpportunitiesRoute
   '/search': typeof SearchRoute
+  '/solicitar': typeof SolicitarRoute
   '/flight/$id': typeof FlightIdRoute
   '/api/public/hooks/discover-prices': typeof ApiPublicHooksDiscoverPricesRoute
 }
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/deals': typeof DealsRoute
   '/opportunities': typeof OpportunitiesRoute
   '/search': typeof SearchRoute
+  '/solicitar': typeof SolicitarRoute
   '/flight/$id': typeof FlightIdRoute
   '/api/public/hooks/discover-prices': typeof ApiPublicHooksDiscoverPricesRoute
 }
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/deals': typeof DealsRoute
   '/opportunities': typeof OpportunitiesRoute
   '/search': typeof SearchRoute
+  '/solicitar': typeof SolicitarRoute
   '/flight/$id': typeof FlightIdRoute
   '/api/public/hooks/discover-prices': typeof ApiPublicHooksDiscoverPricesRoute
 }
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/deals'
     | '/opportunities'
     | '/search'
+    | '/solicitar'
     | '/flight/$id'
     | '/api/public/hooks/discover-prices'
   fileRoutesByTo: FileRoutesByTo
@@ -110,6 +120,7 @@ export interface FileRouteTypes {
     | '/deals'
     | '/opportunities'
     | '/search'
+    | '/solicitar'
     | '/flight/$id'
     | '/api/public/hooks/discover-prices'
   id:
@@ -120,6 +131,7 @@ export interface FileRouteTypes {
     | '/deals'
     | '/opportunities'
     | '/search'
+    | '/solicitar'
     | '/flight/$id'
     | '/api/public/hooks/discover-prices'
   fileRoutesById: FileRoutesById
@@ -131,12 +143,20 @@ export interface RootRouteChildren {
   DealsRoute: typeof DealsRoute
   OpportunitiesRoute: typeof OpportunitiesRoute
   SearchRoute: typeof SearchRoute
+  SolicitarRoute: typeof SolicitarRoute
   FlightIdRoute: typeof FlightIdRoute
   ApiPublicHooksDiscoverPricesRoute: typeof ApiPublicHooksDiscoverPricesRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/solicitar': {
+      id: '/solicitar'
+      path: '/solicitar'
+      fullPath: '/solicitar'
+      preLoaderRoute: typeof SolicitarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/search': {
       id: '/search'
       path: '/search'
@@ -203,19 +223,10 @@ const rootRouteChildren: RootRouteChildren = {
   DealsRoute: DealsRoute,
   OpportunitiesRoute: OpportunitiesRoute,
   SearchRoute: SearchRoute,
+  SolicitarRoute: SolicitarRoute,
   FlightIdRoute: FlightIdRoute,
   ApiPublicHooksDiscoverPricesRoute: ApiPublicHooksDiscoverPricesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

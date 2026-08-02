@@ -50,6 +50,277 @@ export type Database = {
         }
         Relationships: []
       }
+      customers: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          notes: string | null
+          phone: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          notes?: string | null
+          phone: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          notes?: string | null
+          phone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      email_logs: {
+        Row: {
+          created_at: string
+          error: string | null
+          id: string
+          order_id: string | null
+          sent_at: string | null
+          status: string
+          subject: string | null
+          template: string
+          to_email: string
+        }
+        Insert: {
+          created_at?: string
+          error?: string | null
+          id?: string
+          order_id?: string | null
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+          template: string
+          to_email: string
+        }
+        Update: {
+          created_at?: string
+          error?: string | null
+          id?: string
+          order_id?: string | null
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+          template?: string
+          to_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_logs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_messages: {
+        Row: {
+          author_name: string | null
+          author_role: string
+          body: string
+          created_at: string
+          id: string
+          order_id: string
+        }
+        Insert: {
+          author_name?: string | null
+          author_role?: string
+          body: string
+          created_at?: string
+          id?: string
+          order_id: string
+        }
+        Update: {
+          author_name?: string | null
+          author_role?: string
+          body?: string
+          created_at?: string
+          id?: string
+          order_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_messages_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_status_history: {
+        Row: {
+          changed_by: string | null
+          created_at: string
+          from_status: string | null
+          id: string
+          note: string | null
+          order_id: string
+          to_status: string
+        }
+        Insert: {
+          changed_by?: string | null
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          note?: string | null
+          order_id: string
+          to_status: string
+        }
+        Update: {
+          changed_by?: string | null
+          created_at?: string
+          from_status?: string | null
+          id?: string
+          note?: string | null
+          order_id?: string
+          to_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_status_history_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          adults: number
+          budget_brl: number | null
+          cabin: string
+          children: number
+          created_at: string
+          customer_id: string
+          depart_date: string
+          destination_iata: string
+          flexible_dates: boolean
+          id: string
+          infants: number
+          notes: string | null
+          origin_iata: string
+          preferred_airline: string | null
+          preferred_program: string | null
+          protocol: string
+          quoted_price_brl: number | null
+          return_date: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          adults?: number
+          budget_brl?: number | null
+          cabin?: string
+          children?: number
+          created_at?: string
+          customer_id: string
+          depart_date: string
+          destination_iata: string
+          flexible_dates?: boolean
+          id?: string
+          infants?: number
+          notes?: string | null
+          origin_iata: string
+          preferred_airline?: string | null
+          preferred_program?: string | null
+          protocol: string
+          quoted_price_brl?: number | null
+          return_date?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          adults?: number
+          budget_brl?: number | null
+          cabin?: string
+          children?: number
+          created_at?: string
+          customer_id?: string
+          depart_date?: string
+          destination_iata?: string
+          flexible_dates?: boolean
+          id?: string
+          infants?: number
+          notes?: string | null
+          origin_iata?: string
+          preferred_airline?: string | null
+          preferred_program?: string | null
+          protocol?: string
+          quoted_price_brl?: number | null
+          return_date?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount_brl: number
+          created_at: string
+          currency: string
+          id: string
+          order_id: string
+          paid_at: string | null
+          provider: string
+          provider_reference: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount_brl: number
+          created_at?: string
+          currency?: string
+          id?: string
+          order_id: string
+          paid_at?: string | null
+          provider?: string
+          provider_reference?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount_brl?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          order_id?: string
+          paid_at?: string | null
+          provider?: string
+          provider_reference?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       price_history: {
         Row: {
           airline: string | null
@@ -94,6 +365,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      next_order_protocol: { Args: never; Returns: string }
       route_price_stats: {
         Args: {
           _cabin?: string
