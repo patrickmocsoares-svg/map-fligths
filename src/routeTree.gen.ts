@@ -20,6 +20,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as FlightIdRouteImport } from './routes/flight.$id'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminConfiguracoesRouteImport } from './routes/_authenticated/admin.configuracoes'
 import { Route as ApiPublicHooksDiscoverPricesRouteImport } from './routes/api/public/hooks/discover-prices'
 import { Route as AuthenticatedAdminPedidosIdRouteImport } from './routes/_authenticated/admin.pedidos.$id'
 
@@ -77,6 +78,12 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminConfiguracoesRoute =
+  AuthenticatedAdminConfiguracoesRouteImport.update({
+    id: '/admin/configuracoes',
+    path: '/admin/configuracoes',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const ApiPublicHooksDiscoverPricesRoute =
   ApiPublicHooksDiscoverPricesRouteImport.update({
     id: '/api/public/hooks/discover-prices',
@@ -100,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/solicitar': typeof SolicitarRoute
   '/flight/$id': typeof FlightIdRoute
+  '/admin/configuracoes': typeof AuthenticatedAdminConfiguracoesRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/pedidos/$id': typeof AuthenticatedAdminPedidosIdRoute
   '/api/public/hooks/discover-prices': typeof ApiPublicHooksDiscoverPricesRoute
@@ -114,6 +122,7 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/solicitar': typeof SolicitarRoute
   '/flight/$id': typeof FlightIdRoute
+  '/admin/configuracoes': typeof AuthenticatedAdminConfiguracoesRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/pedidos/$id': typeof AuthenticatedAdminPedidosIdRoute
   '/api/public/hooks/discover-prices': typeof ApiPublicHooksDiscoverPricesRoute
@@ -130,6 +139,7 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/solicitar': typeof SolicitarRoute
   '/flight/$id': typeof FlightIdRoute
+  '/_authenticated/admin/configuracoes': typeof AuthenticatedAdminConfiguracoesRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/pedidos/$id': typeof AuthenticatedAdminPedidosIdRoute
   '/api/public/hooks/discover-prices': typeof ApiPublicHooksDiscoverPricesRoute
@@ -146,6 +156,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/solicitar'
     | '/flight/$id'
+    | '/admin/configuracoes'
     | '/admin/'
     | '/admin/pedidos/$id'
     | '/api/public/hooks/discover-prices'
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/solicitar'
     | '/flight/$id'
+    | '/admin/configuracoes'
     | '/admin'
     | '/admin/pedidos/$id'
     | '/api/public/hooks/discover-prices'
@@ -175,6 +187,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/solicitar'
     | '/flight/$id'
+    | '/_authenticated/admin/configuracoes'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/pedidos/$id'
     | '/api/public/hooks/discover-prices'
@@ -273,6 +286,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/configuracoes': {
+      id: '/_authenticated/admin/configuracoes'
+      path: '/admin/configuracoes'
+      fullPath: '/admin/configuracoes'
+      preLoaderRoute: typeof AuthenticatedAdminConfiguracoesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/public/hooks/discover-prices': {
       id: '/api/public/hooks/discover-prices'
       path: '/api/public/hooks/discover-prices'
@@ -291,11 +311,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminConfiguracoesRoute: typeof AuthenticatedAdminConfiguracoesRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedAdminPedidosIdRoute: typeof AuthenticatedAdminPedidosIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminConfiguracoesRoute: AuthenticatedAdminConfiguracoesRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   AuthenticatedAdminPedidosIdRoute: AuthenticatedAdminPedidosIdRoute,
 }
