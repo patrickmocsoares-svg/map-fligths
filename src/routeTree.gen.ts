@@ -21,6 +21,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as FlightIdRouteImport } from './routes/flight.$id'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as ApiPublicHooksDiscoverPricesRouteImport } from './routes/api/public/hooks/discover-prices'
+import { Route as AuthenticatedAdminPedidosIdRouteImport } from './routes/_authenticated/admin.pedidos.$id'
 
 const SolicitarRoute = SolicitarRouteImport.update({
   id: '/solicitar',
@@ -82,6 +83,12 @@ const ApiPublicHooksDiscoverPricesRoute =
     path: '/api/public/hooks/discover-prices',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedAdminPedidosIdRoute =
+  AuthenticatedAdminPedidosIdRouteImport.update({
+    id: '/admin/pedidos/$id',
+    path: '/admin/pedidos/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/solicitar': typeof SolicitarRoute
   '/flight/$id': typeof FlightIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/admin/pedidos/$id': typeof AuthenticatedAdminPedidosIdRoute
   '/api/public/hooks/discover-prices': typeof ApiPublicHooksDiscoverPricesRoute
 }
 export interface FileRoutesByTo {
@@ -107,6 +115,7 @@ export interface FileRoutesByTo {
   '/solicitar': typeof SolicitarRoute
   '/flight/$id': typeof FlightIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/admin/pedidos/$id': typeof AuthenticatedAdminPedidosIdRoute
   '/api/public/hooks/discover-prices': typeof ApiPublicHooksDiscoverPricesRoute
 }
 export interface FileRoutesById {
@@ -122,6 +131,7 @@ export interface FileRoutesById {
   '/solicitar': typeof SolicitarRoute
   '/flight/$id': typeof FlightIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/admin/pedidos/$id': typeof AuthenticatedAdminPedidosIdRoute
   '/api/public/hooks/discover-prices': typeof ApiPublicHooksDiscoverPricesRoute
 }
 export interface FileRouteTypes {
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/solicitar'
     | '/flight/$id'
     | '/admin/'
+    | '/admin/pedidos/$id'
     | '/api/public/hooks/discover-prices'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/solicitar'
     | '/flight/$id'
     | '/admin'
+    | '/admin/pedidos/$id'
     | '/api/public/hooks/discover-prices'
   id:
     | '__root__'
@@ -164,6 +176,7 @@ export interface FileRouteTypes {
     | '/solicitar'
     | '/flight/$id'
     | '/_authenticated/admin/'
+    | '/_authenticated/admin/pedidos/$id'
     | '/api/public/hooks/discover-prices'
   fileRoutesById: FileRoutesById
 }
@@ -267,15 +280,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksDiscoverPricesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/pedidos/$id': {
+      id: '/_authenticated/admin/pedidos/$id'
+      path: '/admin/pedidos/$id'
+      fullPath: '/admin/pedidos/$id'
+      preLoaderRoute: typeof AuthenticatedAdminPedidosIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminPedidosIdRoute: typeof AuthenticatedAdminPedidosIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminPedidosIdRoute: AuthenticatedAdminPedidosIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
