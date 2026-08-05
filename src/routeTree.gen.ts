@@ -16,8 +16,10 @@ import { Route as DealsRouteImport } from './routes/deals'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AlertsRouteImport } from './routes/alerts'
 import { Route as AccountRouteImport } from './routes/account'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as FlightIdRouteImport } from './routes/flight.$id'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as ApiPublicHooksDiscoverPricesRouteImport } from './routes/api/public/hooks/discover-prices'
 
 const SolicitarRoute = SolicitarRouteImport.update({
@@ -55,6 +57,10 @@ const AccountRoute = AccountRouteImport.update({
   path: '/account',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -64,6 +70,11 @@ const FlightIdRoute = FlightIdRouteImport.update({
   id: '/flight/$id',
   path: '/flight/$id',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const ApiPublicHooksDiscoverPricesRoute =
   ApiPublicHooksDiscoverPricesRouteImport.update({
@@ -82,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/solicitar': typeof SolicitarRoute
   '/flight/$id': typeof FlightIdRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
   '/api/public/hooks/discover-prices': typeof ApiPublicHooksDiscoverPricesRoute
 }
 export interface FileRoutesByTo {
@@ -94,11 +106,13 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/solicitar': typeof SolicitarRoute
   '/flight/$id': typeof FlightIdRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
   '/api/public/hooks/discover-prices': typeof ApiPublicHooksDiscoverPricesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/account': typeof AccountRoute
   '/alerts': typeof AlertsRoute
   '/auth': typeof AuthRoute
@@ -107,6 +121,7 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/solicitar': typeof SolicitarRoute
   '/flight/$id': typeof FlightIdRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/api/public/hooks/discover-prices': typeof ApiPublicHooksDiscoverPricesRoute
 }
 export interface FileRouteTypes {
@@ -121,6 +136,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/solicitar'
     | '/flight/$id'
+    | '/admin/'
     | '/api/public/hooks/discover-prices'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -133,10 +149,12 @@ export interface FileRouteTypes {
     | '/search'
     | '/solicitar'
     | '/flight/$id'
+    | '/admin'
     | '/api/public/hooks/discover-prices'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/account'
     | '/alerts'
     | '/auth'
@@ -145,11 +163,13 @@ export interface FileRouteTypes {
     | '/search'
     | '/solicitar'
     | '/flight/$id'
+    | '/_authenticated/admin/'
     | '/api/public/hooks/discover-prices'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AccountRoute: typeof AccountRoute
   AlertsRoute: typeof AlertsRoute
   AuthRoute: typeof AuthRoute
@@ -212,6 +232,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -226,6 +253,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FlightIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/public/hooks/discover-prices': {
       id: '/api/public/hooks/discover-prices'
       path: '/api/public/hooks/discover-prices'
@@ -236,8 +270,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AccountRoute: AccountRoute,
   AlertsRoute: AlertsRoute,
   AuthRoute: AuthRoute,
