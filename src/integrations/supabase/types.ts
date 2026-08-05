@@ -393,6 +393,7 @@ export type Database = {
           created_at: string
           id: string
           markup_fixed: number
+          mile_value_ref: number
           singleton: boolean
           updated_at: string
           whatsapp_number: string
@@ -405,6 +406,7 @@ export type Database = {
           created_at?: string
           id?: string
           markup_fixed?: number
+          mile_value_ref?: number
           singleton?: boolean
           updated_at?: string
           whatsapp_number?: string
@@ -417,6 +419,7 @@ export type Database = {
           created_at?: string
           id?: string
           markup_fixed?: number
+          mile_value_ref?: number
           singleton?: boolean
           updated_at?: string
           whatsapp_number?: string
