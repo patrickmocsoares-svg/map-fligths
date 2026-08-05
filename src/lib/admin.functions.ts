@@ -233,6 +233,7 @@ export const updateOrderFn = createServerFn({ method: "POST" })
     if (curErr) throw new Error(curErr.message);
 
     const patch: Record<string, unknown> = {};
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (data.status) patch['status'] = data.status;
     if (data.realPriceBRL !== undefined) patch['real_price_brl'] = data.realPriceBRL;
     if (data.milesRequired !== undefined) patch['miles_required'] = data.milesRequired;
@@ -244,7 +245,7 @@ export const updateOrderFn = createServerFn({ method: "POST" })
     if (data.locator !== undefined) patch['locator'] = data.locator;
 
     if (Object.keys(patch).length > 0) {
-      const { error } = await supabaseAdmin.from("orders").update(patch).eq("id", data.id);
+      const { error } = await supabaseAdmin.from("orders").update(patch as never).eq("id", data.id);
       if (error) throw new Error(error.message);
     }
 
