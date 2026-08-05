@@ -200,6 +200,7 @@ export type Database = {
       orders: {
         Row: {
           adults: number
+          airport_tax_brl: number | null
           budget_brl: number | null
           cabin: string
           children: number
@@ -207,21 +208,29 @@ export type Database = {
           customer_id: string
           depart_date: string
           destination_iata: string
+          final_price_brl: number | null
           flexible_dates: boolean
           id: string
           infants: number
+          internal_notes: string | null
+          locator: string | null
+          markup_applied_brl: number | null
+          miles_price_brl: number | null
+          miles_required: number | null
           notes: string | null
           origin_iata: string
           preferred_airline: string | null
           preferred_program: string | null
           protocol: string
           quoted_price_brl: number | null
+          real_price_brl: number | null
           return_date: string | null
           status: string
           updated_at: string
         }
         Insert: {
           adults?: number
+          airport_tax_brl?: number | null
           budget_brl?: number | null
           cabin?: string
           children?: number
@@ -229,21 +238,29 @@ export type Database = {
           customer_id: string
           depart_date: string
           destination_iata: string
+          final_price_brl?: number | null
           flexible_dates?: boolean
           id?: string
           infants?: number
+          internal_notes?: string | null
+          locator?: string | null
+          markup_applied_brl?: number | null
+          miles_price_brl?: number | null
+          miles_required?: number | null
           notes?: string | null
           origin_iata: string
           preferred_airline?: string | null
           preferred_program?: string | null
           protocol: string
           quoted_price_brl?: number | null
+          real_price_brl?: number | null
           return_date?: string | null
           status?: string
           updated_at?: string
         }
         Update: {
           adults?: number
+          airport_tax_brl?: number | null
           budget_brl?: number | null
           cabin?: string
           children?: number
@@ -251,15 +268,22 @@ export type Database = {
           customer_id?: string
           depart_date?: string
           destination_iata?: string
+          final_price_brl?: number | null
           flexible_dates?: boolean
           id?: string
           infants?: number
+          internal_notes?: string | null
+          locator?: string | null
+          markup_applied_brl?: number | null
+          miles_price_brl?: number | null
+          miles_required?: number | null
           notes?: string | null
           origin_iata?: string
           preferred_airline?: string | null
           preferred_program?: string | null
           protocol?: string
           quoted_price_brl?: number | null
+          real_price_brl?: number | null
           return_date?: string | null
           status?: string
           updated_at?: string
@@ -360,11 +384,78 @@ export type Database = {
         }
         Relationships: []
       }
+      settings: {
+        Row: {
+          airport_tax: number
+          business_hours: string
+          contact_email: string
+          cost_per_mile: number
+          created_at: string
+          id: string
+          markup_fixed: number
+          singleton: boolean
+          updated_at: string
+          whatsapp_number: string
+        }
+        Insert: {
+          airport_tax?: number
+          business_hours?: string
+          contact_email?: string
+          cost_per_mile?: number
+          created_at?: string
+          id?: string
+          markup_fixed?: number
+          singleton?: boolean
+          updated_at?: string
+          whatsapp_number?: string
+        }
+        Update: {
+          airport_tax?: number
+          business_hours?: string
+          contact_email?: string
+          cost_per_mile?: number
+          created_at?: string
+          id?: string
+          markup_fixed?: number
+          singleton?: boolean
+          updated_at?: string
+          whatsapp_number?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       next_order_protocol: { Args: never; Returns: string }
       route_price_stats: {
         Args: {
@@ -387,7 +478,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "staff" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -514,6 +605,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "staff", "user"],
+    },
   },
 } as const
