@@ -13,6 +13,7 @@ import { Route as SolicitarRouteImport } from './routes/solicitar'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as OpportunitiesRouteImport } from './routes/opportunities'
 import { Route as DealsRouteImport } from './routes/deals'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AlertsRouteImport } from './routes/alerts'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
@@ -37,6 +38,11 @@ const OpportunitiesRoute = OpportunitiesRouteImport.update({
 const DealsRoute = DealsRouteImport.update({
   id: '/deals',
   path: '/deals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AlertsRoute = AlertsRouteImport.update({
@@ -70,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/alerts': typeof AlertsRoute
+  '/auth': typeof AuthRoute
   '/deals': typeof DealsRoute
   '/opportunities': typeof OpportunitiesRoute
   '/search': typeof SearchRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/alerts': typeof AlertsRoute
+  '/auth': typeof AuthRoute
   '/deals': typeof DealsRoute
   '/opportunities': typeof OpportunitiesRoute
   '/search': typeof SearchRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/alerts': typeof AlertsRoute
+  '/auth': typeof AuthRoute
   '/deals': typeof DealsRoute
   '/opportunities': typeof OpportunitiesRoute
   '/search': typeof SearchRoute
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/'
     | '/account'
     | '/alerts'
+    | '/auth'
     | '/deals'
     | '/opportunities'
     | '/search'
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/'
     | '/account'
     | '/alerts'
+    | '/auth'
     | '/deals'
     | '/opportunities'
     | '/search'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/'
     | '/account'
     | '/alerts'
+    | '/auth'
     | '/deals'
     | '/opportunities'
     | '/search'
@@ -140,6 +152,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountRoute: typeof AccountRoute
   AlertsRoute: typeof AlertsRoute
+  AuthRoute: typeof AuthRoute
   DealsRoute: typeof DealsRoute
   OpportunitiesRoute: typeof OpportunitiesRoute
   SearchRoute: typeof SearchRoute
@@ -176,6 +189,13 @@ declare module '@tanstack/react-router' {
       path: '/deals'
       fullPath: '/deals'
       preLoaderRoute: typeof DealsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/alerts': {
@@ -220,6 +240,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountRoute: AccountRoute,
   AlertsRoute: AlertsRoute,
+  AuthRoute: AuthRoute,
   DealsRoute: DealsRoute,
   OpportunitiesRoute: OpportunitiesRoute,
   SearchRoute: SearchRoute,
@@ -230,13 +251,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
