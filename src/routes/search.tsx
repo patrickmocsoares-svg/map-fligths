@@ -100,6 +100,39 @@ function SearchResults() {
     return a.price - b.price;
   });
 
+  const [modalCtx, setModalCtx] = useState<SavingsContext | null>(null);
+
+  const openModal = useCallback(
+    (offer: FlightOffer) => {
+      setModalCtx({
+        origin: params.origin ?? offer.outbound.segments[0]?.originCode ?? "",
+        destination: params.destination ?? "",
+        date: params.depart ?? "",
+        price: offer.price,
+        currency: offer.currency,
+      });
+    },
+    [params.origin, params.destination, params.depart],
+  );
+
+  // Auto-open once per session, 7s after results are visible.
+  useEffect(() => {
+    if (!sorted.length) return;
+    if (!savingsModalAllowed()) return;
+    const timer = window.setTimeout(() => {
+      if (!savingsModalAllowed()) return;
+      const best = sorted.reduce((a, b) => (a.price <= b.price ? a : b));
+      openModal(best);
+    }, 7000);
+    return () => window.clearTimeout(timer);
+  }, [sorted.length, openModal]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const closeModal = useCallback(() => {
+    dismissSavingsModal();
+    setModalCtx(null);
+  }, []);
+
+
   return (
     <div className="min-h-screen">
       <Header />
