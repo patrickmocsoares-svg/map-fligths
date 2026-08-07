@@ -257,10 +257,7 @@ function FlightRow({
   const lastSeg = o.outbound.segments[o.outbound.segments.length - 1];
 
   return (
-    <Link
-      to="/flight/$id"
-      params={{ id: o.id }}
-      search={(prev: Record<string, unknown>) => ({ ...prev })}
+    <div
       className="group relative block overflow-hidden rounded-2xl card-luxe transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/30 hover:shadow-luxe animate-rise"
       style={{ animationDelay: `${index * 40}ms` }}
     >
