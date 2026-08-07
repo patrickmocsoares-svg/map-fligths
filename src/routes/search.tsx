@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -7,6 +7,12 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FlightSearchForm } from "@/components/FlightSearchForm";
 import { DealCard } from "@/components/DealCard";
+import {
+  WhatsAppSavingsModal,
+  savingsModalAllowed,
+  dismissSavingsModal,
+  type SavingsContext,
+} from "@/components/WhatsAppSavingsModal";
 import { searchFlightsFn } from "@/lib/flights.functions";
 import {
   getNearbyDatesFn,
@@ -14,7 +20,7 @@ import {
 } from "@/lib/deals/travelpayouts-deals.functions";
 import type { FlightOffer } from "@/lib/flights/types";
 import { formatBRL, t } from "@/lib/i18n";
-import { Plane, ArrowRight, SearchX, Sparkles, Briefcase, CalendarDays } from "lucide-react";
+import { Plane, ArrowRight, SearchX, Sparkles, Briefcase, CalendarDays, MessageCircle } from "lucide-react";
 
 const cabinEnum = z.enum(["economy", "premium", "business", "first"]);
 
