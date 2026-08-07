@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -7,6 +7,12 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FlightSearchForm } from "@/components/FlightSearchForm";
 import { DealCard } from "@/components/DealCard";
+import {
+  WhatsAppSavingsModal,
+  savingsModalAllowed,
+  dismissSavingsModal,
+  type SavingsContext,
+} from "@/components/WhatsAppSavingsModal";
 import { searchFlightsFn } from "@/lib/flights.functions";
 import {
   getNearbyDatesFn,
@@ -14,7 +20,7 @@ import {
 } from "@/lib/deals/travelpayouts-deals.functions";
 import type { FlightOffer } from "@/lib/flights/types";
 import { formatBRL, t } from "@/lib/i18n";
-import { Plane, ArrowRight, SearchX, Sparkles, Briefcase, CalendarDays } from "lucide-react";
+import { Plane, ArrowRight, SearchX, Sparkles, Briefcase, CalendarDays, MessageCircle } from "lucide-react";
 
 const cabinEnum = z.enum(["economy", "premium", "business", "first"]);
 
@@ -93,6 +99,39 @@ function SearchResults() {
     if (sort === "duration") return a.durationMin - b.durationMin;
     return a.price - b.price;
   });
+
+  const [modalCtx, setModalCtx] = useState<SavingsContext | null>(null);
+
+  const openModal = useCallback(
+    (offer: FlightOffer) => {
+      setModalCtx({
+        origin: params.origin ?? offer.outbound.segments[0]?.originCode ?? "",
+        destination: params.destination ?? "",
+        date: params.depart ?? "",
+        price: offer.price,
+        currency: offer.currency,
+      });
+    },
+    [params.origin, params.destination, params.depart],
+  );
+
+  // Auto-open once per session, 7s after results are visible.
+  useEffect(() => {
+    if (!sorted.length) return;
+    if (!savingsModalAllowed()) return;
+    const timer = window.setTimeout(() => {
+      if (!savingsModalAllowed()) return;
+      const best = sorted.reduce((a, b) => (a.price <= b.price ? a : b));
+      openModal(best);
+    }, 7000);
+    return () => window.clearTimeout(timer);
+  }, [sorted.length, openModal]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const closeModal = useCallback(() => {
+    dismissSavingsModal();
+    setModalCtx(null);
+  }, []);
+
 
   return (
     <div className="min-h-screen">
@@ -179,10 +218,18 @@ function SearchResults() {
 
         <div className="space-y-3 pb-20">
           {sorted.map((o, idx) => (
-            <FlightRow key={o.id} offer={o} cheapest={cheapest} index={idx} />
+            <FlightRow
+              key={o.id}
+              offer={o}
+              cheapest={cheapest}
+              index={idx}
+              onWantSavings={() => openModal(o)}
+            />
           ))}
         </div>
       </div>
+
+      <WhatsAppSavingsModal open={!!modalCtx} onClose={closeModal} context={modalCtx} />
       <Footer />
     </div>
   );
@@ -192,10 +239,12 @@ function FlightRow({
   offer: o,
   cheapest,
   index,
+  onWantSavings,
 }: {
   offer: FlightOffer;
   cheapest: number;
   index: number;
+  onWantSavings: () => void;
 }) {
   const dh = Math.floor(o.durationMin / 60);
   const dm = o.durationMin % 60;
@@ -208,10 +257,7 @@ function FlightRow({
   const lastSeg = o.outbound.segments[o.outbound.segments.length - 1];
 
   return (
-    <Link
-      to="/flight/$id"
-      params={{ id: o.id }}
-      search={(prev: Record<string, unknown>) => ({ ...prev })}
+    <div
       className="group relative block overflow-hidden rounded-2xl card-luxe transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/30 hover:shadow-luxe animate-rise"
       style={{ animationDelay: `${index * 40}ms` }}
     >
@@ -273,7 +319,7 @@ function FlightRow({
         </div>
 
         {/* Price + CTA */}
-        <div className="flex items-center justify-between gap-3 border-t border-white/5 pt-4 md:flex-col md:items-end md:border-l md:border-t-0 md:pl-6 md:pt-0">
+        <div className="flex flex-col gap-3 border-t border-white/5 pt-4 md:items-end md:border-l md:border-t-0 md:pl-6 md:pt-0">
           <div className="text-right">
             <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
               Total
@@ -283,21 +329,33 @@ function FlightRow({
                 ? formatBRL(o.price)
                 : `${o.currency} ${o.price.toFixed(0)}`}
             </div>
-            {o.miles && (
-              <div className="mt-1 inline-flex items-center gap-1 rounded-full border border-gold/25 bg-gold/5 px-2 py-0.5 text-[10px] text-gold-soft">
-                <Sparkles className="h-2.5 w-2.5" /> {o.miles.toLocaleString("pt-BR")} milhas
-              </div>
-            )}
-            <div className="mt-1 inline-flex items-center gap-1 text-[10px] text-muted-foreground">
+            <div className="mt-1.5 inline-flex items-center gap-1 rounded-full border border-gold/25 bg-gold/5 px-2.5 py-1 text-[10px] font-medium text-gold-soft">
+              <Sparkles className="h-2.5 w-2.5" /> 💰 Economia estimada com milhas: até 40%
+            </div>
+            <div className="mt-1 flex items-center justify-end gap-1 text-[10px] text-muted-foreground">
               <Briefcase className="h-3 w-3" /> Bagagem de mão inclusa
             </div>
           </div>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-gold px-4 py-2 text-xs font-bold text-primary-foreground shadow transition group-hover:gap-2.5">
-            Ver oferta <ArrowRight className="h-3.5 w-3.5" />
-          </span>
+
+          <button
+            type="button"
+            onClick={onWantSavings}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-whatsapp px-5 py-3 text-xs font-bold uppercase tracking-wide text-whatsapp-foreground shadow-luxe transition hover:brightness-110 active:scale-[0.99] md:w-auto"
+          >
+            <MessageCircle className="h-4 w-4" /> Quero economizar
+          </button>
+
+          <Link
+            to="/flight/$id"
+            params={{ id: o.id }}
+            search={(prev: Record<string, unknown>) => ({ ...prev })}
+            className="inline-flex items-center gap-1 self-center text-[11px] font-semibold text-muted-foreground transition hover:text-gold md:self-end"
+          >
+            Ver detalhes <ArrowRight className="h-3 w-3" />
+          </Link>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 
