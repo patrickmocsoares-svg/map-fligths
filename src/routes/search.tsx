@@ -319,7 +319,7 @@ function FlightRow({
         </div>
 
         {/* Price + CTA */}
-        <div className="flex items-center justify-between gap-3 border-t border-white/5 pt-4 md:flex-col md:items-end md:border-l md:border-t-0 md:pl-6 md:pt-0">
+        <div className="flex flex-col gap-3 border-t border-white/5 pt-4 md:items-end md:border-l md:border-t-0 md:pl-6 md:pt-0">
           <div className="text-right">
             <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
               Total
@@ -329,21 +329,33 @@ function FlightRow({
                 ? formatBRL(o.price)
                 : `${o.currency} ${o.price.toFixed(0)}`}
             </div>
-            {o.miles && (
-              <div className="mt-1 inline-flex items-center gap-1 rounded-full border border-gold/25 bg-gold/5 px-2 py-0.5 text-[10px] text-gold-soft">
-                <Sparkles className="h-2.5 w-2.5" /> {o.miles.toLocaleString("pt-BR")} milhas
-              </div>
-            )}
-            <div className="mt-1 inline-flex items-center gap-1 text-[10px] text-muted-foreground">
+            <div className="mt-1.5 inline-flex items-center gap-1 rounded-full border border-gold/25 bg-gold/5 px-2.5 py-1 text-[10px] font-medium text-gold-soft">
+              <Sparkles className="h-2.5 w-2.5" /> 💰 Economia estimada com milhas: até 40%
+            </div>
+            <div className="mt-1 flex items-center justify-end gap-1 text-[10px] text-muted-foreground">
               <Briefcase className="h-3 w-3" /> Bagagem de mão inclusa
             </div>
           </div>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-gold px-4 py-2 text-xs font-bold text-primary-foreground shadow transition group-hover:gap-2.5">
-            Ver oferta <ArrowRight className="h-3.5 w-3.5" />
-          </span>
+
+          <button
+            type="button"
+            onClick={onWantSavings}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-whatsapp px-5 py-3 text-xs font-bold uppercase tracking-wide text-whatsapp-foreground shadow-luxe transition hover:brightness-110 active:scale-[0.99] md:w-auto"
+          >
+            <MessageCircle className="h-4 w-4" /> Quero economizar
+          </button>
+
+          <Link
+            to="/flight/$id"
+            params={{ id: o.id }}
+            search={(prev: Record<string, unknown>) => ({ ...prev })}
+            className="inline-flex items-center gap-1 self-center text-[11px] font-semibold text-muted-foreground transition hover:text-gold md:self-end"
+          >
+            Ver detalhes <ArrowRight className="h-3 w-3" />
+          </Link>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 
