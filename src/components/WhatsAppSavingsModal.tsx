@@ -121,7 +121,7 @@ export function WhatsAppSavingsModal({
             dismissSavingsModal();
             onClose();
           }}
-          className="mt-7 flex w-full items-center justify-center gap-2 rounded-2xl bg-[hsl(var(--whatsapp))] px-6 py-4 text-sm font-bold uppercase tracking-wide text-white shadow-luxe transition hover:brightness-110 active:scale-[0.99]"
+          className="mt-7 flex w-full items-center justify-center gap-2 rounded-2xl bg-whatsapp px-6 py-4 text-sm font-bold uppercase tracking-wide text-whatsapp-foreground shadow-luxe transition hover:brightness-110 active:scale-[0.99]"
         >
           💬 Falar no WhatsApp agora
         </a>
