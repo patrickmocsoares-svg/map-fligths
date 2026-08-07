@@ -218,10 +218,18 @@ function SearchResults() {
 
         <div className="space-y-3 pb-20">
           {sorted.map((o, idx) => (
-            <FlightRow key={o.id} offer={o} cheapest={cheapest} index={idx} />
+            <FlightRow
+              key={o.id}
+              offer={o}
+              cheapest={cheapest}
+              index={idx}
+              onWantSavings={() => openModal(o)}
+            />
           ))}
         </div>
       </div>
+
+      <WhatsAppSavingsModal open={!!modalCtx} onClose={closeModal} context={modalCtx} />
       <Footer />
     </div>
   );
@@ -231,10 +239,12 @@ function FlightRow({
   offer: o,
   cheapest,
   index,
+  onWantSavings,
 }: {
   offer: FlightOffer;
   cheapest: number;
   index: number;
+  onWantSavings: () => void;
 }) {
   const dh = Math.floor(o.durationMin / 60);
   const dm = o.durationMin % 60;
