@@ -124,7 +124,7 @@ function SettingsPage() {
             Canais de atendimento
           </h2>
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="WhatsApp (somente dígitos)" hint="Ex: 5511999999999">
+            <Field label="WhatsApp (somente dígitos)" hint="Ex: 553120940901">
               <input
                 className={field}
                 value={form.whatsappNumber}

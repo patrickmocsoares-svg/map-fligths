@@ -5,7 +5,7 @@
  * contact e-mail) are managed in /admin/configuracoes and read through
  * `useSettings()`.
  */
-export const WHATSAPP_NUMBER = "5511999999999";
+export const WHATSAPP_NUMBER = "553120940901";
 
 export function whatsappLink(message: string, number: string = WHATSAPP_NUMBER) {
   const digits = (number || WHATSAPP_NUMBER).replace(/\D/g, "");
