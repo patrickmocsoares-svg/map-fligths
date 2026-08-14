@@ -49,7 +49,7 @@ const updateSchema = z.object({
   mileValueRef: z.number().min(0.001).max(1),
   markupFixed: z.number().min(0).max(100000),
   airportTax: z.number().min(0).max(100000),
-  whatsappNumber: z.string().trim().regex(/^\d{10,15}$/, "Use apenas dígitos (ex: 5511999999999)"),
+  whatsappNumber: z.string().trim().regex(/^\d{10,15}$/, "Use apenas dígitos (ex: 553120940901)"),
   businessHours: z.string().trim().min(3).max(160),
   contactEmail: z.string().trim().email().max(160),
 });
