@@ -1,0 +1,1 @@
+UPDATE public.settings SET whatsapp_number = '553120940901' WHERE singleton = true;
