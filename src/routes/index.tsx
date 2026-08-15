@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FlightSearchForm } from "@/components/FlightSearchForm";
 import { DealCard } from "@/components/DealCard";
+import { SkyscannerSearchSection } from "@/components/SkyscannerSearchSection";
 import { getCuratedDealsFn } from "@/lib/deals/travelpayouts-deals.functions";
 import type { RealDeal } from "@/lib/deals/types";
 import { heroImage } from "@/lib/destination-images";
