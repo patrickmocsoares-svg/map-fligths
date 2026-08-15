@@ -219,6 +219,8 @@ function Home() {
         </div>
       </section>
 
+      <SkyscannerSearchSection />
+
       <Footer />
     </div>
   );
