@@ -10,7 +10,7 @@ import {
   MessageCircle,
   CalendarDays,
 } from "lucide-react";
-import { searchFlightsFn } from "@/lib/flights.functions";
+import { searchFlightsFallbackFn } from "@/lib/flights-fallback.functions";
 import { getNearbyDatesFn } from "@/lib/deals/travelpayouts-deals.functions";
 import { whatsappLink } from "@/lib/contact-config";
 import { useSettings } from "@/hooks/useSettings";
