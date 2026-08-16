@@ -53,7 +53,7 @@ const CABINS: { value: CabinClass; label: string }[] = [
 
 export function RealFlightSearchSection() {
   const { settings } = useSettings();
-  const search = useServerFn(searchFlightsFn);
+  const search = useServerFn(searchFlightsFallbackFn);
   const nearby = useServerFn(getNearbyDatesFn);
 
   const [tripType, setTripType] = useState<TripType>("roundtrip");
