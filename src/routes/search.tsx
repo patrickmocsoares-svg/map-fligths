@@ -94,6 +94,15 @@ function SearchResults() {
   const offers: FlightOffer[] = query.data?.offers ?? [];
   const cheapest = offers.length ? Math.min(...offers.map((o) => o.price)) : 0;
 
+  const milesCtx: MilesContext = {
+    origin: params.origin,
+    destination: params.destination,
+    departDate: params.depart,
+    returnDate: params.ret,
+    passengers: params.pax ?? 1,
+    currency: "BRL",
+  };
+
   const sorted = [...offers].sort((a, b) => {
     if (sort === "price") return a.price - b.price;
     if (sort === "duration") return a.durationMin - b.durationMin;
