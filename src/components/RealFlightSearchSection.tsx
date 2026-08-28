@@ -14,6 +14,13 @@ import {
 import { searchFlightsFallbackFn } from "@/lib/flights-fallback.functions";
 import { getNearbyDatesFn } from "@/lib/deals/travelpayouts-deals.functions";
 import { whatsappLink } from "@/lib/contact-config";
+import {
+  MilesOfferCTA,
+  MilesBanner,
+  MilesNoResults,
+  MilesReferencePrice,
+  type MilesContext,
+} from "@/components/MilesEmission";
 import { useSettings } from "@/hooks/useSettings";
 import type { FlightOffer, CabinClass } from "@/lib/flights/types";
 
@@ -124,6 +131,19 @@ export function RealFlightSearchSection() {
     if (sort === "duration") return a.durationMin - b.durationMin;
     return a.stops - b.stops;
   });
+
+  /** Estimated data is never presented as a confirmed flight — only as a reference price. */
+  const isReferenceOnly = source === "estimated" || offers.some((o) => o.estimated);
+  const referencePrice = offers.length ? Math.min(...offers.map((o) => o.price)) : undefined;
+
+  const milesCtx: MilesContext = {
+    origin: origin.trim().toUpperCase() || undefined,
+    destination: destination.trim().toUpperCase() || undefined,
+    departDate: date || undefined,
+    returnDate: tripType === "roundtrip" ? returnDate || undefined : undefined,
+    passengers,
+    currency: "BRL",
+  };
 
   const field =
     "w-full rounded-xl border border-white/10 bg-card px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/30";
@@ -286,51 +306,57 @@ export function RealFlightSearchSection() {
         )}
 
         {mutation.isSuccess && offers.length === 0 && (
-          <div className="mt-8 rounded-2xl border border-dashed border-white/10 bg-secondary p-6">
-            <p className="text-sm text-foreground">
-              Não encontramos tarifas publicadas para essa data. Veja datas próximas com preço
-              disponível ou fale com a gente.
-            </p>
-            {suggestions.length > 0 && (
-              <div className="mt-4 flex flex-wrap gap-2">
-                {suggestions.map((s) => (
-                  <button
-                    key={s.date}
-                    type="button"
-                    onClick={() => runSearch(s.date)}
-                    className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-card px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-white/5"
-                  >
-                    <CalendarDays className="h-3.5 w-3.5" />
-                    {fmtDate(s.date)} · {fmtPrice(s.price, s.currency)}
-                  </button>
-                ))}
-              </div>
-            )}
-            <a
-              href={whatsappLink(
-                `Olá! Procuro passagem ${origin} → ${destination} em ${date}${
-                  tripType === "roundtrip" && returnDate ? ` (volta ${returnDate})` : ""
-                } para ${passengers} passageiro(s).`,
-                settings.whatsappNumber,
+          <div className="mt-8 space-y-6">
+            <MilesNoResults ctx={milesCtx} />
+            <div className="rounded-2xl border border-dashed border-white/10 bg-secondary p-6">
+              <p className="text-sm text-foreground">
+                Não encontramos uma tarifa exata para esta busca. Veja datas próximas com preço
+                disponível ou fale com a gente.
+              </p>
+              {suggestions.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {suggestions.map((s) => (
+                    <button
+                      key={s.date}
+                      type="button"
+                      onClick={() => runSearch(s.date)}
+                      className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-card px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-white/5"
+                    >
+                      <CalendarDays className="h-3.5 w-3.5" />
+                      {fmtDate(s.date)} · {fmtPrice(s.price, s.currency)}
+                    </button>
+                  ))}
+                </div>
               )}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
-            >
-              <MessageCircle className="h-4 w-4" /> Falar no WhatsApp
-            </a>
+              <a
+                href={whatsappLink(
+                  `Olá! Procuro passagem ${origin} → ${destination} em ${date}${
+                    tripType === "roundtrip" && returnDate ? ` (volta ${returnDate})` : ""
+                  } para ${passengers} passageiro(s).`,
+                  settings.whatsappNumber,
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-whatsapp px-4 py-3 text-sm font-semibold text-whatsapp-foreground transition-transform hover:-translate-y-0.5"
+              >
+                <MessageCircle className="h-4 w-4" /> Falar no WhatsApp
+              </a>
+            </div>
           </div>
         )}
 
-        {offers.length > 0 && (source === "estimated" || offers.some((o) => o.estimated)) && (
-          <p className="mt-8 rounded-2xl border border-warning/35 bg-warning/10 p-4 text-xs text-warning">
-            Sem tarifa publicada em tempo real para esta data: os valores abaixo são
-            <strong> estimativas</strong> com companhias que operam esta rota. Confirmamos o preço
-            final com você no WhatsApp.
-          </p>
+        {/* No confirmed fare: only a reference price + miles invitation. */}
+        {offers.length > 0 && isReferenceOnly && (
+          <div className="mt-8 space-y-6">
+            <p className="rounded-2xl border border-warning/35 bg-warning/10 p-4 text-xs text-warning">
+              Não encontramos uma tarifa confirmada para esta data. Abaixo, apenas uma referência
+              de preço para a rota.
+            </p>
+            <MilesReferencePrice ctx={{ ...milesCtx, price: referencePrice }} />
+          </div>
         )}
 
-        {offers.length > 0 && (
+        {offers.length > 0 && !isReferenceOnly && (
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             {offers.map((r) => {
               const msg = `Olá! Quero comprar a passagem ${origin} → ${destination} em ${date}${
@@ -345,11 +371,6 @@ export function RealFlightSearchSection() {
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="text-sm font-semibold text-foreground">{r.airline.name}</span>
-                        {r.estimated && (
-                          <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-700">
-                            Estimativa
-                          </span>
-                        )}
                       </div>
 
                       <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
@@ -377,9 +398,19 @@ export function RealFlightSearchSection() {
                   >
                     <MessageCircle className="h-4 w-4" /> QUERO ECONOMIZAR
                   </a>
+
+                  <div className="mt-4">
+                    <MilesOfferCTA ctx={{ ...milesCtx, price: r.price, currency: r.currency }} />
+                  </div>
                 </article>
               );
             })}
+          </div>
+        )}
+
+        {offers.length > 0 && (
+          <div className="mt-10">
+            <MilesBanner ctx={milesCtx} />
           </div>
         )}
       </div>

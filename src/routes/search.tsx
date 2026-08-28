@@ -15,6 +15,12 @@ import {
 } from "@/components/WhatsAppSavingsModal";
 import { searchFlightsFn } from "@/lib/flights.functions";
 import {
+  MilesOfferCTA,
+  MilesBanner,
+  MilesNoResults,
+  type MilesContext,
+} from "@/components/MilesEmission";
+import {
   getNearbyDatesFn,
   getPopularFromCityFn,
 } from "@/lib/deals/travelpayouts-deals.functions";
@@ -93,6 +99,15 @@ function SearchResults() {
 
   const offers: FlightOffer[] = query.data?.offers ?? [];
   const cheapest = offers.length ? Math.min(...offers.map((o) => o.price)) : 0;
+
+  const milesCtx: MilesContext = {
+    origin: params.origin,
+    destination: params.destination,
+    departDate: params.depart,
+    returnDate: params.ret,
+    passengers: params.pax ?? 1,
+    currency: "BRL",
+  };
 
   const sorted = [...offers].sort((a, b) => {
     if (sort === "price") return a.price - b.price;
@@ -209,23 +224,34 @@ function SearchResults() {
         )}
 
         {ready && !query.isLoading && !query.isError && sorted.length === 0 && (
-          <NoOffersState
-            origin={params.origin!}
-            destination={params.destination!}
-            departDate={params.depart!}
-          />
+          <div className="space-y-6">
+            <MilesNoResults ctx={milesCtx} />
+            <NoOffersState
+              origin={params.origin!}
+              destination={params.destination!}
+              departDate={params.depart!}
+            />
+          </div>
         )}
 
         <div className="space-y-3 pb-20">
           {sorted.map((o, idx) => (
-            <FlightRow
-              key={o.id}
-              offer={o}
-              cheapest={cheapest}
-              index={idx}
-              onWantSavings={() => openModal(o)}
-            />
+            <div key={o.id} className="space-y-2">
+              <FlightRow
+                offer={o}
+                cheapest={cheapest}
+                index={idx}
+                onWantSavings={() => openModal(o)}
+              />
+              <MilesOfferCTA ctx={{ ...milesCtx, price: o.price, currency: o.currency }} />
+            </div>
           ))}
+
+          {sorted.length > 0 && (
+            <div className="pt-6">
+              <MilesBanner ctx={milesCtx} />
+            </div>
+          )}
         </div>
       </div>
 
