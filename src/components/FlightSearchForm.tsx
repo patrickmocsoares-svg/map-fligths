@@ -261,19 +261,17 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
             onChange={setDestination}
             icon={<Plane className="h-4 w-4 rotate-45" />}
           />
-          <div
-            className={`grid gap-3 ${trip === "roundtrip" ? "grid-cols-2" : "grid-cols-1"}`}
-          >
-            <DateField label={t("search.depart")} value={depart} onChange={setDepart} />
-            {trip === "roundtrip" && (
-              <DateField
-                label={t("search.return")}
-                value={ret}
-                onChange={setRet}
-                min={depart}
-              />
-            )}
-          </div>
+          <DateRangeCalendar
+            depart={depart}
+            ret={trip === "roundtrip" ? ret : ""}
+            range={trip === "roundtrip"}
+            onChange={({ depart: d, ret: r }) => {
+              setDepart(d);
+              setRet(r);
+            }}
+            labelDepart={t("search.depart")}
+            labelReturn={t("search.return")}
+          />
         </div>
       )}
 
