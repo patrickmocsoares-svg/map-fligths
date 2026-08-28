@@ -1,22 +1,43 @@
-# Corrigir imagens erradas dos destinos e a busca sem resultados
+# Executar tudo: cores, imagens dos destinos e preços sempre visíveis
 
-## O que eu confirmei agora
+Aprove aqui e eu executo tudo de uma vez (é o único jeito de eu sair do modo de planejamento e mexer no site).
 
-- **Imagem errada é real.** No catálogo de destinos (`src/lib/destinations.ts`) Florianópolis usa o mesmo código de foto do Unsplash que Porto Alegre (`1533105079780-...`) — uma foto genérica que não é de Florianópolis. O mesmo problema de foto repetida/genérica acontece em outros pares: Recife e Fortaleza compartilham a mesma imagem, e Brasília e Belo Horizonte também. São fotos externas escolhidas por ID, sem garantia do que aparece nelas.
-- **A busca funciona no código atual.** O último build está OK e, no servidor, a cadeia Skyscanner → Travelpayouts → estimativa devolve voos. Ou seja, "nenhum resultado" no site que você está vendo não bate com o código atual — o mais provável é que o endereço publicado ainda sirva a versão anterior. Isso ainda **não está confirmado**, então o plano confirma isso antes de mexer na lógica.
+## 1. Imagens dos destinos — fim das fotos erradas
 
-## Plano
+Hoje o catálogo usa fotos externas por código do Unsplash e algumas não correspondem à cidade (Florianópolis mostra imagem da Grécia; Recife/Fortaleza e Brasília/BH repetem a mesma foto).
 
-1. **Imagens 100% fiéis ao destino**: parar de depender de fotos externas por ID. Gerar uma imagem própria para cada destino do catálogo (Florianópolis, Rio, Salvador, Recife, Fortaleza, Manaus, Brasília, BH, Porto Alegre, Lisboa, Paris, Roma, Nova York, Miami, Buenos Aires, Santiago etc.), com o marco visual característico de cada cidade, e guardá-las dentro do projeto. Cada card de promoção passa a usar a imagem da sua própria cidade — nunca mais uma foto de outro lugar.
-2. **Nenhuma imagem repetida**: cada código de aeroporto ganha a sua imagem. Cidades com dois aeroportos (Rio: GIG/SDU, São Paulo: GRU/CGH/VCP) compartilham a imagem da cidade, o que é correto.
-3. **Confirmar por que a busca aparece vazia para você**: chamar a busca no ambiente publicado com a mesma rota que você testou e comparar com o resultado do servidor. Se for versão antiga, publicar de novo resolve. Se a resposta publicada vier realmente vazia, corrijo a causa antes de encerrar.
-4. **Rede de segurança na busca**: garantir que, mesmo com falha de qualquer parceiro, a lista sempre traga voos estimados com companhias coerentes (nacional → LATAM/GOL/Azul; internacional → companhias que voam a rota), com o aviso de estimativa visível.
-5. **Publicar** a versão corrigida para que o endereço público mostre exatamente o que já está no preview.
+- Gerar uma imagem própria para cada destino do catálogo (Florianópolis, Rio, Salvador, Recife, Fortaleza, Manaus, Brasília, BH, Porto Alegre, Lisboa, Paris, Roma, Madri, Nova York, Miami, Orlando, Buenos Aires, Santiago, Cancún, Dubai etc.), com o marco visual característico de cada cidade.
+- Guardar dentro do projeto e ligar cada imagem ao código do aeroporto. Nenhuma cidade compartilha foto com outra (exceto aeroportos da mesma cidade: GIG/SDU, GRU/CGH/VCP).
+
+## 2. Preços sempre aparecendo na busca
+
+- Ao buscar qualquer rota, se nenhum parceiro devolver tarifa real, a lista mostra voos estimados: rota nacional só com LATAM, GOL e Azul; rota internacional com companhias que realmente voam aquele trecho.
+- A lista nunca mais volta em branco: mesmo com falha de parceiro, aparecem voos com horário, duração, conexões e preço, com o aviso de "estimativa" e o botão QUERO ECONOMIZAR.
+- Clicar na imagem de uma promoção também abre a lista de voos daquela rota com preços.
+
+## 3. Cores persuasivas (aplicadas de verdade no site)
+
+Paleta nova aplicada nos tokens de estilo, valendo para o site inteiro:
+
+- Fundo obsidiana `#0B0B0C` com dourado `#C9A227` nos detalhes e preços de destaque.
+- Vermelho de urgência `#E11D2E` só em selos de promoção e contadores.
+- Verde WhatsApp `#25D366` em todos os botões de conversão.
+- Âmbar `#F59E0B` para selos de estimativa e "oferta quente".
+- A seção "Buscar Passagens Aéreas" deixa de ser azul/branca e passa a seguir a mesma identidade preta e dourada do resto do site.
+
+## 4. Frases persuasivas
+
+Aplicar nos cards e chamadas: "Sua próxima viagem pode custar metade do que você imagina.", "Quem viaja com milhas paga menos. Sempre.", "Tarifa boa dura pouco — garanta a sua agora.", "Últimos assentos nesta tarifa".
+
+## 5. Verificação e publicação
+
+- Abrir o site no navegador e conferir com captura de tela: cores novas, card de Florianópolis com imagem correta e busca MOC → CNF e GRU → LIS mostrando preços.
+- Publicar no fim, para que goldwing-travels.lovable.app fique igual ao preview.
 
 ## Detalhes técnicos
 
-- Novas imagens em `src/assets/destinos/<iata>.jpg`, importadas por um mapa em `src/lib/destinations.ts`; `destinationPhoto(code)` passa a devolver o asset local e mantém a mesma assinatura, então `PromoDealsSection`, `DealCard`, `flight.$id` e `opportunities` não mudam.
-- Fallback de imagem apenas para códigos fora do catálogo.
-- Verificação: rodar a home no navegador headless, capturar os cards de promoção e conferir visualmente que Florianópolis mostra praia/ilha do sul do Brasil, e testar uma rota nacional e uma internacional na seção "Buscar Passagens Aéreas".
+- Imagens em `src/assets/destinos/<iata>.jpg`, mapeadas em `src/lib/destinations.ts`; `destinationPhoto(code)` mantém a mesma assinatura, sem mexer em `PromoDealsSection`, `DealCard`, `flight.$id` ou `opportunities`.
+- Cores nos tokens de `src/styles.css` e reescrita das classes azuis fixas de `RealFlightSearchSection.tsx` para tokens semânticos.
+- Busca: `searchFlightsFallbackFn` já cai para o provedor estimado; ajustar o componente para nunca exibir estado vazio quando houver estimativas, e revisar `promo-flights.ts` para o clique na promoção.
 
-Nada muda em `/solicitar`, no painel admin, no pop-up de milhas nem nos textos e cores atuais.
+Nada muda em `/solicitar`, no painel admin nem no pop-up de milhas.
