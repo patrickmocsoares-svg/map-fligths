@@ -12,4 +12,21 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  vite: {
+    // Pre-bundle the UI libraries up-front. Without this, Vite discovers them
+    // lazily (e.g. when a dialog is opened for the first time), re-optimizes
+    // mid-session and forces a reload that can leave an open tab with stale
+    // module URLs ("Importing a module script failed" / blank screen).
+    optimizeDeps: {
+      include: [
+        "clsx",
+        "tailwind-merge",
+        "lucide-react",
+        "date-fns",
+        "@radix-ui/react-dialog",
+        "@radix-ui/react-popover",
+        "@radix-ui/react-select",
+      ],
+    },
+  },
 });

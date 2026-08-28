@@ -26,18 +26,41 @@ const schema = z.object({
 export const searchFlightsFallbackFn = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => schema.parse(input))
   .handler(async ({ data }) => {
-    const { searchSkyscanner } = await import("./flights/providers/skyscanner.server");
-    const skyscanner = await searchSkyscanner(data);
-    if (skyscanner.offers.length > 0) return skyscanner;
+    // 1. Skyscanner (RapidAPI). Any failure is non-fatal.
+    try {
+      const { searchSkyscanner } = await import("./flights/providers/skyscanner.server");
+      const skyscanner = await searchSkyscanner(data);
+      if (skyscanner.offers.length > 0) return { ...skyscanner, source: "real" as const };
+    } catch (err) {
+      console.error("[flights-fallback] skyscanner failed", err);
+    }
 
-    const { searchFlights } = await import("./flights");
-    const real = await searchFlights(data);
-    if (real.offers.length > 0) return real;
+    // 2. Connected provider layer (Travelpayouts and friends).
+    try {
+      const { searchFlights } = await import("./flights");
+      const real = await searchFlights(data);
+      if (real.offers.length > 0) return { ...real, source: "real" as const };
+    } catch (err) {
+      console.error("[flights-fallback] real provider failed", err);
+    }
 
-    // Last resort: estimated offers so the user always has something to
+    // 3. Last resort: estimated offers so the user always has something to
     // negotiate on WhatsApp. Airlines are route-consistent (domestic routes
     // only get LATAM/GOL/Azul) and every offer is flagged `estimated`.
-    const { devProvider } = await import("./flights/providers/dev");
-    return devProvider.search(data);
+    try {
+      const { devProvider } = await import("./flights/providers/dev");
+      const est = await devProvider.search(data);
+      return { ...est, source: "estimated" as const };
+    } catch (err) {
+      console.error("[flights-fallback] estimated provider failed", err);
+      return {
+        provider: "none",
+        searchedAt: new Date().toISOString(),
+        params: data,
+        currency: data.currency ?? "BRL",
+        offers: [],
+        source: "none" as const,
+      };
+    }
   });
 

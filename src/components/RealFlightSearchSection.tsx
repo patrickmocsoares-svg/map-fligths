@@ -21,6 +21,8 @@ type TripType = "roundtrip" | "oneway";
 type SortKey = "price" | "duration" | "stops";
 
 type NearbyDate = { date: string; price: number; currency: string };
+/** Where the displayed prices came from. */
+type Source = "real" | "estimated" | "none";
 
 function fmtTime(v: string | null | undefined) {
   if (!v) return "--:--";
@@ -66,6 +68,7 @@ export function RealFlightSearchSection() {
   const [cabin, setCabin] = useState<CabinClass>("economy");
   const [sort, setSort] = useState<SortKey>("price");
   const [suggestions, setSuggestions] = useState<NearbyDate[]>([]);
+  const [source, setSource] = useState<Source>("real");
 
   const mutation = useMutation({
     mutationFn: async (vars: {
@@ -78,6 +81,7 @@ export function RealFlightSearchSection() {
     }) => {
       const res = await search({ data: { ...vars, currency: "BRL", limit: 30 } });
       const offers = (res?.offers ?? []) as FlightOffer[];
+      setSource(((res as { source?: string })?.source ?? "real") as Source);
       if (offers.length === 0) {
         const alt = (await nearby({
           data: { origin: vars.origin, destination: vars.destination, around: vars.departDate },
@@ -318,7 +322,7 @@ export function RealFlightSearchSection() {
           </div>
         )}
 
-        {offers.length > 0 && offers.some((o) => o.estimated) && (
+        {offers.length > 0 && (source === "estimated" || offers.some((o) => o.estimated)) && (
           <p className="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800">
             Sem tarifa publicada em tempo real para esta data: os valores abaixo são
             <strong> estimativas</strong> com companhias que operam esta rota. Confirmamos o preço
