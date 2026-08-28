@@ -12,6 +12,7 @@ type Props = {
   onChange: (next: { depart: string; ret: string }) => void;
   labelDepart?: string;
   labelReturn?: string;
+  theme?: "dark" | "light";
 };
 
 const WEEKDAYS = ["D", "S", "T", "Q", "Q", "S", "S"];
@@ -46,7 +47,9 @@ export function DateRangeCalendar({
   onChange,
   labelDepart = "Ida",
   labelReturn = "Volta",
+  theme = "dark",
 }: Props) {
+  const light = theme === "light";
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -104,7 +107,7 @@ export function DateRangeCalendar({
     const days = new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate();
     return (
       <div key={iso(first)} className="min-w-0">
-        <div className="mb-2 text-center text-sm font-semibold text-foreground">
+        <div className={`mb-2 text-center text-sm font-semibold ${light ? "text-slate-900" : "text-foreground"}`}>
           {MONTHS[m.getMonth()]} {m.getFullYear()}
         </div>
         <div className="grid grid-cols-7 text-center text-[10px] uppercase tracking-wider text-muted-foreground">
@@ -134,11 +137,15 @@ export function DateRangeCalendar({
                 className={[
                   "relative mx-auto grid h-10 w-10 place-items-center rounded-full text-sm transition",
                   disabled
-                    ? "cursor-not-allowed text-muted-foreground/30"
-                    : "text-foreground hover:bg-gold/15",
-                  inRange ? "bg-gold/10 text-gold" : "",
+                    ? "cursor-not-allowed opacity-30"
+                    : light
+                      ? "text-slate-800 hover:bg-sky-100"
+                      : "text-foreground hover:bg-gold/15",
+                  inRange ? (light ? "bg-sky-100 text-sky-700" : "bg-gold/10 text-gold") : "",
                   isStart || isEnd
-                    ? "gold-gradient font-bold text-primary-foreground hover:opacity-90"
+                    ? light
+                      ? "bg-sky-600 font-bold text-white hover:bg-sky-700"
+                      : "gold-gradient font-bold text-primary-foreground hover:opacity-90"
                     : "",
                 ].join(" ")}
               >
@@ -153,11 +160,20 @@ export function DateRangeCalendar({
 
   const summary = (
     <>
-      <div className="flex items-center justify-between text-[10px] uppercase tracking-widest text-muted-foreground">
-        <span>{range ? `${labelDepart} · ${labelReturn}` : labelDepart}</span>
-        <Calendar className="h-3.5 w-3.5 text-gold/70" />
-      </div>
-      <div className="mt-1 truncate text-base font-semibold text-foreground">
+      {!light && (
+        <div className="flex items-center justify-between text-[10px] uppercase tracking-widest text-muted-foreground">
+          <span>{range ? `${labelDepart} · ${labelReturn}` : labelDepart}</span>
+          <Calendar className="h-3.5 w-3.5 text-gold/70" />
+        </div>
+      )}
+      <div
+        className={
+          light
+            ? "flex h-full items-center gap-2 truncate text-sm font-medium text-slate-900"
+            : "mt-1 truncate text-base font-semibold text-foreground"
+        }
+      >
+        {light && <Calendar className="h-4 w-4 shrink-0 text-sky-600" />}
         {depart ? fmt(depart) : "Selecionar data"}
         {range ? ` — ${ret ? fmt(ret) : "volta"}` : ""}
       </div>
@@ -173,15 +189,17 @@ export function DateRangeCalendar({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className={`block w-full min-w-0 rounded-xl border bg-input/50 px-4 py-3 text-left transition ${
-          open ? "border-gold" : "border-border"
-        }`}
+        className={
+          light
+            ? `block h-11 w-full min-w-0 rounded-xl border bg-white px-4 text-left text-sm text-slate-900 transition ${open ? "border-sky-500" : "border-sky-200"}`
+            : `block w-full min-w-0 rounded-xl border bg-input/50 px-4 py-3 text-left transition ${open ? "border-gold" : "border-border"}`
+        }
       >
         {summary}
       </button>
 
       {open && !isMobile && (
-        <div className="absolute left-0 z-50 mt-2 w-[36rem] max-w-[90vw] rounded-2xl border border-border bg-card p-4 shadow-luxe">
+        <div className={`absolute left-0 z-50 mt-2 w-[36rem] max-w-[90vw] rounded-2xl border p-4 shadow-xl ${light ? "border-sky-200 bg-white text-slate-900" : "border-border bg-card shadow-luxe"}`}>
           <div className="mb-3 flex items-center justify-between">
             <button
               type="button"
