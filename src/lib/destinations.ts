@@ -210,7 +210,11 @@ export function getDestination(code: string): Destination {
   };
 }
 
-export function destinationPhoto(code: string, w = 800, h = 1000): string {
-  const d = getDestination(code);
-  return `https://images.unsplash.com/photo-${d.photoId}?w=${w}&h=${h}&auto=format&fit=crop&q=80`;
+/**
+ * Local, city-accurate photo for a destination. The `w`/`h` arguments are kept
+ * for call-site compatibility; local assets are already sized and cropped.
+ */
+export function destinationPhoto(code: string, _w = 800, _h = 1000): string {
+  const c = code?.toUpperCase?.() ?? "";
+  return DESTINATION_PHOTOS[c] ?? FALLBACK_DESTINATION_PHOTO;
 }
