@@ -204,7 +204,7 @@ export function RealFlightSearchSection() {
                 {tripType === "roundtrip" ? "Ida e volta" : "Data de ida"}
               </label>
               <DateRangeCalendar
-                theme="light"
+                
                 depart={date}
                 ret={tripType === "roundtrip" ? returnDate : ""}
                 range={tripType === "roundtrip"}
