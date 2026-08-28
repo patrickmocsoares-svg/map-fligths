@@ -21,6 +21,8 @@ type TripType = "roundtrip" | "oneway";
 type SortKey = "price" | "duration" | "stops";
 
 type NearbyDate = { date: string; price: number; currency: string };
+/** Where the displayed prices came from. */
+type Source = "real" | "estimated" | "none";
 
 function fmtTime(v: string | null | undefined) {
   if (!v) return "--:--";
