@@ -155,7 +155,7 @@ export function RealFlightSearchSection() {
                 type="button"
                 onClick={() => setTripType(value)}
                 className={`rounded-lg px-4 py-2 text-xs font-semibold transition-colors ${
-                  tripType === value ? "gold-gradient text-white" : "text-muted-foreground hover:bg-secondary"
+                  tripType === value ? "gold-gradient text-primary-foreground" : "text-muted-foreground hover:bg-secondary"
                 }`}
               >
                 {label}
@@ -181,7 +181,7 @@ export function RealFlightSearchSection() {
                 type="button"
                 onClick={swap}
                 aria-label="Inverter origem e destino"
-                className="mb-1 inline-flex h-11 w-full items-center justify-center rounded-xl border border-white/10 bg-card text-muted-foreground transition-colors hover:bg-card/5"
+                className="mb-1 inline-flex h-11 w-full items-center justify-center rounded-xl border border-white/10 bg-card text-muted-foreground transition-colors hover:bg-white/5"
               >
                 <ArrowLeftRight className="h-4 w-4" />
               </button>
@@ -298,7 +298,7 @@ export function RealFlightSearchSection() {
                     key={s.date}
                     type="button"
                     onClick={() => runSearch(s.date)}
-                    className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-card px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-card/5"
+                    className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-card px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-white/5"
                   >
                     <CalendarDays className="h-3.5 w-3.5" />
                     {fmtDate(s.date)} · {fmtPrice(s.price, s.currency)}
