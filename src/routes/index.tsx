@@ -80,21 +80,27 @@ function Home() {
               Transformando <span className="font-serif font-normal text-gold-gradient">milhas</span>
               <br className="hidden sm:block" /> em <span className="font-serif font-normal">oportunidades.</span>
             </h1>
-            <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-white/70 text-balance md:text-lg">
-              Passagens curadas, preços monitorados em tempo real e o exclusivo MAB Score
-              para revelar quando uma tarifa é realmente uma oportunidade.
+            <p className="mt-5 max-w-xl text-lg font-semibold leading-snug text-white text-balance md:text-2xl">
+              {t("hero.headline")}
+            </p>
+            <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-white/70 text-balance md:text-lg">
+              {t("hero.sub")}
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link
                 to="/solicitar"
-                className="inline-flex items-center justify-center gap-2 rounded-xl gold-gradient px-7 py-4 text-sm font-semibold text-primary-foreground shadow-luxe transition-transform hover:-translate-y-0.5"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl gold-gradient px-7 py-4 text-sm font-semibold text-primary-foreground shadow-luxe transition-transform hover:-translate-y-0.5"
               >
                 Solicitar orçamento <ArrowRight className="h-4 w-4" />
               </Link>
-              <span className="text-xs leading-relaxed text-white/60 sm:max-w-xs">
-                Orçamento montado e confirmado pela nossa equipe — resposta em até 1 hora no
-                horário de atendimento.
-              </span>
+              <a
+                href={heroMilesLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-whatsapp px-7 py-4 text-sm font-bold uppercase tracking-wide text-whatsapp-foreground transition-transform hover:-translate-y-0.5"
+              >
+                <MessageCircle className="h-4 w-4" /> {t("hero.milesCta")}
+              </a>
             </div>
           </div>
 
