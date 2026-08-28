@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowRight, Sparkles, MapPin } from "lucide-react";
+import { ArrowRight, Sparkles, MapPin, MessageCircle } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FlightSearchForm } from "@/components/FlightSearchForm";
@@ -12,6 +12,9 @@ import { getCuratedDealsFn } from "@/lib/deals/travelpayouts-deals.functions";
 import type { RealDeal } from "@/lib/deals/types";
 import { heroImage } from "@/lib/destination-images";
 import { getDestination, destinationPhoto } from "@/lib/destinations";
+import { whatsappLink } from "@/lib/contact-config";
+import { useSettings } from "@/hooks/useSettings";
+import { useT } from "@/lib/i18n";
 
 const HERO_URL = heroImage(2400);
 
@@ -39,6 +42,12 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  const t = useT();
+  const { settings } = useSettings();
+  const heroMilesLink = whatsappLink(
+    "Olá! Quero consultar uma emissão com milhas para a minha próxima viagem.",
+    settings.whatsappNumber,
+  );
   const fetchCurated = useServerFn(getCuratedDealsFn);
   const curated = useQuery({
     queryKey: ["curated-deals", "GRU"],
