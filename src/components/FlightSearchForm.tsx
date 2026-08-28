@@ -13,6 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { AirportAutocomplete } from "@/components/AirportAutocomplete";
+import { DateRangeCalendar } from "@/components/DateRangeCalendar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { t } from "@/lib/i18n";
 
@@ -231,7 +232,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
           </button>
         </div>
       ) : (
-        <div className="mt-4 grid gap-3 md:grid-cols-[1fr_auto_1fr_auto]">
+        <div className="mt-4 grid gap-3 md:grid-cols-[1fr_auto_1fr_1.1fr] md:items-end">
           <AirportAutocomplete
             label={t("search.origin")}
             value={origin}
