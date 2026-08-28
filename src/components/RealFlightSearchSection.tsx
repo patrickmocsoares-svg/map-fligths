@@ -318,8 +318,16 @@ export function RealFlightSearchSection() {
           </div>
         )}
 
+        {offers.length > 0 && offers.some((o) => o.estimated) && (
+          <p className="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800">
+            Sem tarifa publicada em tempo real para esta data: os valores abaixo são
+            <strong> estimativas</strong> com companhias que operam esta rota. Confirmamos o preço
+            final com você no WhatsApp.
+          </p>
+        )}
+
         {offers.length > 0 && (
-          <div className="mt-8 grid gap-4 md:grid-cols-2">
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
             {offers.map((r) => {
               const msg = `Olá! Quero comprar a passagem ${origin} → ${destination} em ${date}${
                 tripType === "roundtrip" && returnDate ? ` (volta ${returnDate})` : ""
