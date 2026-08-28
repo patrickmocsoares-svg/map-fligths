@@ -26,21 +26,6 @@ import type {
 import type { FlightProvider } from "../provider";
 import { eligibleAirlines, isDomesticRoute } from "../airlines";
 
-const AIRLINES: { code: string; name: string; intl?: boolean }[] = [
-  { code: "LA", name: "LATAM", intl: true },
-  { code: "G3", name: "GOL" },
-  { code: "AD", name: "Azul" },
-  { code: "AA", name: "American Airlines", intl: true },
-  { code: "UA", name: "United", intl: true },
-  { code: "DL", name: "Delta", intl: true },
-  { code: "AF", name: "Air France", intl: true },
-  { code: "KL", name: "KLM", intl: true },
-  { code: "IB", name: "Iberia", intl: true },
-  { code: "TP", name: "TAP Portugal", intl: true },
-  { code: "LH", name: "Lufthansa", intl: true },
-  { code: "EK", name: "Emirates", intl: true },
-];
-
 // Rough coordinates for common IATA codes. Unknown airports fall back to a
 // hash-derived pseudo-location so the generator still works for any code.
 const COORDS: Record<string, [number, number]> = {
@@ -326,6 +311,7 @@ export const devProvider: FlightProvider = {
       offers.push({
         id: `dev-${seed.toString(36)}-${i}`,
         provider: "dev",
+        estimated: true,
         airline: { code: al.code, name: al.name },
         flightNumber: head.flightNumber,
         departureTime: head.departureTime,
