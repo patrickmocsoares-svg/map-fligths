@@ -126,24 +126,24 @@ export function RealFlightSearchSection() {
   });
 
   const field =
-    "w-full rounded-xl border border-sky-200 bg-white px-4 py-3 text-sm text-sky-950 outline-none transition-colors placeholder:text-sky-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200";
-  const labelCls = "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-sky-700";
+    "w-full rounded-xl border border-white/10 bg-card px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/30";
+  const labelCls = "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground";
 
   return (
-    <section className="bg-white">
+    <section className="bg-background border-t border-white/5">
       <div className="mx-auto max-w-6xl px-4 py-16 md:px-8 md:py-24">
-        <h2 className="font-display text-3xl font-bold tracking-tight text-sky-950 md:text-4xl">
+        <h2 className="font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
           Buscar Passagens Aéreas
         </h2>
-        <p className="mt-2 text-sm text-sky-700">
+        <p className="mt-2 text-sm text-muted-foreground">
           Tarifas reais consultadas em tempo real. Finalize com nosso time pelo WhatsApp.
         </p>
 
         <form
           onSubmit={onSubmit}
-          className="mt-8 rounded-3xl border border-sky-100 bg-sky-50/70 p-5 shadow-sm md:p-6"
+          className="mt-8 rounded-3xl border border-white/10 bg-card/60 p-5 shadow-sm md:p-6"
         >
-          <div className="mb-4 inline-flex rounded-xl border border-sky-200 bg-white p-1">
+          <div className="mb-4 inline-flex rounded-xl border border-white/10 bg-card p-1">
             {(
               [
                 ["roundtrip", "Ida e volta"],
@@ -155,7 +155,7 @@ export function RealFlightSearchSection() {
                 type="button"
                 onClick={() => setTripType(value)}
                 className={`rounded-lg px-4 py-2 text-xs font-semibold transition-colors ${
-                  tripType === value ? "bg-sky-600 text-white" : "text-sky-700 hover:bg-sky-50"
+                  tripType === value ? "gold-gradient text-primary-foreground" : "text-muted-foreground hover:bg-secondary"
                 }`}
               >
                 {label}
@@ -181,7 +181,7 @@ export function RealFlightSearchSection() {
                 type="button"
                 onClick={swap}
                 aria-label="Inverter origem e destino"
-                className="mb-1 inline-flex h-11 w-full items-center justify-center rounded-xl border border-sky-200 bg-white text-sky-700 transition-colors hover:bg-sky-100"
+                className="mb-1 inline-flex h-11 w-full items-center justify-center rounded-xl border border-white/10 bg-card text-muted-foreground transition-colors hover:bg-white/5"
               >
                 <ArrowLeftRight className="h-4 w-4" />
               </button>
@@ -204,7 +204,7 @@ export function RealFlightSearchSection() {
                 {tripType === "roundtrip" ? "Ida e volta" : "Data de ida"}
               </label>
               <DateRangeCalendar
-                theme="light"
+                
                 depart={date}
                 ret={tripType === "roundtrip" ? returnDate : ""}
                 range={tripType === "roundtrip"}
@@ -262,7 +262,7 @@ export function RealFlightSearchSection() {
               <button
                 type="submit"
                 disabled={mutation.isPending}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-sky-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-sky-700 disabled:opacity-60"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl gold-gradient px-5 py-3 text-sm font-semibold text-white transition-colors hover:opacity-90 disabled:opacity-60"
               >
                 {mutation.isPending ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -276,7 +276,7 @@ export function RealFlightSearchSection() {
         </form>
 
         {mutation.isPending && (
-          <p className="mt-8 text-sm text-sky-700">Consultando as melhores tarifas…</p>
+          <p className="mt-8 text-sm text-muted-foreground">Consultando as melhores tarifas…</p>
         )}
 
         {mutation.isError && (
@@ -286,8 +286,8 @@ export function RealFlightSearchSection() {
         )}
 
         {mutation.isSuccess && offers.length === 0 && (
-          <div className="mt-8 rounded-2xl border border-dashed border-sky-200 bg-sky-50 p-6">
-            <p className="text-sm text-sky-800">
+          <div className="mt-8 rounded-2xl border border-dashed border-white/10 bg-secondary p-6">
+            <p className="text-sm text-foreground">
               Não encontramos tarifas publicadas para essa data. Veja datas próximas com preço
               disponível ou fale com a gente.
             </p>
@@ -298,7 +298,7 @@ export function RealFlightSearchSection() {
                     key={s.date}
                     type="button"
                     onClick={() => runSearch(s.date)}
-                    className="inline-flex items-center gap-2 rounded-xl border border-sky-200 bg-white px-3 py-2 text-xs font-semibold text-sky-800 transition-colors hover:bg-sky-100"
+                    className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-card px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-white/5"
                   >
                     <CalendarDays className="h-3.5 w-3.5" />
                     {fmtDate(s.date)} · {fmtPrice(s.price, s.currency)}
@@ -339,12 +339,12 @@ export function RealFlightSearchSection() {
               return (
                 <article
                   key={r.id}
-                  className="rounded-2xl border border-sky-100 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
+                  className="rounded-2xl border border-white/10 bg-card p-5 shadow-sm transition-shadow hover:shadow-md"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-sm font-semibold text-sky-950">{r.airline.name}</span>
+                        <span className="text-sm font-semibold text-foreground">{r.airline.name}</span>
                         {r.estimated && (
                           <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-700">
                             Estimativa
@@ -352,19 +352,19 @@ export function RealFlightSearchSection() {
                         )}
                       </div>
 
-                      <div className="mt-1 flex items-center gap-2 text-sm text-sky-700">
+                      <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
                         <span className="font-medium">{fmtTime(r.departureTime)}</span>
                         <ArrowRight className="h-3.5 w-3.5" />
                         <span className="font-medium">{fmtTime(r.arrivalTime)}</span>
                       </div>
-                      <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-sky-600">
+                      <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                         <span className="inline-flex items-center gap-1">
                           <Clock className="h-3.5 w-3.5" /> {fmtDuration(r.durationMin)}
                         </span>
                         <span>{r.stops === 0 ? "Direto" : `${r.stops} conexão(ões)`}</span>
                       </div>
                     </div>
-                    <div className="text-right text-2xl font-bold text-sky-700">
+                    <div className="text-right text-3xl font-extrabold text-gold">
                       {fmtPrice(r.price, r.currency)}
                     </div>
                   </div>
