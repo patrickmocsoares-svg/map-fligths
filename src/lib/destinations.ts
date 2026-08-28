@@ -11,6 +11,10 @@
  * consumers. Callers use `getDestination(code)` and receive a normalized
  * shape with sane fallbacks.
  */
+import {
+  DESTINATION_PHOTOS,
+  FALLBACK_DESTINATION_PHOTO,
+} from "@/lib/destination-photos";
 
 export type Destination = {
   code: string;
