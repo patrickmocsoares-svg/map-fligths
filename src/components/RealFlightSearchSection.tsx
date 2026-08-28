@@ -66,6 +66,7 @@ export function RealFlightSearchSection() {
   const [cabin, setCabin] = useState<CabinClass>("economy");
   const [sort, setSort] = useState<SortKey>("price");
   const [suggestions, setSuggestions] = useState<NearbyDate[]>([]);
+  const [source, setSource] = useState<Source>("real");
 
   const mutation = useMutation({
     mutationFn: async (vars: {
