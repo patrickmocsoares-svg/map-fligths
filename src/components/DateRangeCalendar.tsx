@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Calendar, Check, X } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -224,7 +225,7 @@ export function DateRangeCalendar({
         </div>
       )}
 
-      {open && isMobile && (
+      {open && isMobile && typeof document !== "undefined" && createPortal(
         <div className="fixed inset-0 z-[100] md:hidden">
           <button
             type="button"
@@ -266,7 +267,8 @@ export function DateRangeCalendar({
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </div>
   );
