@@ -322,7 +322,7 @@ export function RealFlightSearchSection() {
           </div>
         )}
 
-        {offers.length > 0 && offers.some((o) => o.estimated) && (
+        {offers.length > 0 && (source === "estimated" || offers.some((o) => o.estimated)) && (
           <p className="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800">
             Sem tarifa publicada em tempo real para esta data: os valores abaixo são
             <strong> estimativas</strong> com companhias que operam esta rota. Confirmamos o preço
