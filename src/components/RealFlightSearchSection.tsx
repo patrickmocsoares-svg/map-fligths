@@ -194,25 +194,19 @@ export function RealFlightSearchSection() {
               />
             </div>
 
-            <div className="md:col-span-2">
-              <label className={labelCls}>Data de ida</label>
-              <input
-                type="date"
-                className={field}
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="md:col-span-3">
-              <label className={labelCls}>Data de volta</label>
-              <input
-                type="date"
-                className={field}
-                value={returnDate}
-                disabled={tripType === "oneway"}
-                onChange={(e) => setReturnDate(e.target.value)}
+            <div className="md:col-span-5">
+              <label className={labelCls}>
+                {tripType === "roundtrip" ? "Ida e volta" : "Data de ida"}
+              </label>
+              <DateRangeCalendar
+                theme="light"
+                depart={date}
+                ret={tripType === "roundtrip" ? returnDate : ""}
+                range={tripType === "roundtrip"}
+                onChange={({ depart: d, ret: r }) => {
+                  setDate(d);
+                  setReturnDate(r);
+                }}
               />
             </div>
 
