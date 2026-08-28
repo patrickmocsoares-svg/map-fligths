@@ -7,6 +7,7 @@ import { Footer } from "@/components/Footer";
 import { FlightSearchForm } from "@/components/FlightSearchForm";
 import { DealCard } from "@/components/DealCard";
 import { RealFlightSearchSection } from "@/components/RealFlightSearchSection";
+import { PromoDealsSection } from "@/components/PromoDealsSection";
 import { getCuratedDealsFn } from "@/lib/deals/travelpayouts-deals.functions";
 import type { RealDeal } from "@/lib/deals/types";
 import { heroImage } from "@/lib/destination-images";
@@ -220,6 +221,7 @@ function Home() {
         </div>
       </section>
 
+      <PromoDealsSection />
       <RealFlightSearchSection />
 
       <Footer />
