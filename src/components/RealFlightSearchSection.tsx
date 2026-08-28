@@ -125,6 +125,19 @@ export function RealFlightSearchSection() {
     return a.stops - b.stops;
   });
 
+  /** Estimated data is never presented as a confirmed flight — only as a reference price. */
+  const isReferenceOnly = source === "estimated" || offers.some((o) => o.estimated);
+  const referencePrice = offers.length ? Math.min(...offers.map((o) => o.price)) : undefined;
+
+  const milesCtx: MilesContext = {
+    origin: origin.trim().toUpperCase() || undefined,
+    destination: destination.trim().toUpperCase() || undefined,
+    departDate: date || undefined,
+    returnDate: tripType === "roundtrip" ? returnDate || undefined : undefined,
+    passengers,
+    currency: "BRL",
+  };
+
   const field =
     "w-full rounded-xl border border-white/10 bg-card px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/30";
   const labelCls = "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground";
