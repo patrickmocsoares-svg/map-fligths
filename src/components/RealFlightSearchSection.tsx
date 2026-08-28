@@ -78,6 +78,7 @@ export function RealFlightSearchSection() {
     }) => {
       const res = await search({ data: { ...vars, currency: "BRL", limit: 30 } });
       const offers = (res?.offers ?? []) as FlightOffer[];
+      setSource(((res as { source?: string })?.source ?? "real") as Source);
       if (offers.length === 0) {
         const alt = (await nearby({
           data: { origin: vars.origin, destination: vars.destination, around: vars.departDate },
