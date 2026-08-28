@@ -15,6 +15,12 @@ import {
 } from "@/components/WhatsAppSavingsModal";
 import { searchFlightsFn } from "@/lib/flights.functions";
 import {
+  MilesOfferCTA,
+  MilesBanner,
+  MilesNoResults,
+  type MilesContext,
+} from "@/components/MilesEmission";
+import {
   getNearbyDatesFn,
   getPopularFromCityFn,
 } from "@/lib/deals/travelpayouts-deals.functions";
