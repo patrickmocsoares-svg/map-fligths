@@ -364,7 +364,7 @@ export function RealFlightSearchSection() {
                         <span>{r.stops === 0 ? "Direto" : `${r.stops} conexão(ões)`}</span>
                       </div>
                     </div>
-                    <div className="text-right text-2xl font-bold text-muted-foreground">
+                    <div className="text-right text-3xl font-extrabold text-gold">
                       {fmtPrice(r.price, r.currency)}
                     </div>
                   </div>
