@@ -129,3 +129,25 @@ export function eligibleAirlines(
   const seen = new Set<string>();
   return pool.filter((a) => (seen.has(a.code) ? false : (seen.add(a.code), true)));
 }
+
+/** Catalog region (from `@/lib/destinations`) → eligible carriers. */
+export function airlinesForCatalogRegion(
+  region: string,
+  originIsBrazil = true,
+): SimpleAirline[] {
+  if (region === "Brasil") return BR_DOMESTIC;
+  const map: Record<string, Region> = {
+    "América Latina": "south-america",
+    "América do Norte": "north-america",
+    Europa: "europe",
+    "Oriente Médio": "middle-east",
+    "Ásia": "asia",
+    Outros: "europe",
+  };
+  const pool = [
+    ...(originIsBrazil ? BR_INTERNATIONAL : []),
+    ...REGION_AIRLINES[map[region] ?? "europe"],
+  ];
+  const seen = new Set<string>();
+  return pool.filter((a) => (seen.has(a.code) ? false : (seen.add(a.code), true)));
+}

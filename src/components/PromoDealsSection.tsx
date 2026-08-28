@@ -1,15 +1,25 @@
 import { useMemo, useState } from "react";
-import { Flame, MessageCircle, RefreshCw, Timer } from "lucide-react";
+import { Flame, MessageCircle, Plane, RefreshCw, Timer, X } from "lucide-react";
 import { DESTINATIONS, destinationPhoto, getDestination } from "@/lib/destinations";
 import { whatsappLink } from "@/lib/contact-config";
 import { useSettings } from "@/hooks/useSettings";
+import { isDomesticPromo, promoOffers } from "@/lib/promo-flights";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 /**
  * Rotating "promoções relâmpago" showcase.
  *
  * Images come from the destination catalog keyed by IATA code, so a card can
- * never show a photo of a different city. Prices are shown as an estimated
- * starting point ("a partir de") and always converted through WhatsApp.
+ * never show a photo of a different city. Clicking a card opens the estimated
+ * fares for that route — Brazilian carriers on domestic routes, region-valid
+ * international carriers otherwise. Every price is an estimate and always
+ * converts through WhatsApp.
  */
 
 const HEADLINES = [
@@ -25,7 +35,19 @@ const URGENCY = [
   "Alta procura nas últimas 24h",
 ];
 
-const CODES = Object.keys(DESTINATIONS).filter((c) => !["CGH", "VCP", "SDU"].includes(c));
+const ORIGIN = "GRU";
+
+const ALL_CODES = Object.keys(DESTINATIONS).filter((c) => !["CGH", "VCP", "SDU", ORIGIN].includes(c));
+const DOMESTIC_CODES = ALL_CODES.filter((c) => isDomesticPromo(c));
+const INTL_CODES = ALL_CODES.filter((c) => !isDomesticPromo(c));
+
+type Filter = "todos" | "nacionais" | "internacionais";
+
+const FILTERS: { key: Filter; label: string }[] = [
+  { key: "todos", label: "Todas as ofertas" },
+  { key: "nacionais", label: "Brasil" },
+  { key: "internacionais", label: "Internacionais" },
+];
 
 function priceFor(code: string, salt: number) {
   const d = getDestination(code);
@@ -45,12 +67,29 @@ function shuffle<T>(arr: T[], salt: number): T[] {
     .map((o) => o.v);
 }
 
+const brl = (n: number) => `R$ ${n.toLocaleString("pt-BR")}`;
+
 export function PromoDealsSection() {
   const { settings } = useSettings();
   const [round, setRound] = useState(0);
+  const [filter, setFilter] = useState<Filter>("todos");
+  const [openCode, setOpenCode] = useState<string | null>(null);
 
-  const picks = useMemo(() => shuffle(CODES, round + 1).slice(0, 6), [round]);
+  const pool =
+    filter === "nacionais" ? DOMESTIC_CODES : filter === "internacionais" ? INTL_CODES : ALL_CODES;
+
+  const picks = useMemo(
+    () => shuffle(pool, round + 1 + filter.length).slice(0, 6),
+    [pool, round, filter],
+  );
   const headline = HEADLINES[round % HEADLINES.length];
+
+  const selected = openCode ? getDestination(openCode) : null;
+  const selectedPrice = openCode ? priceFor(openCode, round) : null;
+  const offers = useMemo(
+    () => (openCode ? promoOffers(openCode, priceFor(openCode, round).price, round) : []),
+    [openCode, round],
+  );
 
   return (
     <section className="border-t border-white/5 bg-background">
@@ -77,46 +116,71 @@ export function PromoDealsSection() {
           </button>
         </div>
 
+        <div className="mt-7 flex flex-wrap gap-2">
+          {FILTERS.map((f) => (
+            <button
+              key={f.key}
+              type="button"
+              onClick={() => setFilter(f.key)}
+              className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition-colors ${
+                filter === f.key
+                  ? "gold-gradient text-primary-foreground"
+                  : "border border-white/10 text-muted-foreground hover:border-gold/40 hover:text-gold"
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {picks.map((code, i) => {
             const d = getDestination(code);
             const { price, was, discount } = priceFor(code, round);
             const urgency = URGENCY[(i + round) % URGENCY.length];
-            const msg = `Olá! Vi a promoção para ${d.city} (${d.code}) a partir de R$ ${price.toLocaleString("pt-BR")}. Quero saber como economizar com milhas.`;
+            const msg = `Olá! Vi a promoção para ${d.city} (${d.code}) a partir de ${brl(price)}. Quero saber como economizar com milhas.`;
             return (
               <article
                 key={code}
                 className="group relative overflow-hidden rounded-3xl card-luxe animate-rise"
                 style={{ animationDelay: `${i * 70}ms` }}
               >
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <img
-                    src={destinationPhoto(code, 900, 700)}
-                    alt={`${d.city}, ${d.country}`}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/25 to-transparent" />
-                  <span className="absolute left-4 top-4 rounded-full bg-red-500 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white shadow-lg">
-                    -{discount}%
-                  </span>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <div className="text-xs uppercase tracking-[0.22em] text-white/70">
-                      {d.country}
+                <button
+                  type="button"
+                  onClick={() => setOpenCode(code)}
+                  aria-label={`Ver voos estimados para ${d.city}`}
+                  className="block w-full text-left"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <img
+                      src={destinationPhoto(code, 900, 700)}
+                      alt={`${d.city}, ${d.country}`}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/25 to-transparent" />
+                    <span className="absolute left-4 top-4 rounded-full bg-destructive px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-destructive-foreground shadow-lg">
+                      -{discount}%
+                    </span>
+                    <span className="absolute right-4 top-4 rounded-full bg-background/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-gold backdrop-blur">
+                      {isDomesticPromo(code) ? "Nacional" : "Internacional"}
+                    </span>
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <div className="text-xs uppercase tracking-[0.22em] text-white/70">
+                        {d.country}
+                      </div>
+                      <div className="font-display text-2xl font-bold text-white">{d.city}</div>
                     </div>
-                    <div className="font-display text-2xl font-bold text-white">{d.city}</div>
                   </div>
-                </div>
+                </button>
 
                 <div className="p-5">
                   <p className="text-sm text-muted-foreground">{d.experience}</p>
                   <div className="mt-4 flex items-end justify-between gap-3">
                     <div>
-                      <div className="text-xs text-muted-foreground line-through">
-                        R$ {was.toLocaleString("pt-BR")}
-                      </div>
+                      <div className="text-xs text-muted-foreground line-through">{brl(was)}</div>
                       <div className="font-display text-3xl font-extrabold leading-none text-gold">
-                        R$ {price.toLocaleString("pt-BR")}
+                        {brl(price)}
                       </div>
                       <div className="mt-1 text-[11px] text-muted-foreground">
                         estimativa a partir de · por pessoa
@@ -127,13 +191,21 @@ export function PromoDealsSection() {
                     </span>
                   </div>
 
+                  <button
+                    type="button"
+                    onClick={() => setOpenCode(code)}
+                    className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-gold/30 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-gold transition-colors hover:bg-gold/10"
+                  >
+                    <Plane className="h-4 w-4" /> Ver voos desta promoção
+                  </button>
+
                   <a
                     href={whatsappLink(msg, settings.whatsappNumber)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3 text-sm font-bold text-white transition-transform hover:-translate-y-0.5"
+                    className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-whatsapp px-4 py-3 text-sm font-bold text-whatsapp-foreground transition-transform hover:-translate-y-0.5"
                   >
-                    <MessageCircle className="h-4 w-4" /> Quero economizar
+                    <MessageCircle className="h-4 w-4" /> QUERO ECONOMIZAR
                   </a>
                 </div>
               </article>
@@ -141,6 +213,74 @@ export function PromoDealsSection() {
           })}
         </div>
       </div>
+
+      <Dialog open={!!openCode} onOpenChange={(o) => !o && setOpenCode(null)}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+          {selected && selectedPrice && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="font-display text-2xl">
+                  {ORIGIN} → {selected.city} ({selected.code})
+                </DialogTitle>
+                <DialogDescription>
+                  {isDomesticPromo(selected.code)
+                    ? "Voos nacionais operados por LATAM, GOL e Azul."
+                    : `Companhias que operam para ${selected.country}.`}{" "}
+                  Valores estimados — confirmamos a tarifa final no WhatsApp.
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="space-y-3">
+                {offers.map((o) => {
+                  const msg = `Olá! Vi a promoção ${ORIGIN} → ${selected.city} (${selected.code}) com ${o.airlineName}, saindo ${o.depart}, por cerca de ${brl(o.price)}. Quero economizar com milhas.`;
+                  return (
+                    <div key={o.id} className="rounded-2xl border border-white/10 bg-card/60 p-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <div className="text-sm font-semibold">{o.airlineName}</div>
+                          <div className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                            {o.flightNumber} · {o.cabin}
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="font-display text-2xl font-extrabold leading-none text-gold">
+                            {brl(o.price)}
+                          </div>
+                          <div className="text-[10px] text-muted-foreground">estimativa</div>
+                        </div>
+                      </div>
+                      <div className="mt-3 flex items-center gap-3 text-sm text-muted-foreground">
+                        <span className="font-medium text-foreground">{o.depart}</span>
+                        <span className="h-px flex-1 bg-white/10" />
+                        <span className="text-[11px] uppercase tracking-wide">
+                          {o.durationLabel} ·{" "}
+                          {o.stops === 0 ? "direto" : `${o.stops} parada${o.stops > 1 ? "s" : ""}`}
+                        </span>
+                        <span className="h-px flex-1 bg-white/10" />
+                        <span className="font-medium text-foreground">{o.arrive}</span>
+                      </div>
+                      <a
+                        href={whatsappLink(msg, settings.whatsappNumber)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-whatsapp px-4 py-2.5 text-sm font-bold text-whatsapp-foreground transition-transform hover:-translate-y-0.5"
+                      >
+                        <MessageCircle className="h-4 w-4" /> QUERO ECONOMIZAR
+                      </a>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <p className="flex items-start gap-2 text-[11px] leading-relaxed text-muted-foreground">
+                <X className="mt-0.5 h-3 w-3 shrink-0 text-destructive" />
+                Estes valores são estimativas para iniciar a cotação. A tarifa final (em dinheiro ou
+                milhas) é confirmada pela nossa equipe antes de qualquer emissão.
+              </p>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
