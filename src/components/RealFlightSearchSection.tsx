@@ -14,6 +14,13 @@ import {
 import { searchFlightsFallbackFn } from "@/lib/flights-fallback.functions";
 import { getNearbyDatesFn } from "@/lib/deals/travelpayouts-deals.functions";
 import { whatsappLink } from "@/lib/contact-config";
+import {
+  MilesOfferCTA,
+  MilesBanner,
+  MilesNoResults,
+  MilesReferencePrice,
+  type MilesContext,
+} from "@/components/MilesEmission";
 import { useSettings } from "@/hooks/useSettings";
 import type { FlightOffer, CabinClass } from "@/lib/flights/types";
 
