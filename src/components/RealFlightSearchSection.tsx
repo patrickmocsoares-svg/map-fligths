@@ -318,8 +318,16 @@ export function RealFlightSearchSection() {
           </div>
         )}
 
+        {offers.length > 0 && offers.some((o) => o.estimated) && (
+          <p className="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800">
+            Sem tarifa publicada em tempo real para esta data: os valores abaixo são
+            <strong> estimativas</strong> com companhias que operam esta rota. Confirmamos o preço
+            final com você no WhatsApp.
+          </p>
+        )}
+
         {offers.length > 0 && (
-          <div className="mt-8 grid gap-4 md:grid-cols-2">
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
             {offers.map((r) => {
               const msg = `Olá! Quero comprar a passagem ${origin} → ${destination} em ${date}${
                 tripType === "roundtrip" && returnDate ? ` (volta ${returnDate})` : ""
@@ -331,7 +339,15 @@ export function RealFlightSearchSection() {
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <div className="text-sm font-semibold text-sky-950">{r.airline.name}</div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-sm font-semibold text-sky-950">{r.airline.name}</span>
+                        {r.estimated && (
+                          <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-700">
+                            Estimativa
+                          </span>
+                        )}
+                      </div>
+
                       <div className="mt-1 flex items-center gap-2 text-sm text-sky-700">
                         <span className="font-medium">{fmtTime(r.departureTime)}</span>
                         <ArrowRight className="h-3.5 w-3.5" />

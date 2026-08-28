@@ -84,6 +84,9 @@ export type FlightOffer = {
   /** Optional: mileage/points alternative. */
   miles?: number;
 
+  /** True when the offer is a synthetic estimate, not a live fare. */
+  estimated?: boolean;
+
 
 
 };
