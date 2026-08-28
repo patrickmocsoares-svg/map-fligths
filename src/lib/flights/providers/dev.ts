@@ -24,6 +24,7 @@ import type {
   FlightSegment,
 } from "../types";
 import type { FlightProvider } from "../provider";
+import { eligibleAirlines, isDomesticRoute } from "../airlines";
 
 const AIRLINES: { code: string; name: string; intl?: boolean }[] = [
   { code: "LA", name: "LATAM", intl: true },
@@ -164,8 +165,12 @@ function buildItinerary(
     );
   } else {
     // Insert a plausible connection hub.
-    const HUBS = ["GRU", "PTY", "BOG", "MIA", "LIS", "MAD", "CDG", "FRA", "IST"];
-    const hub = HUBS[Math.floor(rand() * HUBS.length)];
+    const domestic = isDomesticRoute(origin, destination);
+    const HUBS = domestic
+      ? ["GRU", "VCP", "CNF", "BSB", "GIG", "REC"]
+      : ["GRU", "PTY", "BOG", "MIA", "LIS", "MAD", "CDG", "FRA", "IST"];
+    const pool = HUBS.filter((h) => h !== origin && h !== destination);
+    const hub = pool[Math.floor(rand() * pool.length)];
     const layoverMin = 60 + Math.floor(rand() * 120);
     const legMin = Math.max(45, Math.floor((totalMin - layoverMin) / 2));
     const seg1 = buildSegment(
@@ -243,7 +248,7 @@ export const devProvider: FlightProvider = {
     const a = coordsFor(params.origin);
     const b = coordsFor(params.destination);
     const km = Math.max(120, distanceKm(a, b));
-    const isIntl = km > 2500;
+    const isIntl = !isDomesticRoute(params.origin, params.destination) && km > 2500;
 
     // Cruise ~800 km/h + 40 min ground overhead.
     const baselineMin = Math.round((km / 800) * 60 + 40);
@@ -253,7 +258,7 @@ export const devProvider: FlightProvider = {
     const seed = hashCode(`${params.origin}-${params.destination}-${params.departDate}-${params.cabin}`);
     const rand = mulberry32(seed);
 
-    const eligible = AIRLINES.filter((al) => (isIntl ? true : !al.intl || al.code === "LA"));
+    const eligible = eligibleAirlines(params.origin, params.destination, b);
     const offers: FlightOffer[] = [];
 
     for (let i = 0; i < limit; i++) {
