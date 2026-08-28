@@ -38,14 +38,14 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
   const [flexible, setFlexible] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [origin, setOrigin] = useState("GRU");
-  const [destination, setDestination] = useState("MIA");
-  const [depart, setDepart] = useState(() => addDaysISO(21));
-  const [ret, setRet] = useState(() => addDaysISO(28));
+  const [origin, setOrigin] = useState("");
+  const [destination, setDestination] = useState("");
+  const [depart, setDepart] = useState("");
+  const [ret, setRet] = useState("");
 
   const [legs, setLegs] = useState<Leg[]>(() => [
-    { origin: "GRU", destination: "MIA", depart: addDaysISO(21) },
-    { origin: "MIA", destination: "GRU", depart: addDaysISO(28) },
+    { origin: "", destination: "", depart: "" },
+    { origin: "", destination: "", depart: "" },
   ]);
 
   const pax = adults + children + infants;
