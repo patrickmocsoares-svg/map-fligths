@@ -13,6 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { AirportAutocomplete } from "@/components/AirportAutocomplete";
+import { DateRangeCalendar } from "@/components/DateRangeCalendar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { t } from "@/lib/i18n";
 
@@ -38,14 +39,14 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
   const [flexible, setFlexible] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [origin, setOrigin] = useState("GRU");
-  const [destination, setDestination] = useState("MIA");
-  const [depart, setDepart] = useState(() => addDaysISO(21));
-  const [ret, setRet] = useState(() => addDaysISO(28));
+  const [origin, setOrigin] = useState("");
+  const [destination, setDestination] = useState("");
+  const [depart, setDepart] = useState("");
+  const [ret, setRet] = useState("");
 
   const [legs, setLegs] = useState<Leg[]>(() => [
-    { origin: "GRU", destination: "MIA", depart: addDaysISO(21) },
-    { origin: "MIA", destination: "GRU", depart: addDaysISO(28) },
+    { origin: "", destination: "", depart: "" },
+    { origin: "", destination: "", depart: "" },
   ]);
 
   const pax = adults + children + infants;
@@ -231,7 +232,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
           </button>
         </div>
       ) : (
-        <div className="mt-4 grid gap-3 md:grid-cols-[1fr_auto_1fr_auto]">
+        <div className="mt-4 grid gap-3 md:grid-cols-[1fr_auto_1fr_1.1fr] md:items-end">
           <AirportAutocomplete
             label={t("search.origin")}
             value={origin}
@@ -261,19 +262,17 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
             onChange={setDestination}
             icon={<Plane className="h-4 w-4 rotate-45" />}
           />
-          <div
-            className={`grid gap-3 ${trip === "roundtrip" ? "grid-cols-2" : "grid-cols-1"}`}
-          >
-            <DateField label={t("search.depart")} value={depart} onChange={setDepart} />
-            {trip === "roundtrip" && (
-              <DateField
-                label={t("search.return")}
-                value={ret}
-                onChange={setRet}
-                min={depart}
-              />
-            )}
-          </div>
+          <DateRangeCalendar
+            depart={depart}
+            ret={trip === "roundtrip" ? ret : ""}
+            range={trip === "roundtrip"}
+            onChange={({ depart: d, ret: r }) => {
+              setDepart(d);
+              setRet(r);
+            }}
+            labelDepart={t("search.depart")}
+            labelReturn={t("search.return")}
+          />
         </div>
       )}
 
