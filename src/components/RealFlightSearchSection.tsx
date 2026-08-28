@@ -262,7 +262,7 @@ export function RealFlightSearchSection() {
               <button
                 type="submit"
                 disabled={mutation.isPending}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl gold-gradient px-5 py-3 text-sm font-semibold text-white transition-colors hover:opacity-90 disabled:opacity-60"
+                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl gold-gradient px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:opacity-90 disabled:opacity-60"
               >
                 {mutation.isPending ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -323,7 +323,7 @@ export function RealFlightSearchSection() {
         )}
 
         {offers.length > 0 && (source === "estimated" || offers.some((o) => o.estimated)) && (
-          <p className="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800">
+          <p className="mt-8 rounded-2xl border border-warning/35 bg-warning/10 p-4 text-xs text-warning">
             Sem tarifa publicada em tempo real para esta data: os valores abaixo são
             <strong> estimativas</strong> com companhias que operam esta rota. Confirmamos o preço
             final com você no WhatsApp.
@@ -373,9 +373,9 @@ export function RealFlightSearchSection() {
                     href={whatsappLink(msg, settings.whatsappNumber)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
+                    className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-whatsapp px-4 py-3 text-sm font-semibold text-whatsapp-foreground transition-transform hover:-translate-y-0.5"
                   >
-                    <MessageCircle className="h-4 w-4" /> Comprar via WhatsApp
+                    <MessageCircle className="h-4 w-4" /> QUERO ECONOMIZAR
                   </a>
                 </article>
               );

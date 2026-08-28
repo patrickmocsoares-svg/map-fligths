@@ -10,57 +10,21 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-const cabin = z.enum(["economy", "premium", "business", "first"]);
-
-const schema = z.object({
-  origin: z.string().length(3),
-  destination: z.string().length(3),
-  departDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  returnDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  passengers: z.number().int().min(1).max(9),
-  cabin,
-  currency: z.string().length(3).optional(),
-  limit: z.number().int().min(1).max(50).optional(),
-});
-
 export const searchFlightsFallbackFn = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) => schema.parse(input))
+  .inputValidator((input: unknown) =>
+    z.object({
+      origin: z.string().length(3),
+      destination: z.string().length(3),
+      departDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+      returnDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+      passengers: z.number().int().min(1).max(9),
+      cabin: z.enum(["economy", "premium", "business", "first"]),
+      currency: z.string().length(3).optional(),
+      limit: z.number().int().min(1).max(50).optional(),
+    }).parse(input),
+  )
   .handler(async ({ data }) => {
-    // 1. Skyscanner (RapidAPI). Any failure is non-fatal.
-    try {
-      const { searchSkyscanner } = await import("./flights/providers/skyscanner.server");
-      const skyscanner = await searchSkyscanner(data);
-      if (skyscanner.offers.length > 0) return { ...skyscanner, source: "real" as const };
-    } catch (err) {
-      console.error("[flights-fallback] skyscanner failed", err);
-    }
-
-    // 2. Connected provider layer (Travelpayouts and friends).
-    try {
-      const { searchFlights } = await import("./flights");
-      const real = await searchFlights(data);
-      if (real.offers.length > 0) return { ...real, source: "real" as const };
-    } catch (err) {
-      console.error("[flights-fallback] real provider failed", err);
-    }
-
-    // 3. Last resort: estimated offers so the user always has something to
-    // negotiate on WhatsApp. Airlines are route-consistent (domestic routes
-    // only get LATAM/GOL/Azul) and every offer is flagged `estimated`.
-    try {
-      const { devProvider } = await import("./flights/providers/dev");
-      const est = await devProvider.search(data);
-      return { ...est, source: "estimated" as const };
-    } catch (err) {
-      console.error("[flights-fallback] estimated provider failed", err);
-      return {
-        provider: "none",
-        searchedAt: new Date().toISOString(),
-        params: data,
-        currency: data.currency ?? "BRL",
-        offers: [],
-        source: "none" as const,
-      };
-    }
+    const { searchFlightsWithFallback } = await import("./flights-fallback.server");
+    return searchFlightsWithFallback(data);
   });
 

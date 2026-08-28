@@ -78,10 +78,15 @@ export function PromoDealsSection() {
   const pool =
     filter === "nacionais" ? DOMESTIC_CODES : filter === "internacionais" ? INTL_CODES : ALL_CODES;
 
-  const picks = useMemo(
-    () => shuffle(pool, round + 1 + filter.length).slice(0, 6),
-    [pool, round, filter],
-  );
+  const picks = useMemo(() => {
+    if (filter === "todos") {
+      return [
+        ...shuffle(DOMESTIC_CODES, round + 11).slice(0, 3),
+        ...shuffle(INTL_CODES, round + 29).slice(0, 3),
+      ].sort((a, b) => Math.sin(a.charCodeAt(0) + round) - Math.sin(b.charCodeAt(0) + round));
+    }
+    return shuffle(pool, round + 1 + filter.length).slice(0, 6);
+  }, [pool, round, filter]);
   const headline = HEADLINES[round % HEADLINES.length];
 
   const selected = openCode ? getDestination(openCode) : null;
