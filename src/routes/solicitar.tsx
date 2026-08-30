@@ -24,6 +24,7 @@ import {
   type OrderRequestInput,
 } from "@/lib/orders/schema";
 import { whatsappLink, SUPPORT_HOURS } from "@/lib/contact-config";
+import { useSettings } from "@/hooks/useSettings";
 
 export const Route = createFileRoute("/solicitar")({
   head: () => ({
@@ -90,12 +91,46 @@ function RequestPage() {
   const [form, setForm] = useState<OrderRequestInput>(emptyForm);
   const [errors, setErrors] = useState<Errors>({});
   const [result, setResult] = useState<OrderCreated | null>(null);
+  const { settings } = useSettings();
+
+  const waNumber = settings?.whatsappNumber;
+
+  function quoteMessage(data: OrderCreated, f: OrderRequestInput) {
+    const s = data.summary;
+    const pax =
+      `${s.adults} adulto(s)` +
+      (s.children ? `, ${s.children} criança(s)` : "") +
+      (s.infants ? `, ${s.infants} bebê(s)` : "");
+    return [
+      "Olá! Recebemos uma nova solicitação de orçamento através do TRIPmoc.",
+      "",
+      `Protocolo: ${data.protocol}`,
+      `Cliente: ${f.fullName}`,
+      `E-mail: ${f.email}`,
+      `WhatsApp: ${f.phone}`,
+      `Origem: ${s.origin}`,
+      `Destino: ${s.destination}`,
+      `Data de ida: ${s.departDate}`,
+      `Data de volta: ${s.returnDate ?? "Somente ida"}`,
+      `Passageiros: ${pax}`,
+      `Classe: ${CABIN_LABELS[s.cabin as keyof typeof CABIN_LABELS] ?? s.cabin}`,
+      f.notes ? `Observações: ${f.notes}` : "",
+      "",
+      "Solicitação de orçamento enviada pelo site.",
+    ]
+      .filter(Boolean)
+      .join("\n");
+  }
 
   const mutation = useMutation({
     mutationFn: (payload: unknown) => submitOrder({ data: payload as never }),
     onSuccess: (data) => {
-      setResult(data as OrderCreated);
-      if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+      const created = data as OrderCreated;
+      setResult(created);
+      if (typeof window !== "undefined") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.open(whatsappLink(quoteMessage(created, form), waNumber), "_blank", "noopener");
+      }
     },
   });
 
@@ -125,12 +160,15 @@ function RequestPage() {
   }
 
   const wa = useMemo(() => {
-    if (!result) return whatsappLink("Olá! Gostaria de solicitar um orçamento de passagem com milhas.");
-    const s = result.summary;
-    return whatsappLink(
-      `Olá! Acabei de enviar a solicitação ${result.protocol} (${s.origin} → ${s.destination}, ida ${s.departDate}).`,
-    );
-  }, [result]);
+    if (!result)
+      return whatsappLink(
+        "Olá! Gostaria de solicitar um orçamento de passagem com milhas.",
+        waNumber,
+      );
+    return whatsappLink(quoteMessage(result, form), waNumber);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [result, form, waNumber]);
+
 
   if (result) {
     return (
@@ -142,12 +180,23 @@ function RequestPage() {
               <CheckCircle2 className="h-6 w-6" />
             </div>
             <h1 className="mt-6 font-display text-3xl font-bold leading-tight tracking-tight md:text-4xl">
-              Recebemos sua solicitação.
+              Solicitação recebida com sucesso.
             </h1>
             <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
-              Nossa equipe responderá em até 1 hora durante o horário de atendimento.
+              Nossa equipe analisará as informações fornecidas e preparará seu orçamento de
+              acordo com os dados da sua viagem.
             </p>
-            <p className="mt-1 text-xs text-muted-foreground/80">{SUPPORT_HOURS}</p>
+            <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
+              Após a análise, o orçamento será encaminhado ao e-mail informado e também
+              disponibilizado por meio do WhatsApp para maior comodidade.
+            </p>
+            <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
+              Agradecemos por escolher a TRIPmoc.
+            </p>
+            <p className="mt-4 text-xs text-muted-foreground/80">
+              Atendimento: {settings?.businessHours ?? SUPPORT_HOURS}
+            </p>
+
 
             <div className="mt-8 rounded-2xl border border-border bg-background/50 p-5">
               <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
