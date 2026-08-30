@@ -197,6 +197,78 @@ export const DESTINATIONS: Record<string, Destination> = {
     description: "Burj Khalifa, desert safari, Palm Jumeirah e o luxo do Golfo Pérsico.",
     experience: "Topo do Burj Khalifa ao pôr do sol",
   },
+
+  // ── Brasil (expansão comercial) ──────────────────────────────────────────
+  CWB: {
+    code: "CWB", city: "Curitiba", country: "Brasil", region: "Brasil",
+    photoId: FALLBACK_PHOTO,
+    description: "Jardim Botânico, Ópera de Arame e a capital mais arborizada do país.",
+    experience: "Jardim Botânico ao amanhecer",
+  },
+  NAT: {
+    code: "NAT", city: "Natal", country: "Brasil", region: "Brasil",
+    photoId: FALLBACK_PHOTO,
+    description: "Dunas de Genipabu, Ponta Negra e praias de água morna o ano inteiro.",
+    experience: "Buggy nas dunas de Genipabu",
+  },
+  MCZ: {
+    code: "MCZ", city: "Maceió", country: "Brasil", region: "Brasil",
+    photoId: FALLBACK_PHOTO,
+    description: "Piscinas naturais de Pajuçara, Praia do Francês e mar verde-esmeralda.",
+    experience: "Jangada até as piscinas naturais",
+  },
+  JPA: {
+    code: "JPA", city: "João Pessoa", country: "Brasil", region: "Brasil",
+    photoId: FALLBACK_PHOTO,
+    description: "Ponta do Seixas, Tambaú e o primeiro nascer do sol das Américas.",
+    experience: "Nascer do sol na Ponta do Seixas",
+  },
+  BPS: {
+    code: "BPS", city: "Porto Seguro", country: "Brasil", region: "Brasil",
+    photoId: FALLBACK_PHOTO,
+    description: "Trancoso, Arraial d'Ajuda e o litoral onde o Brasil começou.",
+    experience: "Quadrado de Trancoso ao entardecer",
+  },
+  VIX: {
+    code: "VIX", city: "Vitória", country: "Brasil", region: "Brasil",
+    photoId: FALLBACK_PHOTO,
+    description: "Terceira Ponte, Convento da Penha e a orla de Camburi.",
+    experience: "Pôr do sol na Terceira Ponte",
+  },
+  IGU: {
+    code: "IGU", city: "Foz do Iguaçu", country: "Brasil", region: "Brasil",
+    photoId: FALLBACK_PHOTO,
+    description: "As Cataratas do Iguaçu, o Parque das Aves e a tríplice fronteira.",
+    experience: "Garganta do Diabo de perto",
+  },
+
+  // ── América Latina (expansão) ────────────────────────────────────────────
+  MVD: {
+    code: "MVD", city: "Montevidéu", country: "Uruguai", region: "América Latina",
+    photoId: FALLBACK_PHOTO,
+    description: "Rambla à beira do Prata, Ciudad Vieja e o melhor asado da região.",
+    experience: "Caminhada na Rambla ao pôr do sol",
+  },
+  LIM: {
+    code: "LIM", city: "Lima", country: "Peru", region: "América Latina",
+    photoId: FALLBACK_PHOTO,
+    description: "Miraflores sobre o Pacífico, Barranco boêmio e alta gastronomia.",
+    experience: "Ceviche em Barranco",
+  },
+  CUN: {
+    code: "CUN", city: "Cancún", country: "México", region: "América Latina",
+    photoId: FALLBACK_PHOTO,
+    description: "Caribe mexicano, cenotes, Tulum e resorts pé na areia.",
+    experience: "Mergulho em cenote perto de Tulum",
+  },
+
+  // ── América do Norte (expansão) ──────────────────────────────────────────
+  MCO: {
+    code: "MCO", city: "Orlando", country: "Estados Unidos", region: "América do Norte",
+    photoId: FALLBACK_PHOTO,
+    description: "Parques temáticos, outlets e o destino favorito das famílias brasileiras.",
+    experience: "Dia completo nos parques",
+  },
 };
 
 export function getDestination(code: string): Destination {

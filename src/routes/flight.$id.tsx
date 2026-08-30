@@ -62,12 +62,12 @@ export const Route = createFileRoute("/flight/$id")({
   validateSearch: (s) => searchSchema.parse(s),
   head: () => ({
     meta: [
-      { title: "Detalhes da oferta — MAB Flights" },
+      { title: "Detalhes da oferta — TRIPmoc" },
       {
         name: "description",
         content: "Revise a oferta selecionada e continue para compra.",
       },
-      { property: "og:title", content: "Detalhes da oferta — MAB Flights" },
+      { property: "og:title", content: "Detalhes da oferta — TRIPmoc" },
       {
         property: "og:description",
         content: "Detalhes de voo, MAB Score e economia estimada.",

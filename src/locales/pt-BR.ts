@@ -1,5 +1,5 @@
 const dict = {
-  "brand.name": "MAB Flights",
+  "brand.name": "TRIPmoc",
   "brand.slogan": "Transformando milhas em oportunidades.",
   "nav.home": "Início",
   "nav.deals": "Ofertas",
@@ -107,7 +107,7 @@ const dict = {
   "miles.banner.text": "Consulte nossa equipe e descubra se sua viagem pode ser emitida com milhas.",
   "miles.banner.button": "Consultar emiss\u00e3o",
   "hero.headline": "Encontre a melhor forma de viajar.",
-  "hero.sub": "Compare tarifas, descubra oportunidades com milhas e conte com a MAB Flights para encontrar uma op\u00e7\u00e3o que fa\u00e7a sentido para sua viagem.",
+  "hero.sub": "Compare tarifas, descubra oportunidades com milhas e conte com a TRIPmoc para encontrar uma op\u00e7\u00e3o que fa\u00e7a sentido para sua viagem.",
   "hero.milesCta": "Emitir com milhas",
 };
 export default dict;

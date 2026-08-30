@@ -19,13 +19,13 @@ export const Route = createFileRoute("/deals")({
   validateSearch: (s) => schema.parse(s),
   head: () => ({
     meta: [
-      { title: "MAB Deals — Melhores oportunidades de voos" },
+      { title: "TRIPmoc Deals — Melhores oportunidades de voos" },
       {
         name: "description",
         content:
           "Painel premium de ofertas: passagens nacionais e internacionais com preços monitorados em tempo real.",
       },
-      { property: "og:title", content: "MAB Deals — Melhores oportunidades de voos" },
+      { property: "og:title", content: "TRIPmoc Deals — Melhores oportunidades de voos" },
       {
         property: "og:description",
         content: "Descubra automaticamente as melhores ofertas nacionais e internacionais.",
@@ -133,7 +133,7 @@ function DealsPage() {
         />
         <div className="relative mx-auto max-w-7xl px-4 py-10 md:px-8 md:py-14">
           <div className="inline-flex items-center gap-2 rounded-full border border-border bg-accent px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-brand-soft">
-            <Sparkles className="h-3 w-3" /> MAB Deals
+            <Sparkles className="h-3 w-3" /> TRIPmoc Deals
           </div>
           <h1 className="mt-4 font-display text-4xl leading-tight md:text-6xl">
             <span className="text-brand">As melhores oportunidades</span>

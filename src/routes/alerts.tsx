@@ -10,9 +10,9 @@ import { Bell, Trash2, Plus } from "lucide-react";
 export const Route = createFileRoute("/alerts")({
   head: () => ({
     meta: [
-      { title: "Alertas de preço — MAB Flights" },
+      { title: "Alertas de preço — TRIPmoc" },
       { name: "description", content: "Crie alertas e seja avisado quando o preço da sua rota cair." },
-      { property: "og:title", content: "Alertas de preço — MAB Flights" },
+      { property: "og:title", content: "Alertas de preço — TRIPmoc" },
       { property: "og:description", content: "Nunca perca uma oportunidade de voo com preço baixo." },
     ],
   }),

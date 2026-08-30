@@ -1,6 +1,6 @@
 import type { Dict } from "./pt-BR";
 const dict: Dict = {
-  "brand.name": "MAB Flights",
+  "brand.name": "TRIPmoc",
   "brand.slogan": "Transformer les miles en opportunités.",
   "nav.home": "Accueil",
   "nav.deals": "Offres",
@@ -108,7 +108,7 @@ const dict: Dict = {
   "miles.banner.text": "Consultez notre \u00e9quipe et d\u00e9couvrez si votre voyage peut \u00eatre \u00e9mis avec des miles.",
   "miles.banner.button": "Demander un devis",
   "hero.headline": "Trouvez la meilleure fa\u00e7on de voyager.",
-  "hero.sub": "Comparez les tarifs, d\u00e9couvrez les opportunit\u00e9s en miles et comptez sur MAB Flights pour trouver une option adapt\u00e9e \u00e0 votre voyage.",
+  "hero.sub": "Comparez les tarifs, d\u00e9couvrez les opportunit\u00e9s en miles et comptez sur TRIPmoc pour trouver une option adapt\u00e9e \u00e0 votre voyage.",
   "hero.milesCta": "\u00c9mettre avec des miles",
 };
 export default dict;

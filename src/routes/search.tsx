@@ -24,6 +24,8 @@ import {
   getNearbyDatesFn,
   getPopularFromCityFn,
 } from "@/lib/deals/travelpayouts-deals.functions";
+import { RecoveryOffers } from "@/components/OffersSections";
+import { INTERNATIONAL_OFFERS } from "@/lib/offers-catalog";
 import type { FlightOffer } from "@/lib/flights/types";
 import { formatBRL, t } from "@/lib/i18n";
 import { Plane, ArrowRight, SearchX, Sparkles, Briefcase, CalendarDays, MessageCircle } from "lucide-react";
@@ -43,9 +45,9 @@ export const Route = createFileRoute("/search")({
   validateSearch: (s) => searchSchema.parse(s),
   head: () => ({
     meta: [
-      { title: "Resultados da busca — MAB Flights" },
+      { title: "Resultados da busca — TRIPmoc" },
       { name: "description", content: "Compare voos e ofertas com o MAB Score." },
-      { property: "og:title", content: "Resultados da busca — MAB Flights" },
+      { property: "og:title", content: "Resultados da busca — TRIPmoc" },
       { property: "og:description", content: "Melhores tarifas identificadas em tempo real." },
     ],
   }),
@@ -467,14 +469,13 @@ function NoOffersState({
       <div className="rounded-3xl card-luxe p-10 text-center">
         <SearchX className="mx-auto h-10 w-10 text-brand" />
         <h2 className="mt-4 font-display text-2xl font-bold">
-          Nenhuma oferta disponível para esta rota e data.
+          Ainda não há tarifa publicada para esta data — mas há saída.
         </h2>
         <p className="mx-auto mt-2 max-w-lg text-sm text-muted-foreground">
-          Nossos parceiros ainda não possuem tarifas em cache para
-          {" "}
+          Não encontramos tarifa em cache para{" "}
           <span className="font-mono">{origin}</span> →{" "}
-          <span className="font-mono">{destination}</span> em {fmt(departDate)}.
-          Experimente uma data próxima ou explore destinos com preços disponíveis.
+          <span className="font-mono">{destination}</span> em {fmt(departDate)}. Veja datas
+          próximas, outras oportunidades abaixo ou fale com um consultor agora.
         </p>
       </div>
 
@@ -527,6 +528,13 @@ function NoOffersState({
           </div>
         </section>
       )}
+
+      <section>
+        <div className="mb-4 flex items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-brand">
+          <Sparkles className="h-3.5 w-3.5" /> Outras oportunidades para você
+        </div>
+        <RecoveryOffers scope={INTERNATIONAL_OFFERS.some((o) => o.code === destination?.toUpperCase()) ? "international" : "national"} />
+      </section>
     </div>
   );
 }

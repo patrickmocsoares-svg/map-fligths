@@ -11,7 +11,7 @@ import { formatBRL, formatMiles } from "@/lib/i18n";
 export const Route = createFileRoute("/_authenticated/admin/configuracoes")({
   head: () => ({
     meta: [
-      { title: "Configurações de milhas — MAB Flights" },
+      { title: "Configurações de milhas — TRIPmoc" },
       { name: "description", content: "Parâmetros de precificação em milhas e canais de contato." },
       { name: "robots", content: "noindex" },
     ],

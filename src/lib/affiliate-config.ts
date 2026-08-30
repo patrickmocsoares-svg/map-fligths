@@ -1,5 +1,5 @@
 /**
- * Centralized affiliate configuration for MAB Flights.
+ * Centralized affiliate configuration for TRIPmoc.
  *
  * Single source of truth for conversion partners. To onboard a new partner
  * (Trip.com, Booking, Kiwi, etc.), add an entry to `PARTNERS` and — when

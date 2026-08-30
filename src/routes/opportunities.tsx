@@ -13,17 +13,17 @@ import { scoreColorClass, scoreLabelKey } from "@/lib/mab-score";
 export const Route = createFileRoute("/opportunities")({
   head: () => ({
     meta: [
-      { title: "Oportunidades do dia — MAB Flights" },
+      { title: "Oportunidades do dia — TRIPmoc" },
       {
         name: "description",
         content:
           "Feed automático das melhores oportunidades de passagens: preços incomuns, quedas recentes e rotas abaixo da média histórica.",
       },
-      { property: "og:title", content: "Oportunidades do dia — MAB Flights" },
+      { property: "og:title", content: "Oportunidades do dia — TRIPmoc" },
       {
         property: "og:description",
         content:
-          "Descoberta automática de voos baratos monitorada continuamente pelo motor MAB.",
+          "Descoberta automática de voos baratos monitorada continuamente pelo motor TRIPmoc.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -94,13 +94,13 @@ function OpportunitiesPage() {
           />
           <div className="relative mx-auto max-w-7xl px-4 py-14 md:px-8 md:py-20">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-accent px-3 py-1 text-[11px] uppercase tracking-[0.24em] text-brand">
-              <Sparkles className="h-3 w-3" /> MAB Discovery Engine
+              <Sparkles className="h-3 w-3" /> TRIPmoc Discovery
             </div>
             <h1 className="mt-4 font-display text-4xl font-bold tracking-tight text-white md:text-6xl">
               Oportunidades do dia
             </h1>
             <p className="mt-3 max-w-2xl text-sm text-white/70 md:text-base">
-              O motor MAB monitora rotas populares 24/7 e destaca aqui apenas os preços incomuns,
+              O motor TRIPmoc monitora rotas populares 24/7 e destaca aqui apenas os preços incomuns,
               quedas recentes e voos abaixo da média histórica.
             </p>
 

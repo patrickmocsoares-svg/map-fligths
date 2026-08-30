@@ -28,13 +28,13 @@ import { whatsappLink, SUPPORT_HOURS } from "@/lib/contact-config";
 export const Route = createFileRoute("/solicitar")({
   head: () => ({
     meta: [
-      { title: "Solicitar orçamento de passagem com milhas | MAB Flights" },
+      { title: "Solicitar orçamento de passagem com milhas | TRIPmoc" },
       {
         name: "description",
         content:
           "Envie sua solicitação de emissão com milhas. Nossa equipe cota as melhores opções e responde em até 1 hora no horário de atendimento.",
       },
-      { property: "og:title", content: "Solicitar orçamento com milhas — MAB Flights" },
+      { property: "og:title", content: "Solicitar orçamento com milhas — TRIPmoc" },
       {
         property: "og:description",
         content:

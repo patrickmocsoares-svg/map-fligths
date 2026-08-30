@@ -20,7 +20,7 @@ import { CABIN_LABELS } from "@/lib/orders/schema";
 export const Route = createFileRoute("/_authenticated/admin/pedidos/$id")({
   head: () => ({
     meta: [
-      { title: "Detalhe do pedido — MAB Flights" },
+      { title: "Detalhe do pedido — TRIPmoc" },
       { name: "description", content: "Cotação, status e histórico da solicitação." },
       { name: "robots", content: "noindex" },
     ],

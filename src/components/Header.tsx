@@ -44,7 +44,7 @@ export function Header() {
             <Plane className="h-4 w-4" strokeWidth={2.5} />
           </span>
           <span className="flex flex-col leading-none">
-            <span className="font-display text-lg tracking-tight">MAB Flights</span>
+            <span className="font-display text-lg tracking-tight">TRIPmoc</span>
             <span className="text-[10px] uppercase tracking-[0.22em] text-brand-foreground/70">Premium Travel</span>
           </span>
         </Link>
