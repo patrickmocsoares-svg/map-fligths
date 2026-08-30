@@ -24,7 +24,7 @@ export const Route = createFileRoute("/_authenticated/admin/configuracoes")({
 });
 
 const field =
-  "w-full rounded-xl border border-white/10 bg-background/60 px-3 py-2.5 text-sm outline-none focus:border-gold/50";
+  "w-full rounded-xl border border-border bg-background/60 px-3 py-2.5 text-sm outline-none focus:border-gold/50";
 
 function SettingsPage() {
   const fetchSettings = useServerFn(getPublicSettingsFn);
@@ -71,7 +71,7 @@ function SettingsPage() {
       </p>
 
       <div className="mt-7 grid gap-5 lg:grid-cols-[1.1fr_1fr]">
-        <section className="rounded-2xl border border-white/10 bg-card/40 p-5">
+        <section className="rounded-2xl border border-border bg-card/40 p-5">
           <h2 className="mb-4 text-[10px] uppercase tracking-[0.24em] text-gold">
             Motor de precificação
           </h2>
@@ -177,7 +177,7 @@ function SettingsPage() {
             <Line label="Markup" value={formatBRL(preview.markup)} />
             <Line label="Taxa de embarque" value={formatBRL(preview.airportTax)} />
           </dl>
-          <div className="mt-4 border-t border-white/10 pt-4">
+          <div className="mt-4 border-t border-border pt-4">
             <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
               Preço ao cliente
             </div>

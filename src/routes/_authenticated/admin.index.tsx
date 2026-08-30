@@ -40,14 +40,14 @@ export const Route = createFileRoute("/_authenticated/admin/")({
 function statusPill(status: string) {
   const map: Record<string, string> = {
     novo: "border-gold/30 bg-gold/10 text-gold",
-    em_analise: "border-white/15 bg-white/5 text-foreground",
+    em_analise: "border-border bg-muted text-foreground",
     cotacao_enviada: "border-sky-400/30 bg-sky-400/10 text-sky-300",
     aguardando_pagamento: "border-amber-400/30 bg-amber-400/10 text-amber-300",
     pago: "border-emerald-400/30 bg-emerald-400/10 text-emerald-300",
     emitido: "border-emerald-500/40 bg-emerald-500/15 text-emerald-200",
     cancelado: "border-destructive/30 bg-destructive/10 text-destructive",
   };
-  return map[status] ?? "border-white/15 bg-white/5 text-muted-foreground";
+  return map[status] ?? "border-border bg-muted text-muted-foreground";
 }
 
 function AdminDashboard() {
@@ -85,7 +85,7 @@ function AdminDashboard() {
   const total = orders.data?.total ?? 0;
   const pages = Math.max(1, Math.ceil(total / 15));
   const field =
-    "w-full rounded-xl border border-white/10 bg-background/60 px-3 py-2.5 text-sm outline-none focus:border-gold/50";
+    "w-full rounded-xl border border-border bg-background/60 px-3 py-2.5 text-sm outline-none focus:border-gold/50";
 
   return (
     <div>
@@ -147,7 +147,7 @@ function AdminDashboard() {
       </div>
 
       {/* Filters */}
-      <div className="mt-6 grid gap-3 rounded-2xl border border-white/10 bg-card/40 p-4 sm:grid-cols-2 lg:grid-cols-6">
+      <div className="mt-6 grid gap-3 rounded-2xl border border-border bg-card/40 p-4 sm:grid-cols-2 lg:grid-cols-6">
         <div className="relative sm:col-span-2">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
@@ -207,14 +207,14 @@ function AdminDashboard() {
             <Loader2 className="h-5 w-5 animate-spin text-gold" />
           </div>
         ) : rows.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-white/10 p-12 text-center text-sm text-muted-foreground">
+          <div className="rounded-2xl border border-dashed border-border p-12 text-center text-sm text-muted-foreground">
             Nenhum pedido encontrado com esses filtros.
           </div>
         ) : (
           rows.map((o) => (
             <div
               key={o.id}
-              className="rounded-2xl border border-white/10 bg-card/40 p-4 transition hover:border-gold/25 md:p-5"
+              className="rounded-2xl border border-border bg-card/40 p-4 transition hover:border-gold/25 md:p-5"
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">
@@ -274,7 +274,7 @@ function AdminDashboard() {
           <button
             disabled={page <= 1}
             onClick={() => setPage((p) => p - 1)}
-            className="rounded-xl border border-white/10 px-4 py-2 text-xs disabled:opacity-40"
+            className="rounded-xl border border-border px-4 py-2 text-xs disabled:opacity-40"
           >
             Anterior
           </button>
@@ -284,7 +284,7 @@ function AdminDashboard() {
           <button
             disabled={page >= pages}
             onClick={() => setPage((p) => p + 1)}
-            className="rounded-xl border border-white/10 px-4 py-2 text-xs disabled:opacity-40"
+            className="rounded-xl border border-border px-4 py-2 text-xs disabled:opacity-40"
           >
             Próxima
           </button>
@@ -306,7 +306,7 @@ function Kpi({
   hint?: string;
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-card/40 p-5">
+    <div className="rounded-2xl border border-border bg-card/40 p-5">
       <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
         <span className="text-gold">{icon}</span> {label}
       </div>

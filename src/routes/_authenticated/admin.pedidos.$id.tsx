@@ -33,7 +33,7 @@ export const Route = createFileRoute("/_authenticated/admin/pedidos/$id")({
 });
 
 const field =
-  "w-full rounded-xl border border-white/10 bg-background/60 px-3 py-2.5 text-sm outline-none focus:border-gold/50";
+  "w-full rounded-xl border border-border bg-background/60 px-3 py-2.5 text-sm outline-none focus:border-gold/50";
 
 function OrderDetail() {
   const { id } = Route.useParams();
@@ -151,7 +151,7 @@ function OrderDetail() {
           <button
             onClick={() => eticket.mutate()}
             disabled={eticket.isPending}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-white/12 px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-border px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground disabled:opacity-50"
           >
             <Mail className="h-4 w-4" />
             {eticket.isSuccess ? "E-ticket na fila" : "Enviar e-ticket"}
@@ -194,7 +194,7 @@ function OrderDetail() {
               value={order.budget_brl ? formatBRL(Number(order.budget_brl)) : "—"}
             />
             {order.notes ? (
-              <div className="mt-3 rounded-xl border border-white/10 bg-background/50 p-3 text-sm text-muted-foreground">
+              <div className="mt-3 rounded-xl border border-border bg-background/50 p-3 text-sm text-muted-foreground">
                 {order.notes}
               </div>
             ) : null}
@@ -396,7 +396,7 @@ function OrderDetail() {
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-2xl border border-white/10 bg-card/40 p-5">
+    <section className="rounded-2xl border border-border bg-card/40 p-5">
       <h2 className="mb-4 text-[10px] uppercase tracking-[0.24em] text-gold">{title}</h2>
       {children}
     </section>
@@ -405,7 +405,7 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex justify-between gap-4 border-b border-white/5 py-2 text-sm last:border-0">
+    <div className="flex justify-between gap-4 border-b border-border py-2 text-sm last:border-0">
       <span className="text-muted-foreground">{label}</span>
       <span className="text-right font-medium">{value}</span>
     </div>

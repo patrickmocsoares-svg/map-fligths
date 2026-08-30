@@ -74,7 +74,7 @@ export function MilesOfferCTA({ ctx }: { ctx: MilesContext }) {
 export function MilesReferencePrice({ ctx }: { ctx: MilesContext }) {
   const t = useT();
   return (
-    <div className="rounded-2xl border border-white/10 bg-card p-5">
+    <div className="rounded-2xl border border-border bg-card p-5">
       <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
         {t("miles.reference.title")}
       </div>

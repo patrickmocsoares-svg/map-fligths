@@ -88,7 +88,7 @@ export function WhatsAppSavingsModal({
         <button
           onClick={onClose}
           aria-label="Fechar"
-          className="absolute right-4 top-4 rounded-full border border-white/10 p-2 text-muted-foreground transition hover:text-foreground"
+          className="absolute right-4 top-4 rounded-full border border-border p-2 text-muted-foreground transition hover:text-foreground"
         >
           <X className="h-4 w-4" />
         </button>
@@ -128,7 +128,7 @@ export function WhatsAppSavingsModal({
 
         <button
           onClick={onClose}
-          className="mt-3 w-full rounded-2xl border border-white/10 px-6 py-3.5 text-sm font-semibold text-muted-foreground transition hover:text-foreground"
+          className="mt-3 w-full rounded-2xl border border-border px-6 py-3.5 text-sm font-semibold text-muted-foreground transition hover:text-foreground"
         >
           Ver outras opções
         </button>

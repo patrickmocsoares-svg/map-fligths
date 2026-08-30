@@ -233,9 +233,9 @@ export function DateRangeCalendar({
             onClick={() => setOpen(false)}
             className="absolute inset-0 bg-black/60 animate-fade"
           />
-          <div className="absolute inset-x-0 bottom-0 flex max-h-[90vh] flex-col overflow-hidden rounded-t-3xl border-t border-white/10 bg-card shadow-luxe animate-slide-up">
+          <div className="absolute inset-x-0 bottom-0 flex max-h-[90vh] flex-col overflow-hidden rounded-t-3xl border-t border-border bg-card shadow-luxe animate-slide-up">
             <div className="pt-3">
-              <div className="mx-auto h-1.5 w-10 rounded-full bg-white/15" />
+              <div className="mx-auto h-1.5 w-10 rounded-full bg-border" />
             </div>
             <div className="flex items-center justify-between px-5 py-3">
               <div className="min-w-0">
@@ -257,7 +257,7 @@ export function DateRangeCalendar({
               </button>
             </div>
             <div className="flex-1 overflow-y-auto px-4 pb-2">{body}</div>
-            <div className="border-t border-white/5 bg-card px-4 pt-3 safe-bottom">
+            <div className="border-t border-border bg-card px-4 pt-3 safe-bottom">
               <button
                 type="button"
                 onClick={() => setOpen(false)}

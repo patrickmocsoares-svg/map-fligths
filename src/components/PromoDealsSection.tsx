@@ -97,7 +97,7 @@ export function PromoDealsSection() {
   );
 
   return (
-    <section className="border-t border-white/5 bg-background">
+    <section className="border-t border-border bg-background">
       <div className="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
@@ -130,7 +130,7 @@ export function PromoDealsSection() {
               className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition-colors ${
                 filter === f.key
                   ? "gold-gradient text-primary-foreground"
-                  : "border border-white/10 text-muted-foreground hover:border-gold/40 hover:text-gold"
+                  : "border border-border text-muted-foreground hover:border-gold/40 hover:text-gold"
               }`}
             >
               {f.label}
@@ -191,7 +191,7 @@ export function PromoDealsSection() {
                         estimativa a partir de · por pessoa
                       </div>
                     </div>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-white/5 px-2.5 py-1 text-[10px] font-medium text-white/70">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-[10px] font-medium text-white/70">
                       <Timer className="h-3 w-3 text-gold" /> {urgency}
                     </span>
                   </div>
@@ -239,7 +239,7 @@ export function PromoDealsSection() {
                 {offers.map((o) => {
                   const msg = `Olá! Vi a promoção ${ORIGIN} → ${selected.city} (${selected.code}) com ${o.airlineName}, saindo ${o.depart}, por cerca de ${brl(o.price)}. Quero economizar com milhas.`;
                   return (
-                    <div key={o.id} className="rounded-2xl border border-white/10 bg-card/60 p-4">
+                    <div key={o.id} className="rounded-2xl border border-border bg-card/60 p-4">
                       <div className="flex items-start justify-between gap-3">
                         <div>
                           <div className="text-sm font-semibold">{o.airlineName}</div>
@@ -256,12 +256,12 @@ export function PromoDealsSection() {
                       </div>
                       <div className="mt-3 flex items-center gap-3 text-sm text-muted-foreground">
                         <span className="font-medium text-foreground">{o.depart}</span>
-                        <span className="h-px flex-1 bg-white/10" />
+                        <span className="h-px flex-1 bg-muted" />
                         <span className="text-[11px] uppercase tracking-wide">
                           {o.durationLabel} ·{" "}
                           {o.stops === 0 ? "direto" : `${o.stops} parada${o.stops > 1 ? "s" : ""}`}
                         </span>
-                        <span className="h-px flex-1 bg-white/10" />
+                        <span className="h-px flex-1 bg-muted" />
                         <span className="font-medium text-foreground">{o.arrive}</span>
                       </div>
                       <a

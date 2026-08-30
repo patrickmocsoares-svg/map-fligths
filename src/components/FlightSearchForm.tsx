@@ -148,7 +148,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
   return (
     <form
       onSubmit={submit}
-      className={`rounded-3xl border border-white/10 bg-card/85 p-4 backdrop-blur-2xl sm:p-5 md:p-7 ${compact ? "shadow-card" : "shadow-luxe"}`}
+      className={`rounded-3xl border border-border bg-card/85 p-4 backdrop-blur-2xl sm:p-5 md:p-7 ${compact ? "shadow-card" : "shadow-luxe"}`}
     >
       {/* Top control bar */}
       <div className="flex flex-wrap items-center gap-2">
@@ -543,9 +543,9 @@ function Menu({
             onClick={close}
             className="absolute inset-0 bg-black/60 animate-fade"
           />
-          <div className="absolute inset-x-0 bottom-0 max-h-[85vh] overflow-hidden rounded-t-3xl border-t border-white/10 bg-card shadow-luxe animate-slide-up flex flex-col">
+          <div className="absolute inset-x-0 bottom-0 max-h-[85vh] overflow-hidden rounded-t-3xl border-t border-border bg-card shadow-luxe animate-slide-up flex flex-col">
             <div className="flex items-center justify-between px-5 pt-3 pb-2">
-              <div className="mx-auto h-1.5 w-10 rounded-full bg-white/15" />
+              <div className="mx-auto h-1.5 w-10 rounded-full bg-border" />
             </div>
             <div className="flex items-center justify-between px-5 pb-3">
               <h3 className="font-display text-lg font-bold">{sheetTitle ?? label}</h3>
@@ -562,7 +562,7 @@ function Menu({
               {children(close)}
             </div>
             {showConfirm && (
-              <div className="border-t border-white/5 bg-card px-4 pt-3 safe-bottom">
+              <div className="border-t border-border bg-card px-4 pt-3 safe-bottom">
                 <button
                   type="button"
                   onClick={close}

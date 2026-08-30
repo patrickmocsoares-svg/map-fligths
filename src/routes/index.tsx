@@ -82,7 +82,7 @@ function Home() {
 
         <div className="mx-auto max-w-7xl px-5 pb-10 pt-14 md:px-8 md:pb-16 md:pt-28">
           <div className="max-w-3xl animate-rise">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-white/75 backdrop-blur">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-white/75 backdrop-blur">
               <Sparkles className="h-3 w-3 text-gold" /> Premium Travel Marketplace
             </div>
             <h1 className="mt-6 font-display text-[2.6rem] font-extrabold leading-[1.02] tracking-tight text-white text-balance sm:text-5xl md:text-7xl">
@@ -183,7 +183,7 @@ function Home() {
       </section>
 
       {/* ============================== INSPIRE ============================== */}
-      <section className="border-t border-white/5 bg-background/60">
+      <section className="border-t border-border bg-background/60">
         <div className="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
           <div className="max-w-2xl">
             <div className="text-[10px] uppercase tracking-[0.28em] text-gold">
@@ -214,7 +214,7 @@ function Home() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent" />
 
-                <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/40 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-white/85 backdrop-blur-md">
+                <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full border border-border bg-black/40 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-white/85 backdrop-blur-md">
                   <MapPin className="h-3 w-3 text-gold" /> {meta.country}
                 </div>
 

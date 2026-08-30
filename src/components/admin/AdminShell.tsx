@@ -42,7 +42,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
   if (guard.isError || !guard.data?.isAdmin) {
     return (
       <div className="grid min-h-screen place-items-center px-5">
-        <div className="max-w-sm rounded-3xl border border-white/10 bg-card/50 p-8 text-center">
+        <div className="max-w-sm rounded-3xl border border-border bg-card/50 p-8 text-center">
           <ShieldAlert className="mx-auto h-8 w-8 text-gold" />
           <h1 className="mt-4 font-display text-xl font-bold">Acesso não autorizado</h1>
           <p className="mt-2 text-sm text-muted-foreground">
@@ -51,7 +51,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
           </p>
           <button
             onClick={signOut}
-            className="mt-6 inline-flex items-center gap-2 rounded-xl border border-white/12 px-5 py-2.5 text-sm text-muted-foreground hover:text-foreground"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl border border-border px-5 py-2.5 text-sm text-muted-foreground hover:text-foreground"
           >
             <LogOut className="h-4 w-4" /> Sair
           </button>
@@ -92,7 +92,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
             })}
             <button
               onClick={signOut}
-              className="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/10 px-3.5 py-1.5 text-xs text-muted-foreground hover:text-foreground"
+              className="inline-flex shrink-0 items-center gap-2 rounded-full border border-border px-3.5 py-1.5 text-xs text-muted-foreground hover:text-foreground"
             >
               <LogOut className="h-3.5 w-3.5" /> Sair
             </button>

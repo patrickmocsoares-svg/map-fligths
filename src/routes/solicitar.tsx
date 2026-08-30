@@ -69,7 +69,7 @@ const emptyForm: OrderRequestInput = {
 };
 
 const fieldBase =
-  "w-full rounded-xl border border-white/10 bg-background/60 px-4 py-3 text-[15px] text-foreground outline-none transition-colors placeholder:text-muted-foreground/60 focus:border-gold/50";
+  "w-full rounded-xl border border-border bg-background/60 px-4 py-3 text-[15px] text-foreground outline-none transition-colors placeholder:text-muted-foreground/60 focus:border-gold/50";
 
 function Label({ children, required }: { children: React.ReactNode; required?: boolean }) {
   return (
@@ -149,7 +149,7 @@ function RequestPage() {
             </p>
             <p className="mt-1 text-xs text-muted-foreground/80">{SUPPORT_HOURS}</p>
 
-            <div className="mt-8 rounded-2xl border border-white/10 bg-background/50 p-5">
+            <div className="mt-8 rounded-2xl border border-border bg-background/50 p-5">
               <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
                 Protocolo
               </div>
@@ -158,7 +158,7 @@ function RequestPage() {
               </div>
             </div>
 
-            <div className="mt-5 rounded-2xl border border-white/10 bg-background/50 p-5">
+            <div className="mt-5 rounded-2xl border border-border bg-background/50 p-5">
               <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
                 Resumo da viagem
               </div>
@@ -202,7 +202,7 @@ function RequestPage() {
               </a>
               <Link
                 to="/"
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-white/12 px-6 py-3.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-border px-6 py-3.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
                 Voltar ao início
               </Link>
@@ -234,7 +234,7 @@ function RequestPage() {
         <form
           onSubmit={onSubmit}
           noValidate
-          className="mt-9 animate-rise rounded-3xl border border-white/10 bg-card/40 p-6 md:p-8"
+          className="mt-9 animate-rise rounded-3xl border border-border bg-card/40 p-6 md:p-8"
           style={{ animationDelay: "100ms" }}
         >
           {/* Contato */}
@@ -409,7 +409,7 @@ function RequestPage() {
                 placeholder="Smiles, Latam Pass, TudoAzul…"
               />
             </div>
-            <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-white/10 bg-background/50 px-4 py-3.5 md:col-span-2">
+            <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-background/50 px-4 py-3.5 md:col-span-2">
               <input
                 type="checkbox"
                 className="h-4 w-4 accent-[hsl(var(--gold,45_80%_55%))]"

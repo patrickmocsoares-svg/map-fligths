@@ -153,7 +153,7 @@ function SearchResults() {
       <Header />
 
       {/* Compact search bar */}
-      <div className="border-b border-white/5 bg-background/70 backdrop-blur">
+      <div className="border-b border-border bg-background/70 backdrop-blur">
         <div className="mx-auto max-w-7xl px-4 py-6 md:px-8">
           <FlightSearchForm compact />
         </div>
@@ -184,7 +184,7 @@ function SearchResults() {
             </p>
           </div>
 
-          <div className="flex items-center gap-2 rounded-full border border-white/10 bg-card/60 p-1 backdrop-blur">
+          <div className="flex items-center gap-2 rounded-full border border-border bg-card/60 p-1 backdrop-blur">
             {(["score", "price", "duration"] as Sort[]).map((s) => (
               <button
                 key={s}
@@ -345,7 +345,7 @@ function FlightRow({
         </div>
 
         {/* Price + CTA */}
-        <div className="flex flex-col gap-3 border-t border-white/5 pt-4 md:items-end md:border-l md:border-t-0 md:pl-6 md:pt-0">
+        <div className="flex flex-col gap-3 border-t border-border pt-4 md:items-end md:border-l md:border-t-0 md:pl-6 md:pt-0">
           <div className="text-right">
             <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
               Total

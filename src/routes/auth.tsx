@@ -61,7 +61,7 @@ function AuthPage() {
   }
 
   const field =
-    "w-full rounded-xl border border-white/10 bg-background/60 px-4 py-3 text-[15px] outline-none transition-colors focus:border-gold/50";
+    "w-full rounded-xl border border-border bg-background/60 px-4 py-3 text-[15px] outline-none transition-colors focus:border-gold/50";
 
   return (
     <div className="grid min-h-screen place-items-center px-5 py-14">
@@ -73,7 +73,7 @@ function AuthPage() {
           <span className="font-display text-lg tracking-tight">MAB Flights</span>
         </Link>
 
-        <div className="mt-8 rounded-3xl border border-white/10 bg-card/50 p-6 md:p-8">
+        <div className="mt-8 rounded-3xl border border-border bg-card/50 p-6 md:p-8">
           <div className="inline-flex items-center gap-2 rounded-full border border-gold/20 bg-gold/5 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-gold">
             <Lock className="h-3 w-3" /> Área restrita
           </div>
