@@ -41,7 +41,7 @@ function useMilesLink(ctx: MilesContext) {
 }
 
 const whatsBtn =
-  "inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-whatsapp px-4 py-3 text-sm font-bold uppercase tracking-wide text-whatsapp-foreground transition-transform hover:-translate-y-0.5";
+  "inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-cta hover:bg-cta-hover px-4 py-3 text-sm font-bold uppercase tracking-wide text-cta-foreground transition-transform hover:-translate-y-0.5";
 
 /** Compact block shown inside / below every flight offer. */
 export function MilesOfferCTA({ ctx }: { ctx: MilesContext }) {

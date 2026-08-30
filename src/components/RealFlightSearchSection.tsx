@@ -337,7 +337,7 @@ export function RealFlightSearchSection() {
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-whatsapp px-4 py-3 text-sm font-semibold text-whatsapp-foreground transition-transform hover:-translate-y-0.5"
+                className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-cta hover:bg-cta-hover px-4 py-3 text-sm font-semibold text-cta-foreground transition-transform hover:-translate-y-0.5"
               >
                 <MessageCircle className="h-4 w-4" /> Falar no WhatsApp
               </a>
@@ -394,7 +394,7 @@ export function RealFlightSearchSection() {
                     href={whatsappLink(msg, settings.whatsappNumber)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-whatsapp px-4 py-3 text-sm font-semibold text-whatsapp-foreground transition-transform hover:-translate-y-0.5"
+                    className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cta hover:bg-cta-hover px-4 py-3 text-sm font-semibold text-cta-foreground transition-transform hover:-translate-y-0.5"
                   >
                     <MessageCircle className="h-4 w-4" /> QUERO ECONOMIZAR
                   </a>

@@ -69,7 +69,7 @@ function OfferCard({ offer }: { offer: CatalogOffer }) {
             href={whatsappLink(msg, settings.whatsappNumber)}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-whatsapp px-3 text-xs font-bold uppercase tracking-wide text-whatsapp-foreground transition hover:-translate-y-0.5"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-cta hover:bg-cta-hover px-3 text-xs font-bold uppercase tracking-wide text-cta-foreground transition hover:-translate-y-0.5"
           >
             <MessageCircle className="h-4 w-4" /> Conferir oferta
           </a>
