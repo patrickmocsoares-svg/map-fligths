@@ -83,50 +83,49 @@ export const createOrderFn = createServerFn({ method: "POST" })
       note: "Solicitação criada pelo formulário público",
     });
 
-    // 5. Notify the TRIPmoc business WhatsApp from the backend (best-effort).
-    try {
-      const { notifyBusinessWhatsApp } = await import("@/lib/orders/notify.server");
-      const pax =
-        `${data.adults} adulto(s)` +
-        (data.children ? `, ${data.children} criança(s)` : "") +
-        (data.infants ? `, ${data.infants} bebê(s)` : "");
-      const result = await notifyBusinessWhatsApp({
-        id: order.id as string,
-        protocol: order.protocol as string,
-        fullName: data.fullName,
-        phone: data.phone,
-        email,
-        origin: data.origin.toUpperCase(),
-        destination: data.destination.toUpperCase(),
-        departDate: data.departDate,
-        returnDate: data.returnDate,
-        passengers: pax,
-        notes: data.notes,
-        createdAt: order.created_at as string,
-      });
-      if (!result.sent) {
-        console.warn("[orders] WhatsApp notification not sent:", result.transport, result.error);
-      }
-      await supabaseAdmin.from("email_logs").insert({
-        order_id: order.id,
-        to_email: (process.env["WHATSAPP_BUSINESS_NUMBER"] || "553120940901").replace(/\D/g, ""),
-        template: "whatsapp_order",
-        subject: `Nova solicitação ${order.protocol}`,
-        status: result.sent ? "sent" : "failed",
-        error: result.sent ? null : `${result.transport}: ${result.error ?? "erro desconhecido"}`,
-        sent_at: result.sent ? new Date().toISOString() : null,
-      });
-    } catch (err) {
-      console.warn("[orders] WhatsApp notification failed", err);
-      await supabaseAdmin.from("email_logs").insert({
-        order_id: order.id,
-        to_email: "whatsapp",
-        template: "whatsapp_order",
-        subject: `Nova solicitação ${order.protocol}`,
-        status: "failed",
-        error: err instanceof Error ? err.message : "erro desconhecido",
-      });
+    // 5. Notify the TRIPmoc admin inbox from the backend (Resend).
+    const { notifyAdminByEmail } = await import("@/lib/orders/notify-email.server");
+    const pax =
+      `${data.adults} adulto(s)` +
+      (data.children ? `, ${data.children} criança(s)` : "") +
+      (data.infants ? `, ${data.infants} bebê(s)` : "");
+
+    const emailResult = await notifyAdminByEmail({
+      id: order.id as string,
+      protocol: order.protocol as string,
+      fullName: data.fullName,
+      phone: data.phone,
+      email,
+      origin: data.origin.toUpperCase(),
+      destination: data.destination.toUpperCase(),
+      departDate: data.departDate,
+      returnDate: data.returnDate,
+      passengers: pax,
+      cabin: data.cabin,
+      preferredAirline: data.preferredAirline,
+      preferredProgram: data.preferredProgram,
+      budgetBRL: data.budgetBRL,
+      notes: data.notes,
+      createdAt: order.created_at as string,
+    });
+
+    await supabaseAdmin.from("email_logs").insert({
+      order_id: order.id,
+      to_email: emailResult.to,
+      template: "order_admin_notification",
+      subject: `✈️ Nova solicitação de orçamento — TRIPmoc #${order.protocol}`,
+      status: emailResult.sent ? "sent" : "failed",
+      error: emailResult.sent ? null : emailResult.error ?? "erro desconhecido",
+      sent_at: emailResult.sent ? new Date().toISOString() : null,
+    });
+
+    if (!emailResult.sent) {
+      console.error("[orders] admin e-mail not sent:", emailResult.error);
+      // O pedido está salvo, mas o cliente não pode ver "sucesso" sem confirmação de envio.
+      throw new Error("EMAIL_NOT_SENT");
     }
+
+
 
 
     return {
