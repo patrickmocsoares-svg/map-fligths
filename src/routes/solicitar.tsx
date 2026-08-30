@@ -24,6 +24,7 @@ import {
   type OrderRequestInput,
 } from "@/lib/orders/schema";
 import { whatsappLink, SUPPORT_HOURS } from "@/lib/contact-config";
+import { useSettings } from "@/hooks/useSettings";
 
 export const Route = createFileRoute("/solicitar")({
   head: () => ({
