@@ -91,36 +91,36 @@ function Home() {
             <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-brand/50 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-white/85 backdrop-blur">
               <Sparkles className="h-3 w-3 text-cta" /> Premium Travel Marketplace
             </div>
-            <h1 className="mt-6 font-display text-[2.6rem] font-extrabold leading-[1.02] tracking-tight text-white text-balance sm:text-5xl md:text-7xl">
-              Transformando <span className="font-serif font-normal text-white">milhas</span>
-              <br className="hidden sm:block" /> em <span className="font-serif font-normal">oportunidades.</span>
+            <h1 className="mt-6 font-display text-[2.15rem] font-extrabold leading-[1.08] tracking-tight text-white text-balance sm:text-5xl md:text-6xl">
+              Viaje de Executiva ou Econômica pagando até 60% menos com suas{" "}
+              <span className="text-mabgold">milhas</span>.
             </h1>
-            <p className="mt-5 max-w-xl text-lg font-semibold leading-snug text-white text-balance md:text-2xl">
-              {t("hero.headline")}
+            <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-white/85 text-balance md:text-lg">
+              Encontre a melhor forma de viajar com total transparência e economia.
             </p>
-            <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-white/70 text-balance md:text-lg">
-              {t("hero.sub")}
-            </p>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="mt-7 flex flex-col gap-3 sm:max-w-sm">
               <Link
                 to="/solicitar"
-                className="btn-primary min-h-12 px-7 py-4 text-sm"
+                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-xl bg-cta px-7 py-4 text-sm font-bold uppercase tracking-wide text-cta-foreground shadow-[0_4px_12px_rgba(255,107,53,0.4)] transition-all hover:-translate-y-0.5 hover:bg-cta-hover"
               >
-                Solicitar orçamento <ArrowRight className="h-4 w-4" />
+                Solicitar cotação <ArrowRight className="h-4 w-4" />
               </Link>
               <a
                 href={heroMilesLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-cta hover:bg-cta-hover px-7 py-4 text-sm font-bold uppercase tracking-wide text-cta-foreground transition-transform hover:-translate-y-0.5"
+                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-7 py-4 text-sm font-bold text-white backdrop-blur-md transition-colors hover:bg-white/20"
               >
-                <MessageCircle className="h-4 w-4" /> {t("hero.milesCta")}
+                <MessageCircle className="h-4 w-4" /> Emissão Direta com Milhas
               </a>
             </div>
           </div>
 
           <div className="mx-auto mt-9 max-w-6xl animate-rise md:mt-14" style={{ animationDelay: "150ms" }}>
             <FlightSearchForm />
+            <p className="mt-4 text-center text-[12px] font-medium text-white/75">
+              Líder em emissões premium. +15.000 clientes satisfeitos.
+            </p>
           </div>
 
           <div
@@ -133,6 +133,7 @@ function Home() {
           </div>
         </div>
       </section>
+
 
       {/* ============================== FEATURED ============================== */}
       <section className="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
