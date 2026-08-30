@@ -148,7 +148,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
   return (
     <form
       onSubmit={submit}
-      className={`rounded-3xl border border-border bg-card/85 p-4 backdrop-blur-2xl sm:p-5 md:p-7 ${compact ? "shadow-card" : "shadow-luxe"}`}
+      className={`rounded-3xl border border-border bg-card p-4 sm:p-5 md:p-7 ${compact ? "shadow-card" : "shadow-luxe"}`}
     >
       {/* Top control bar */}
       <div className="flex flex-wrap items-center gap-2">
@@ -615,7 +615,7 @@ function DateField({
   min?: string;
 }) {
   return (
-    <label className="block min-w-0 rounded-xl border border-border bg-input/50 px-4 py-3 focus-within:border-border transition">
+    <label className="block min-w-0 rounded-xl border border-border bg-input px-4 py-3 focus-within:border-border transition">
       <div className="flex items-center justify-between text-[10px] uppercase tracking-widest text-muted-foreground">
         <span>{label}</span>
         <Calendar className="h-3.5 w-3.5 text-brand" />
@@ -625,7 +625,7 @@ function DateField({
         value={value}
         min={min}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-1 w-full min-w-0 bg-transparent text-base font-semibold text-foreground outline-none [color-scheme:dark]"
+        className="mt-1 w-full min-w-0 bg-transparent text-base font-semibold text-foreground outline-none [color-scheme:light]"
       />
     </label>
   );
