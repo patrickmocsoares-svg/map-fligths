@@ -147,10 +147,10 @@ export function RealFlightSearchSection() {
 
   const field =
     "w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/30";
-  const labelCls = "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground";
+  const labelCls = "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-brand-foreground/80";
 
   return (
-    <section className="bg-background border-t border-border">
+    <section className="bg-secondary border-t border-border">
       <div className="mx-auto max-w-6xl px-4 py-16 md:px-8 md:py-24">
         <h2 className="font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
           Buscar Passagens Aéreas
@@ -161,9 +161,9 @@ export function RealFlightSearchSection() {
 
         <form
           onSubmit={onSubmit}
-          className="mt-8 rounded-3xl border border-border bg-card/60 p-5 shadow-sm md:p-6"
+          className="mt-8 rounded-2xl border border-brand bg-brand p-5 shadow-md md:p-6"
         >
-          <div className="mb-4 inline-flex rounded-xl border border-border bg-card p-1">
+          <div className="mb-4 inline-flex rounded-lg border border-brand-foreground/20 bg-brand-foreground/10 p-1">
             {(
               [
                 ["roundtrip", "Ida e volta"],
@@ -175,7 +175,7 @@ export function RealFlightSearchSection() {
                 type="button"
                 onClick={() => setTripType(value)}
                 className={`rounded-lg px-4 py-2 text-xs font-semibold transition-colors ${
-                  tripType === value ? "gold-gradient text-primary-foreground" : "text-muted-foreground hover:bg-secondary"
+                  tripType === value ? "bg-cta text-cta-foreground" : "text-brand-foreground/75 hover:text-brand-foreground"
                 }`}
               >
                 {label}
@@ -201,7 +201,7 @@ export function RealFlightSearchSection() {
                 type="button"
                 onClick={swap}
                 aria-label="Inverter origem e destino"
-                className="mb-1 inline-flex h-11 w-full items-center justify-center rounded-xl border border-border bg-card text-muted-foreground transition-colors hover:bg-muted"
+                className="mb-1 inline-flex h-11 w-full items-center justify-center rounded-lg border border-border bg-card text-brand transition-colors hover:bg-muted"
               >
                 <ArrowLeftRight className="h-4 w-4" />
               </button>
@@ -282,7 +282,7 @@ export function RealFlightSearchSection() {
               <button
                 type="submit"
                 disabled={mutation.isPending}
-                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl gold-gradient px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:opacity-90 disabled:opacity-60"
+                 className="btn-primary w-full px-5 py-3 text-sm disabled:opacity-60"
               >
                 {mutation.isPending ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -385,7 +385,7 @@ export function RealFlightSearchSection() {
                         <span>{r.stops === 0 ? "Direto" : `${r.stops} conexão(ões)`}</span>
                       </div>
                     </div>
-                    <div className="text-right text-3xl font-extrabold text-gold">
+                    <div className="text-right text-3xl font-extrabold text-brand">
                       {fmtPrice(r.price, r.currency)}
                     </div>
                   </div>
