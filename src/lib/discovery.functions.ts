@@ -18,8 +18,12 @@
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { POPULAR_ROUTES, SWEEP_HORIZONS_DAYS, type RouteRegion } from "./discovery/popular-routes";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { POPULAR_ROUTES, type RouteRegion } from "./discovery/popular-routes";
 import { computeMabScoreFromStats, type MabScore } from "./mab-score";
+import type { SweepReport } from "./discovery/sweep.server";
+
+export type { SweepReport } from "./discovery/sweep.server";
 
 const cabinEnum = z.enum(["economy", "premium", "business", "first"]);
 
@@ -30,83 +34,21 @@ const sweepSchema = z.object({
   maxRoutes: z.number().int().min(1).max(200).optional().default(60),
 });
 
-export type SweepReport = {
-  startedAt: string;
-  finishedAt: string;
-  provider: string;
-  routesRequested: number;
-  routesSucceeded: number;
-  observations: number;
-  failures: { origin: string; destination: string; date: string; error: string }[];
-};
-
-function toIsoDate(daysAhead: number): string {
-  const d = new Date();
-  d.setUTCDate(d.getUTCDate() + daysAhead);
-  return d.toISOString().slice(0, 10);
-}
-
 /**
- * Sweep popular routes and record fresh prices. Safe to call ad-hoc from
- * an admin surface, but designed to run as a scheduled pg_cron job via
- * `/api/public/hooks/discover-prices`.
+ * Admin-only manual trigger for the discovery sweep. The scheduled run goes
+ * through `/api/public/hooks/discover-prices`, which authenticates with a
+ * dedicated server-side secret.
  */
 export const runDiscoverySweepFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => sweepSchema.parse(input ?? {}))
-  .handler(async ({ data }): Promise<SweepReport> => {
-    const { searchFlights } = await import("./flights");
-    const startedAt = new Date().toISOString();
-
-    const regions = new Set<RouteRegion>(data.regions ?? [
-      "domestic",
-      "south_america",
-      "usa",
-      "europe",
-    ]);
-    const horizons = data.horizons ?? SWEEP_HORIZONS_DAYS;
-    const routes = POPULAR_ROUTES.filter((r) => regions.has(r.region)).slice(0, data.maxRoutes);
-
-    const failures: SweepReport["failures"] = [];
-    let observations = 0;
-    let routesSucceeded = 0;
-    let provider = "unknown";
-
-    for (const route of routes) {
-      for (const days of horizons) {
-        const departDate = toIsoDate(days);
-        try {
-          const result = await searchFlights({
-            origin: route.origin,
-            destination: route.destination,
-            departDate,
-            passengers: 1,
-            cabin: data.cabin,
-            limit: 10,
-          });
-          provider = result.provider;
-          observations += result.offers.length;
-          if (result.offers.length > 0) routesSucceeded++;
-        } catch (err) {
-          failures.push({
-            origin: route.origin,
-            destination: route.destination,
-            date: departDate,
-            error: (err as Error).message.slice(0, 200),
-          });
-        }
-      }
-    }
-
-    return {
-      startedAt,
-      finishedAt: new Date().toISOString(),
-      provider,
-      routesRequested: routes.length * horizons.length,
-      routesSucceeded,
-      observations,
-      failures,
-    };
+  .handler(async ({ data, context }): Promise<SweepReport> => {
+    const { assertAdmin } = await import("./security/guards.server");
+    await assertAdmin(context.supabase, context.userId);
+    const { runDiscoverySweep } = await import("./discovery/sweep.server");
+    return runDiscoverySweep(data);
   });
+
 
 // --- Opportunities of the Day -----------------------------------------------
 

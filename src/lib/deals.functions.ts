@@ -9,6 +9,8 @@
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+
 
 const iata = z.string().length(3).regex(/^[A-Za-z]{3}$/);
 const cabinEnum = z.enum(["economy", "premium", "business", "first"]);
@@ -83,13 +85,16 @@ const observationSchema = z.object({
 });
 
 /**
- * Record a single observed price. Called from the search flow and from
- * scheduled discovery jobs. Uses service-role — writes are gated by RLS,
- * not by client input.
+ * Record a single observed price. Restricted to authenticated admins —
+ * provider adapters and the discovery sweep write to `price_history`
+ * server-side, so no public caller needs this endpoint.
  */
 export const recordPriceObservationFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => observationSchema.parse(input))
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    const { assertAdmin } = await import("./security/guards.server");
+    await assertAdmin(context.supabase, context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin.from("price_history").insert({
       origin_iata: data.origin,
@@ -104,6 +109,7 @@ export const recordPriceObservationFn = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
 
 const opportunitySchema = z.object({
   origin: iata.optional(),
