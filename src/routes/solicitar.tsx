@@ -93,43 +93,12 @@ function RequestPage() {
   const [result, setResult] = useState<OrderCreated | null>(null);
   const { settings } = useSettings();
 
-  const waNumber = settings?.whatsappNumber;
-
-  function quoteMessage(data: OrderCreated, f: OrderRequestInput) {
-    const s = data.summary;
-    const pax =
-      `${s.adults} adulto(s)` +
-      (s.children ? `, ${s.children} criança(s)` : "") +
-      (s.infants ? `, ${s.infants} bebê(s)` : "");
-    return [
-      "Olá! Recebemos uma nova solicitação de orçamento através do TRIPmoc.",
-      "",
-      `Protocolo: ${data.protocol}`,
-      `Cliente: ${f.fullName}`,
-      `E-mail: ${f.email}`,
-      `WhatsApp: ${f.phone}`,
-      `Origem: ${s.origin}`,
-      `Destino: ${s.destination}`,
-      `Data de ida: ${s.departDate}`,
-      `Data de volta: ${s.returnDate ?? "Somente ida"}`,
-      `Passageiros: ${pax}`,
-      `Classe: ${CABIN_LABELS[s.cabin as keyof typeof CABIN_LABELS] ?? s.cabin}`,
-      f.notes ? `Observações: ${f.notes}` : "",
-      "",
-      "Solicitação de orçamento enviada pelo site.",
-    ]
-      .filter(Boolean)
-      .join("\n");
-  }
-
   const mutation = useMutation({
     mutationFn: (payload: unknown) => submitOrder({ data: payload as never }),
     onSuccess: (data) => {
-      const created = data as OrderCreated;
-      setResult(created);
+      setResult(data as OrderCreated);
       if (typeof window !== "undefined") {
         window.scrollTo({ top: 0, behavior: "smooth" });
-        window.open(whatsappLink(quoteMessage(created, form), waNumber), "_blank", "noopener");
       }
     },
   });
@@ -141,6 +110,7 @@ function RequestPage() {
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (mutation.isPending || result) return;
     const parsed = orderRequestSchema.safeParse({
       ...form,
       returnDate: form.returnDate || undefined,
@@ -159,15 +129,7 @@ function RequestPage() {
     mutation.mutate(parsed.data);
   }
 
-  const wa = useMemo(() => {
-    if (!result)
-      return whatsappLink(
-        "Olá! Gostaria de solicitar um orçamento de passagem com milhas.",
-        waNumber,
-      );
-    return whatsappLink(quoteMessage(result, form), waNumber);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [result, form, waNumber]);
+
 
 
   if (result) {
