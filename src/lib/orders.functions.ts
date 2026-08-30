@@ -107,8 +107,25 @@ export const createOrderFn = createServerFn({ method: "POST" })
       if (!result.sent) {
         console.warn("[orders] WhatsApp notification not sent:", result.transport, result.error);
       }
+      await supabaseAdmin.from("email_logs").insert({
+        order_id: order.id,
+        to_email: (process.env["WHATSAPP_BUSINESS_NUMBER"] || "553120940901").replace(/\D/g, ""),
+        template: "whatsapp_order",
+        subject: `Nova solicitação ${order.protocol}`,
+        status: result.sent ? "sent" : "failed",
+        error: result.sent ? null : `${result.transport}: ${result.error ?? "erro desconhecido"}`,
+        sent_at: result.sent ? new Date().toISOString() : null,
+      });
     } catch (err) {
       console.warn("[orders] WhatsApp notification failed", err);
+      await supabaseAdmin.from("email_logs").insert({
+        order_id: order.id,
+        to_email: "whatsapp",
+        template: "whatsapp_order",
+        subject: `Nova solicitação ${order.protocol}`,
+        status: "failed",
+        error: err instanceof Error ? err.message : "erro desconhecido",
+      });
     }
 
 
