@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
@@ -7,7 +7,6 @@ import {
   CheckCircle2,
   Loader2,
   MapPin,
-  MessageCircle,
   Plane,
   ShieldCheck,
   Sparkles,
@@ -23,7 +22,7 @@ import {
   type OrderCreated,
   type OrderRequestInput,
 } from "@/lib/orders/schema";
-import { whatsappLink, SUPPORT_HOURS } from "@/lib/contact-config";
+import { SUPPORT_HOURS } from "@/lib/contact-config";
 import { useSettings } from "@/hooks/useSettings";
 
 export const Route = createFileRoute("/solicitar")({
@@ -93,43 +92,12 @@ function RequestPage() {
   const [result, setResult] = useState<OrderCreated | null>(null);
   const { settings } = useSettings();
 
-  const waNumber = settings?.whatsappNumber;
-
-  function quoteMessage(data: OrderCreated, f: OrderRequestInput) {
-    const s = data.summary;
-    const pax =
-      `${s.adults} adulto(s)` +
-      (s.children ? `, ${s.children} criança(s)` : "") +
-      (s.infants ? `, ${s.infants} bebê(s)` : "");
-    return [
-      "Olá! Recebemos uma nova solicitação de orçamento através do TRIPmoc.",
-      "",
-      `Protocolo: ${data.protocol}`,
-      `Cliente: ${f.fullName}`,
-      `E-mail: ${f.email}`,
-      `WhatsApp: ${f.phone}`,
-      `Origem: ${s.origin}`,
-      `Destino: ${s.destination}`,
-      `Data de ida: ${s.departDate}`,
-      `Data de volta: ${s.returnDate ?? "Somente ida"}`,
-      `Passageiros: ${pax}`,
-      `Classe: ${CABIN_LABELS[s.cabin as keyof typeof CABIN_LABELS] ?? s.cabin}`,
-      f.notes ? `Observações: ${f.notes}` : "",
-      "",
-      "Solicitação de orçamento enviada pelo site.",
-    ]
-      .filter(Boolean)
-      .join("\n");
-  }
-
   const mutation = useMutation({
     mutationFn: (payload: unknown) => submitOrder({ data: payload as never }),
     onSuccess: (data) => {
-      const created = data as OrderCreated;
-      setResult(created);
+      setResult(data as OrderCreated);
       if (typeof window !== "undefined") {
         window.scrollTo({ top: 0, behavior: "smooth" });
-        window.open(whatsappLink(quoteMessage(created, form), waNumber), "_blank", "noopener");
       }
     },
   });
@@ -141,6 +109,7 @@ function RequestPage() {
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (mutation.isPending || result) return;
     const parsed = orderRequestSchema.safeParse({
       ...form,
       returnDate: form.returnDate || undefined,
@@ -159,15 +128,7 @@ function RequestPage() {
     mutation.mutate(parsed.data);
   }
 
-  const wa = useMemo(() => {
-    if (!result)
-      return whatsappLink(
-        "Olá! Gostaria de solicitar um orçamento de passagem com milhas.",
-        waNumber,
-      );
-    return whatsappLink(quoteMessage(result, form), waNumber);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [result, form, waNumber]);
+
 
 
   if (result) {
@@ -180,19 +141,21 @@ function RequestPage() {
               <CheckCircle2 className="h-6 w-6" />
             </div>
             <h1 className="mt-6 font-display text-3xl font-bold leading-tight tracking-tight md:text-4xl">
-              Solicitação recebida com sucesso.
+              Solicitação recebida com sucesso! ✈️
             </h1>
             <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
-              Nossa equipe analisará as informações fornecidas e preparará seu orçamento de
-              acordo com os dados da sua viagem.
+              Nossa equipe recebeu os dados da sua viagem e iniciará a análise das melhores
+              opções para você.
             </p>
             <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
               Após a análise, o orçamento será encaminhado ao e-mail informado e também
               disponibilizado por meio do WhatsApp para maior comodidade.
             </p>
             <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
-              Agradecemos por escolher a TRIPmoc.
+              Agradecemos pela confiança e em breve entraremos em contato com as melhores
+              opções para sua viagem.
             </p>
+
             <p className="mt-4 text-xs text-muted-foreground/80">
               Atendimento: {settings?.businessHours ?? SUPPORT_HOURS}
             </p>
@@ -241,14 +204,12 @@ function RequestPage() {
             </div>
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <a
-                href={wa}
-                target="_blank"
-                rel="noreferrer"
+              <Link
+                to="/search"
                 className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-cta px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-luxe transition-transform hover:-translate-y-0.5"
               >
-                <MessageCircle className="h-4 w-4" /> Falar no WhatsApp
-              </a>
+                <ArrowRight className="h-4 w-4" /> Voltar para a busca
+              </Link>
               <Link
                 to="/"
                 className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-border px-6 py-3.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
@@ -256,6 +217,7 @@ function RequestPage() {
                 Voltar ao início
               </Link>
             </div>
+
           </div>
         </main>
         <Footer />
@@ -483,18 +445,18 @@ function RequestPage() {
 
           {mutation.isError ? (
             <div className="mt-7 rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-              Não conseguimos enviar sua solicitação agora. Tente novamente em instantes.
+              Não foi possível enviar sua solicitação neste momento. Por favor, tente novamente em alguns instantes.
             </div>
           ) : null}
 
           <button
             type="submit"
-            disabled={mutation.isPending}
+            disabled={mutation.isPending || Boolean(result)}
             className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cta px-8 py-4 text-sm font-semibold text-primary-foreground shadow-luxe transition-transform hover:-translate-y-0.5 disabled:opacity-60"
           >
             {mutation.isPending ? (
               <>
-                <Loader2 className="h-4 w-4 animate-spin" /> Enviando…
+                <Loader2 className="h-4 w-4 animate-spin" /> Enviando solicitação…
               </>
             ) : (
               <>

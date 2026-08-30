@@ -83,6 +83,35 @@ export const createOrderFn = createServerFn({ method: "POST" })
       note: "Solicitação criada pelo formulário público",
     });
 
+    // 5. Notify the TRIPmoc business WhatsApp from the backend (best-effort).
+    try {
+      const { notifyBusinessWhatsApp } = await import("@/lib/orders/notify.server");
+      const pax =
+        `${data.adults} adulto(s)` +
+        (data.children ? `, ${data.children} criança(s)` : "") +
+        (data.infants ? `, ${data.infants} bebê(s)` : "");
+      const result = await notifyBusinessWhatsApp({
+        id: order.id as string,
+        protocol: order.protocol as string,
+        fullName: data.fullName,
+        phone: data.phone,
+        email,
+        origin: data.origin.toUpperCase(),
+        destination: data.destination.toUpperCase(),
+        departDate: data.departDate,
+        returnDate: data.returnDate,
+        passengers: pax,
+        notes: data.notes,
+        createdAt: order.created_at as string,
+      });
+      if (!result.sent) {
+        console.warn("[orders] WhatsApp notification not sent:", result.transport, result.error);
+      }
+    } catch (err) {
+      console.warn("[orders] WhatsApp notification failed", err);
+    }
+
+
     return {
       protocol: order.protocol as string,
       status: order.status as string,
