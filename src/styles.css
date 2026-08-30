@@ -182,7 +182,7 @@
 }
 
 @utility text-gold-gradient {
-  background: var(--gradient-gold);
+  background: var(--gradient-brand);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -197,13 +197,13 @@
 }
 
 @utility card-luxe {
-  background: linear-gradient(180deg, oklch(0.19 0.006 260), oklch(0.15 0.006 260));
-  border: 1px solid oklch(0.98 0.003 90 / 6%);
+  background: var(--card);
+  border: 1px solid var(--border);
   box-shadow: var(--shadow-card);
 }
 
 @utility hairline {
-  border: 1px solid oklch(0.98 0.003 90 / 8%);
+  border: 1px solid var(--border);
 }
 
 @utility hero-overlay {
@@ -212,7 +212,7 @@
 
 @utility filter-input {
   width: 100%;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   border: 1px solid var(--border);
   background: var(--input);
   padding: 0.6rem 0.85rem;
@@ -221,7 +221,7 @@
   outline: none;
   transition: border-color 0.15s;
   &:focus {
-    border-color: var(--gold);
+    border-color: var(--brand-soft);
   }
 }
 
@@ -230,17 +230,41 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: 999px;
-  background: var(--gradient-gold);
-  color: var(--primary-foreground);
+  border-radius: 8px;
+  background: var(--cta);
+  color: var(--cta-foreground);
   font-weight: 700;
   letter-spacing: 0.01em;
   padding: 0.875rem 1.5rem;
-  box-shadow: 0 20px 40px -20px oklch(0.83 0.13 85 / 0.55), 0 4px 14px -6px oklch(0 0 0 / 0.5);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  box-shadow: 0 2px 6px rgb(255 107 53 / 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  &:hover {
+    background: var(--cta-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgb(255 107 53 / 0.4);
+  }
 }
 @utility btn-primary-hover {
-  &:hover { transform: translateY(-1px); box-shadow: 0 28px 60px -22px oklch(0.83 0.13 85 / 0.6); }
+  &:hover {
+    background: var(--cta-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgb(255 107 53 / 0.4);
+  }
+}
+
+@utility btn-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--brand);
+  background: transparent;
+  color: var(--brand);
+  font-weight: 600;
+  padding: 0.8rem 1.4rem;
+  transition: background 0.2s ease, color 0.2s ease;
+  &:hover { background: var(--brand); color: var(--brand-foreground); }
 }
 
 @utility skeleton {
