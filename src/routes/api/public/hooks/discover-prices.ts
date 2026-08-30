@@ -1,41 +1,64 @@
 /**
  * Scheduled hook: MAB Opportunity Discovery sweep.
  *
- * Called by pg_cron (see the accompanying schedule migration). Runs the
- * discovery sweep across popular Brazil-origin routes and returns a JSON
- * report. Authenticated with the Supabase publishable key via `apikey`
- * header — no custom shared secret needed.
+ * Called by pg_cron (see the accompanying schedule migration). Authenticated
+ * with a dedicated server-side secret (`DISCOVERY_HOOK_SECRET`) sent in the
+ * `x-discovery-secret` header — never the public publishable key.
  */
 import { createFileRoute } from "@tanstack/react-router";
-import { runDiscoverySweepFn } from "@/lib/discovery.functions";
+import { z } from "zod";
+
+const bodySchema = z.object({
+  regions: z.array(z.enum(["domestic", "south_america", "usa", "europe"])).optional(),
+  cabin: z.enum(["economy", "premium", "business", "first"]).optional().default("economy"),
+  horizons: z.array(z.number().int().min(1).max(365)).optional(),
+  maxRoutes: z.number().int().min(1).max(200).optional().default(60),
+});
 
 export const Route = createFileRoute("/api/public/hooks/discover-prices")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apiKey = request.headers.get("apikey");
-        if (!apiKey || apiKey !== process.env.SUPABASE_PUBLISHABLE_KEY) {
+        const { isValidHookSecret } = await import("@/lib/security/guards.server");
+        const provided =
+          request.headers.get("x-discovery-secret") ??
+          request.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ??
+          null;
+
+        if (!isValidHookSecret(provided)) {
           return new Response(JSON.stringify({ error: "unauthorized" }), {
             status: 401,
             headers: { "Content-Type": "application/json" },
           });
         }
-        let body: Record<string, unknown> = {};
+
+        let raw: unknown = {};
         try {
-          body = (await request.json()) as Record<string, unknown>;
+          raw = await request.json();
         } catch {
-          body = {};
+          raw = {};
         }
+
+        const parsed = bodySchema.safeParse(raw ?? {});
+        if (!parsed.success) {
+          return new Response(JSON.stringify({ error: "invalid_request" }), {
+            status: 400,
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+
         try {
-          const report = await runDiscoverySweepFn({ data: body });
+          const { runDiscoverySweep } = await import("@/lib/discovery/sweep.server");
+          const report = await runDiscoverySweep(parsed.data);
           return new Response(JSON.stringify({ ok: true, report }), {
             headers: { "Content-Type": "application/json" },
           });
         } catch (err) {
-          return new Response(
-            JSON.stringify({ ok: false, error: (err as Error).message }),
-            { status: 500, headers: { "Content-Type": "application/json" } },
-          );
+          console.error("[discover-prices] sweep failed", err);
+          return new Response(JSON.stringify({ ok: false, error: "sweep_failed" }), {
+            status: 500,
+            headers: { "Content-Type": "application/json" },
+          });
         }
       },
     },
