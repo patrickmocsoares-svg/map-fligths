@@ -203,14 +203,12 @@ function RequestPage() {
             </div>
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <a
-                href={wa}
-                target="_blank"
-                rel="noreferrer"
+              <Link
+                to="/search"
                 className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-cta px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-luxe transition-transform hover:-translate-y-0.5"
               >
-                <MessageCircle className="h-4 w-4" /> Falar no WhatsApp
-              </a>
+                <ArrowRight className="h-4 w-4" /> Voltar para a busca
+              </Link>
               <Link
                 to="/"
                 className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-border px-6 py-3.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
@@ -218,6 +216,7 @@ function RequestPage() {
                 Voltar ao início
               </Link>
             </div>
+
           </div>
         </main>
         <Footer />
