@@ -93,7 +93,7 @@ function RequestPage() {
   const [result, setResult] = useState<OrderCreated | null>(null);
   const { settings } = useSettings();
 
-  const waNumber = settings?.whatsapp_number;
+  const waNumber = settings?.whatsappNumber;
 
   function quoteMessage(data: OrderCreated, f: OrderRequestInput) {
     const s = data.summary;
@@ -194,7 +194,7 @@ function RequestPage() {
               Agradecemos por escolher a TRIPmoc.
             </p>
             <p className="mt-4 text-xs text-muted-foreground/80">
-              Atendimento: {settings?.business_hours ?? SUPPORT_HOURS}
+              Atendimento: {settings?.businessHours ?? SUPPORT_HOURS}
             </p>
 
 
