@@ -32,6 +32,13 @@
   --color-gold: var(--gold);
   --color-gold-soft: var(--gold-soft);
   --color-gold-deep: var(--gold-deep);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-soft: var(--brand-soft);
+  --color-cta: var(--cta);
+  --color-cta-hover: var(--cta-hover);
+  --color-cta-foreground: var(--cta-foreground);
+  --color-mabgold: var(--mabgold);
   --color-success: var(--success);
   --color-whatsapp: var(--whatsapp);
   --color-whatsapp-foreground: var(--whatsapp-foreground);
@@ -42,57 +49,74 @@
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 0.75rem;
 
-  /* Obsidian + porcelain + gold */
-  --background: #0b0b0c;
-  --foreground: oklch(0.98 0.003 90);
+  /* CRO palette — 60 deep ocean blue / 30 white / 10 coral orange */
+  --background: #ffffff;
+  --foreground: #10233c;
 
-  --card: oklch(0.17 0.005 260);
-  --card-foreground: oklch(0.98 0.003 90);
+  --card: #ffffff;
+  --card-foreground: #10233c;
 
-  --popover: oklch(0.17 0.005 260);
-  --popover-foreground: oklch(0.98 0.003 90);
+  --popover: #ffffff;
+  --popover-foreground: #10233c;
 
-  --primary: oklch(0.83 0.13 85);           /* gold */
-  --primary-foreground: oklch(0.13 0.005 260);
+  /* Primary = conversion orange (CTAs) */
+  --primary: #ff6b35;
+  --primary-foreground: #ffffff;
 
-  --secondary: oklch(0.22 0.008 260);
-  --secondary-foreground: oklch(0.98 0.003 90);
+  --secondary: #f8fafc;
+  --secondary-foreground: #1a365d;
 
-  --muted: oklch(0.2 0.006 260);
-  --muted-foreground: oklch(0.66 0.008 90);
+  --muted: #f8fafc;
+  --muted-foreground: #4a5f7a;
 
-  --accent: oklch(0.24 0.01 80);
-  --accent-foreground: oklch(0.98 0.003 90);
+  --accent: #e6f0f8;
+  --accent-foreground: #1a365d;
 
   --destructive: #e11d2e;
-  --destructive-foreground: oklch(0.98 0 0);
+  --destructive-foreground: #ffffff;
 
-  --border: oklch(0.98 0.003 90 / 8%);
-  --input: oklch(0.2 0.006 260);
-  --ring: oklch(0.83 0.13 85);
+  --border: #dde5ee;
+  --input: #ffffff;
+  --ring: #0077b6;
 
-  --gold: #c9a227;
-  --gold-soft: oklch(0.9 0.09 88);
-  --gold-deep: oklch(0.68 0.14 72);
-  --success: oklch(0.78 0.16 155);
+  /* Brand blue (dominant, 60%) */
+  --brand: #1a365d;
+  --brand-foreground: #ffffff;
+  --brand-soft: #0077b6;
+
+  /* Legacy "gold" aliases now map to the brand blue so existing
+     institutional accents follow the new identity. */
+  --gold: #1a365d;
+  --gold-soft: #0077b6;
+  --gold-deep: #10233c;
+
+  /* Conversion orange (10%) */
+  --cta: #ff6b35;
+  --cta-hover: #e85d04;
+  --cta-foreground: #ffffff;
+
+  /* Kept exclusively as a fine MAB Score detail */
+  --mabgold: #c9a227;
+
+  --success: #0f9d58;
   --whatsapp: #25d366;
-  --whatsapp-foreground: oklch(0.99 0 0);
-  --warning: #f59e0b;
+  --whatsapp-foreground: #ffffff;
+  --warning: #ff6b35;
 
-  --gradient-gold: linear-gradient(135deg, oklch(0.92 0.09 90), oklch(0.72 0.14 72));
-  --gradient-obsidian: linear-gradient(180deg, oklch(0.15 0.005 260), oklch(0.1 0.005 260));
+  --gradient-gold: linear-gradient(135deg, #ff6b35, #e85d04);
+  --gradient-brand: linear-gradient(135deg, #1a365d, #0077b6);
+  --gradient-obsidian: linear-gradient(180deg, #1a365d, #10233c);
   --gradient-hero-overlay: linear-gradient(
     180deg,
-    oklch(0.1 0.005 260 / 0.55) 0%,
-    oklch(0.1 0.005 260 / 0.25) 40%,
-    oklch(0.1 0.005 260 / 0.85) 100%
+    rgb(26 54 93 / 0.72) 0%,
+    rgb(26 54 93 / 0.45) 40%,
+    rgb(16 35 60 / 0.9) 100%
   );
-  --shadow-luxe: 0 40px 90px -40px oklch(0.83 0.13 85 / 0.22),
-                 0 12px 40px -18px oklch(0 0 0 / 0.7);
-  --shadow-card: 0 20px 50px -24px oklch(0 0 0 / 0.6);
-  --shadow-float: 0 30px 60px -30px oklch(0 0 0 / 0.55);
+  --shadow-luxe: 0 4px 12px rgb(255 107 53 / 0.4);
+  --shadow-card: 0 6px 20px -10px rgb(26 54 93 / 0.22);
+  --shadow-float: 0 14px 34px -18px rgb(26 54 93 / 0.28);
 }
 
 @layer base {
