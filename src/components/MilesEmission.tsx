@@ -21,7 +21,7 @@ export type MilesContext = {
 };
 
 function fmtPrice(v?: number | null, currency = "BRL") {
-  if (v == null) return "";
+  if (typeof v !== "number" || !Number.isFinite(v)) return "";
   return v.toLocaleString("pt-BR", { style: "currency", currency, maximumFractionDigits: 0 });
 }
 
@@ -35,7 +35,7 @@ function useMilesLink(ctx: MilesContext) {
     ctx.returnDate ? `Volta: ${ctx.returnDate}` : null,
     ctx.passengers ? `Passageiros: ${ctx.passengers}` : null,
     ctx.price ? `Tarifa vista no site: ${fmtPrice(ctx.price, ctx.currency)}` : null,
-    "Vi uma opção no MAB Flights e gostaria de saber se é possível emitir com milhas.",
+    "Vi uma opção no site e gostaria de saber se é possível emitir com milhas.",
   ].filter(Boolean);
   return whatsappLink(lines.join("\n"), settings.whatsappNumber);
 }
@@ -47,7 +47,8 @@ const whatsBtn =
 export function MilesOfferCTA({ ctx }: { ctx: MilesContext }) {
   const t = useT();
   const href = useMilesLink(ctx);
-  const estimated = ctx.price ? Math.round(ctx.price * 0.6) : null;
+  const estimated =
+    typeof ctx.price === "number" && Number.isFinite(ctx.price) ? Math.round(ctx.price * 0.6) : null;
 
   return (
     <div className="rounded-2xl border border-border bg-cta/[0.06] p-4">
@@ -73,13 +74,14 @@ export function MilesOfferCTA({ ctx }: { ctx: MilesContext }) {
 /** Reference price block — used when there is no confirmed fare for the search. */
 export function MilesReferencePrice({ ctx }: { ctx: MilesContext }) {
   const t = useT();
+  const price = fmtPrice(ctx.price, ctx.currency);
   return (
     <div className="rounded-2xl border border-border bg-card p-5">
       <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
         {t("miles.reference.title")}
       </div>
       <div className="mt-1 font-display text-4xl font-extrabold text-brand">
-        {fmtPrice(ctx.price, ctx.currency)}
+        {price || "Consultar"}
       </div>
       <p className="mt-2 text-xs text-muted-foreground">{t("miles.reference.note")}</p>
       <div className="mt-4">
@@ -89,19 +91,27 @@ export function MilesReferencePrice({ ctx }: { ctx: MilesContext }) {
   );
 }
 
-/** Shown when the API returns nothing at all. */
+/**
+ * Shown when the search returns nothing.
+ * Copy approved by the client — keep it verbatim.
+ */
 export function MilesNoResults({ ctx }: { ctx: MilesContext }) {
-  const t = useT();
   const href = useMilesLink(ctx);
   return (
-    <div className="rounded-3xl border border-border bg-cta/[0.06] p-6">
-      <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-brand">
-        <Plane className="h-3.5 w-3.5" /> {t("miles.none.title")}
-      </div>
-      <p className="mt-2 text-sm text-foreground">{t("miles.none.text")}</p>
-      <a href={href} target="_blank" rel="noopener noreferrer" className={`${whatsBtn} mt-4 md:max-w-sm`}>
-        <MessageCircle className="h-4 w-4" /> {t("miles.none.button")}
+    <div className="rounded-3xl border border-cta/30 bg-cta/[0.07] p-6 md:p-8">
+      <h3 className="font-display text-xl font-extrabold text-brand md:text-2xl">
+        ✈️ VIAJE COM MILHAS E PAGUE MENOS
+      </h3>
+      <p className="mt-3 text-base font-semibold text-foreground">Não encontrou a tarifa que queria?</p>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Consulte agora uma opção de emissão para sua viagem.
+      </p>
+      <a href={href} target="_blank" rel="noopener noreferrer" className={`${whatsBtn} mt-5 md:max-w-sm`}>
+        <MessageCircle className="h-4 w-4" /> 🟢 CONFERIR OFERTA
       </a>
+      <p className="mt-3 text-[10px] leading-relaxed text-muted-foreground">
+        Disponibilidade, quantidade de milhas, taxas e valor final são confirmados antes da emissão.
+      </p>
     </div>
   );
 }

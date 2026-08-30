@@ -76,9 +76,15 @@ export function useT(): (key: string) => string {
   return t;
 }
 
-export function formatBRL(n: number): string {
+/**
+ * Currency formatter that never renders "R$ NaN".
+ * Invalid / missing values fall back to a commercial "Consultar" label.
+ */
+export function formatBRL(n: number | null | undefined, fallback = "Consultar"): string {
+  if (typeof n !== "number" || !Number.isFinite(n)) return fallback;
   return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(n);
 }
-export function formatMiles(n: number): string {
+export function formatMiles(n: number | null | undefined, fallback = "—"): string {
+  if (typeof n !== "number" || !Number.isFinite(n)) return fallback;
   return new Intl.NumberFormat("pt-BR").format(n);
 }

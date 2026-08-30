@@ -29,7 +29,7 @@ export const DEFAULT_MILES_SETTINGS: MilesSettings = {
   airportTax: 38,
   whatsappNumber: "553120940901",
   businessHours: "Seg a Sáb, 8h às 20h (horário de Brasília)",
-  contactEmail: "contato@mabflights.com",
+  contactEmail: "contato@tripmoc.com.br",
 };
 
 export type MilesQuote = {

@@ -78,14 +78,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "MAB Flights — Transformando milhas em oportunidades" },
+      { title: "TRIPmoc — Transformando milhas em oportunidades" },
       {
         name: "description",
         content:
           "Plataforma premium para encontrar as melhores ofertas de voos no Brasil e para o mundo. Compare preços, milhas e crie alertas.",
       },
-      { name: "author", content: "MAB Flights" },
-      { property: "og:title", content: "MAB Flights — Premium Travel Deals" },
+      { name: "author", content: "TRIPmoc" },
+      { property: "og:title", content: "TRIPmoc — Premium Travel Deals" },
       {
         property: "og:description",
         content: "Encontre oportunidades de voos com o MAB Score. Ofertas nacionais, internacionais e achados com milhas.",

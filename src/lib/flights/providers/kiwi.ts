@@ -3,7 +3,7 @@
  *
  * Docs: https://tequila.kiwi.com/portal/docs/tequila_api/search_api
  *
- * This is MAB Flights' first real upstream provider. It maps Tequila's
+ * This is TRIPmoc' first real upstream provider. It maps Tequila's
  * native `/v2/search` response into the neutral `FlightOffer` shape used
  * by the rest of the app. UI code never sees Tequila-native fields.
  *

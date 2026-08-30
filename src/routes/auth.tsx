@@ -6,13 +6,13 @@ import { Loader2, Lock, Plane } from "lucide-react";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Acesso restrito — MAB Flights" },
+      { title: "Acesso restrito — TRIPmoc" },
       {
         name: "description",
-        content: "Área de acesso da equipe MAB Flights para gestão de solicitações de emissão.",
+        content: "Área de acesso da equipe TRIPmoc para gestão de solicitações de emissão.",
       },
-      { property: "og:title", content: "Acesso restrito — MAB Flights" },
-      { property: "og:description", content: "Área de acesso da equipe MAB Flights." },
+      { property: "og:title", content: "Acesso restrito — TRIPmoc" },
+      { property: "og:description", content: "Área de acesso da equipe TRIPmoc." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
@@ -70,7 +70,7 @@ function AuthPage() {
           <span className="grid h-9 w-9 place-items-center rounded-lg bg-cta text-primary-foreground shadow-luxe">
             <Plane className="h-4 w-4" strokeWidth={2.5} />
           </span>
-          <span className="font-display text-lg tracking-tight">MAB Flights</span>
+          <span className="font-display text-lg tracking-tight">TRIPmoc</span>
         </Link>
 
         <div className="mt-8 rounded-3xl border border-border bg-card/50 p-6 md:p-8">

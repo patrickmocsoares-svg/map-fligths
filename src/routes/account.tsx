@@ -9,9 +9,9 @@ import { Heart, Bell, Trash2, User } from "lucide-react";
 export const Route = createFileRoute("/account")({
   head: () => ({
     meta: [
-      { title: "Minha conta — MAB Flights" },
+      { title: "Minha conta — TRIPmoc" },
       { name: "description", content: "Rotas salvas, alertas de preço e preferências." },
-      { property: "og:title", content: "Minha conta — MAB Flights" },
+      { property: "og:title", content: "Minha conta — TRIPmoc" },
       { property: "og:description", content: "Gerencie suas rotas favoritas e alertas." },
     ],
   }),
@@ -36,7 +36,7 @@ function Account() {
           </div>
           <div>
             <h1 className="font-display text-3xl md:text-4xl">{t("account.title")}</h1>
-            <p className="text-sm text-muted-foreground">Bem-vindo de volta ao MAB Flights.</p>
+            <p className="text-sm text-muted-foreground">Bem-vindo de volta ao TRIPmoc.</p>
           </div>
         </div>
 

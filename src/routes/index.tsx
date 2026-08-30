@@ -8,6 +8,12 @@ import { FlightSearchForm } from "@/components/FlightSearchForm";
 import { DealCard } from "@/components/DealCard";
 import { RealFlightSearchSection } from "@/components/RealFlightSearchSection";
 import { PromoDealsSection } from "@/components/PromoDealsSection";
+import { PlatformSection } from "@/components/PlatformSection";
+import {
+  NationalOffersSection,
+  InternationalOffersSection,
+  RecoveryOffers,
+} from "@/components/OffersSections";
 import { getCuratedDealsFn } from "@/lib/deals/travelpayouts-deals.functions";
 import type { RealDeal } from "@/lib/deals/types";
 import { heroImage } from "@/lib/destination-images";
@@ -21,13 +27,13 @@ const HERO_URL = heroImage(2400);
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "MAB Flights — Transformando milhas em oportunidades" },
+      { title: "TRIPmoc — Transformando milhas em oportunidades" },
       {
         name: "description",
         content:
           "Plataforma premium de passagens: busque voos, monitore preços e descubra as melhores oportunidades curadas pelo MAB Score.",
       },
-      { property: "og:title", content: "MAB Flights — Premium Travel Marketplace" },
+      { property: "og:title", content: "TRIPmoc — Premium Travel Marketplace" },
       {
         property: "og:description",
         content: "Busque voos, descubra oportunidades e viaje melhor. Curadoria premium pelo MAB Score.",
@@ -165,13 +171,12 @@ function Home() {
             ))}
           </div>
         ) : (
-          <div className="mt-10 rounded-3xl border border-dashed border-border bg-muted p-10 text-center">
-            <div className="text-sm text-muted-foreground">
-              Ainda não há ofertas em cache para esta semana.
-            </div>
-            <Link to="/search" className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-brand-soft">
-              Buscar voos agora <ArrowRight className="h-4 w-4" />
-            </Link>
+          <div className="mt-10">
+            <p className="mb-5 text-sm text-muted-foreground">
+              Sem tarifa em tempo real neste momento — veja oportunidades com preço indicativo e
+              fale com um consultor.
+            </p>
+            <RecoveryOffers scope="international" />
           </div>
         )}
 
@@ -183,7 +188,7 @@ function Home() {
       </section>
 
       {/* ============================== INSPIRE ============================== */}
-      <section className="border-t border-border bg-secondary">
+      <section id="destinos" className="border-t border-border bg-secondary scroll-mt-20">
         <div className="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
           <div className="max-w-2xl">
             <div className="text-[10px] uppercase tracking-[0.28em] text-brand-soft">
@@ -236,8 +241,11 @@ function Home() {
         </div>
       </section>
 
+      <NationalOffersSection />
+      <InternationalOffersSection />
       <PromoDealsSection />
       <RealFlightSearchSection />
+      <PlatformSection />
 
       <Footer />
     </div>

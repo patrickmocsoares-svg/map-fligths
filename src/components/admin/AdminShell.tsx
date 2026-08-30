@@ -69,7 +69,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
               <Plane className="h-3.5 w-3.5" strokeWidth={2.5} />
             </span>
             <span className="flex flex-col leading-none">
-              <span className="font-display text-base tracking-tight">MAB Flights</span>
+              <span className="font-display text-base tracking-tight">TRIPmoc</span>
               <span className="text-[10px] uppercase tracking-[0.22em] text-brand">Admin</span>
             </span>
           </Link>

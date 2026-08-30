@@ -25,7 +25,7 @@ import { whatsappLink } from "@/lib/contact-config";
 export const Route = createFileRoute("/_authenticated/admin/")({
   head: () => ({
     meta: [
-      { title: "Painel administrativo — MAB Flights" },
+      { title: "Painel administrativo — TRIPmoc" },
       { name: "description", content: "Gestão de solicitações de emissão com milhas." },
       { name: "robots", content: "noindex" },
     ],
