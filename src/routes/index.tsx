@@ -12,6 +12,7 @@ import { PlatformSection } from "@/components/PlatformSection";
 import {
   NationalOffersSection,
   InternationalOffersSection,
+  RecoveryOffers,
 } from "@/components/OffersSections";
 import { getCuratedDealsFn } from "@/lib/deals/travelpayouts-deals.functions";
 import type { RealDeal } from "@/lib/deals/types";
