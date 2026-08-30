@@ -412,7 +412,7 @@ function RequestPage() {
             <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-background/50 px-4 py-3.5 md:col-span-2">
               <input
                 type="checkbox"
-                className="h-4 w-4 accent-[hsl(var(--gold,45_80%_55%))]"
+                className="h-4 w-4 accent-[color:var(--cta)]"
                 checked={Boolean(form.flexibleDates)}
                 onChange={(e) => set("flexibleDates", e.target.checked)}
               />

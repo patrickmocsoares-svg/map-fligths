@@ -211,7 +211,7 @@ function DealsPage() {
                   step={100}
                   value={priceMax}
                   onChange={(e) => setPriceMax(Number(e.target.value))}
-                  className="w-full accent-[color:var(--gold)]"
+                  className="w-full accent-[color:var(--cta)]"
                 />
               </Field>
             </div>
