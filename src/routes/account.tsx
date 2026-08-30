@@ -31,7 +31,7 @@ function Account() {
       <Header />
       <div className="mx-auto max-w-6xl px-4 py-10 md:px-8">
         <div className="flex items-center gap-4">
-          <div className="grid h-14 w-14 place-items-center rounded-full gold-gradient text-primary-foreground">
+          <div className="grid h-14 w-14 place-items-center rounded-full bg-cta text-primary-foreground">
             <User className="h-6 w-6" />
           </div>
           <div>
@@ -43,7 +43,7 @@ function Account() {
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           <section className="card-luxe rounded-2xl p-6">
             <div className="flex items-center gap-2 mb-4">
-              <Heart className="h-4 w-4 text-gold" />
+              <Heart className="h-4 w-4 text-brand" />
               <h2 className="font-display text-xl">{t("account.saved")}</h2>
             </div>
             {saved.length === 0 ? (
@@ -71,10 +71,10 @@ function Account() {
           <section className="card-luxe rounded-2xl p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <Bell className="h-4 w-4 text-gold" />
+                <Bell className="h-4 w-4 text-brand" />
                 <h2 className="font-display text-xl">{t("account.alerts")}</h2>
               </div>
-              <Link to="/alerts" className="text-xs text-gold">Gerenciar →</Link>
+              <Link to="/alerts" className="text-xs text-brand">Gerenciar →</Link>
             </div>
             {alerts.length === 0 ? (
               <p className="text-sm text-muted-foreground">{t("account.empty.alerts")}</p>
@@ -84,7 +84,7 @@ function Account() {
                   <li key={a.id} className="flex items-center justify-between rounded-lg border border-border p-3 text-sm">
                     <span>
                       <span className="font-display text-lg">{a.origin}</span> → <span className="font-display text-lg">{a.destination}</span>
-                      <span className="ml-2 text-xs text-gold">≤ {formatBRL(a.targetPriceBRL)}</span>
+                      <span className="ml-2 text-xs text-brand">≤ {formatBRL(a.targetPriceBRL)}</span>
                     </span>
                     <button
                       onClick={() => setAlerts(alerts.filter((x) => x.id !== a.id))}

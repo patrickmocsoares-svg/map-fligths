@@ -32,6 +32,13 @@
   --color-gold: var(--gold);
   --color-gold-soft: var(--gold-soft);
   --color-gold-deep: var(--gold-deep);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-soft: var(--brand-soft);
+  --color-cta: var(--cta);
+  --color-cta-hover: var(--cta-hover);
+  --color-cta-foreground: var(--cta-foreground);
+  --color-mabgold: var(--mabgold);
   --color-success: var(--success);
   --color-whatsapp: var(--whatsapp);
   --color-whatsapp-foreground: var(--whatsapp-foreground);
@@ -42,57 +49,74 @@
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 0.75rem;
 
-  /* Obsidian + porcelain + gold */
-  --background: #0b0b0c;
-  --foreground: oklch(0.98 0.003 90);
+  /* CRO palette — 60 deep ocean blue / 30 white / 10 coral orange */
+  --background: #ffffff;
+  --foreground: #10233c;
 
-  --card: oklch(0.17 0.005 260);
-  --card-foreground: oklch(0.98 0.003 90);
+  --card: #ffffff;
+  --card-foreground: #10233c;
 
-  --popover: oklch(0.17 0.005 260);
-  --popover-foreground: oklch(0.98 0.003 90);
+  --popover: #ffffff;
+  --popover-foreground: #10233c;
 
-  --primary: oklch(0.83 0.13 85);           /* gold */
-  --primary-foreground: oklch(0.13 0.005 260);
+  /* Primary = conversion orange (CTAs) */
+  --primary: #ff6b35;
+  --primary-foreground: #ffffff;
 
-  --secondary: oklch(0.22 0.008 260);
-  --secondary-foreground: oklch(0.98 0.003 90);
+  --secondary: #f8fafc;
+  --secondary-foreground: #1a365d;
 
-  --muted: oklch(0.2 0.006 260);
-  --muted-foreground: oklch(0.66 0.008 90);
+  --muted: #f8fafc;
+  --muted-foreground: #4a5f7a;
 
-  --accent: oklch(0.24 0.01 80);
-  --accent-foreground: oklch(0.98 0.003 90);
+  --accent: #e6f0f8;
+  --accent-foreground: #1a365d;
 
   --destructive: #e11d2e;
-  --destructive-foreground: oklch(0.98 0 0);
+  --destructive-foreground: #ffffff;
 
-  --border: oklch(0.98 0.003 90 / 8%);
-  --input: oklch(0.2 0.006 260);
-  --ring: oklch(0.83 0.13 85);
+  --border: #dde5ee;
+  --input: #ffffff;
+  --ring: #0077b6;
 
-  --gold: #c9a227;
-  --gold-soft: oklch(0.9 0.09 88);
-  --gold-deep: oklch(0.68 0.14 72);
-  --success: oklch(0.78 0.16 155);
+  /* Brand blue (dominant, 60%) */
+  --brand: #1a365d;
+  --brand-foreground: #ffffff;
+  --brand-soft: #0077b6;
+
+  /* Legacy "gold" aliases now map to the brand blue so existing
+     institutional accents follow the new identity. */
+  --gold: #1a365d;
+  --gold-soft: #0077b6;
+  --gold-deep: #10233c;
+
+  /* Conversion orange (10%) */
+  --cta: #ff6b35;
+  --cta-hover: #e85d04;
+  --cta-foreground: #ffffff;
+
+  /* Kept exclusively as a fine MAB Score detail */
+  --mabgold: #c9a227;
+
+  --success: #0f9d58;
   --whatsapp: #25d366;
-  --whatsapp-foreground: oklch(0.99 0 0);
-  --warning: #f59e0b;
+  --whatsapp-foreground: #ffffff;
+  --warning: #ff6b35;
 
-  --gradient-gold: linear-gradient(135deg, oklch(0.92 0.09 90), oklch(0.72 0.14 72));
-  --gradient-obsidian: linear-gradient(180deg, oklch(0.15 0.005 260), oklch(0.1 0.005 260));
+  --gradient-gold: linear-gradient(135deg, #ff6b35, #e85d04);
+  --gradient-brand: linear-gradient(135deg, #1a365d, #0077b6);
+  --gradient-obsidian: linear-gradient(180deg, #1a365d, #10233c);
   --gradient-hero-overlay: linear-gradient(
     180deg,
-    oklch(0.1 0.005 260 / 0.55) 0%,
-    oklch(0.1 0.005 260 / 0.25) 40%,
-    oklch(0.1 0.005 260 / 0.85) 100%
+    rgb(26 54 93 / 0.72) 0%,
+    rgb(26 54 93 / 0.45) 40%,
+    rgb(16 35 60 / 0.9) 100%
   );
-  --shadow-luxe: 0 40px 90px -40px oklch(0.83 0.13 85 / 0.22),
-                 0 12px 40px -18px oklch(0 0 0 / 0.7);
-  --shadow-card: 0 20px 50px -24px oklch(0 0 0 / 0.6);
-  --shadow-float: 0 30px 60px -30px oklch(0 0 0 / 0.55);
+  --shadow-luxe: 0 4px 12px rgb(255 107 53 / 0.4);
+  --shadow-card: 0 6px 20px -10px rgb(26 54 93 / 0.22);
+  --shadow-float: 0 14px 34px -18px rgb(26 54 93 / 0.28);
 }
 
 @layer base {
@@ -116,11 +140,12 @@
 
   body {
     background-image:
-      radial-gradient(ellipse 90% 60% at 50% -10%, oklch(0.83 0.13 85 / 0.06), transparent 65%),
-      radial-gradient(ellipse 60% 40% at 95% 100%, oklch(0.83 0.13 85 / 0.04), transparent 60%);
+      radial-gradient(ellipse 90% 60% at 50% -10%, rgb(0 119 182 / 0.06), transparent 65%);
     background-attachment: fixed;
     letter-spacing: -0.005em;
   }
+
+  h1, h2 { color: var(--brand); }
 
   h1, h2, h3, h4, .font-display {
     font-family: var(--font-display);
@@ -130,7 +155,7 @@
 
   .font-serif { font-family: var(--font-serif); font-style: italic; letter-spacing: -0.01em; }
 
-  ::selection { background: oklch(0.83 0.13 85 / 0.35); color: var(--foreground); }
+  ::selection { background: rgb(255 107 53 / 0.25); color: var(--foreground); }
 
   :focus-visible {
     outline: 2px solid var(--gold);
@@ -157,7 +182,7 @@
 }
 
 @utility text-gold-gradient {
-  background: var(--gradient-gold);
+  background: var(--gradient-brand);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -172,13 +197,13 @@
 }
 
 @utility card-luxe {
-  background: linear-gradient(180deg, oklch(0.19 0.006 260), oklch(0.15 0.006 260));
-  border: 1px solid oklch(0.98 0.003 90 / 6%);
+  background: var(--card);
+  border: 1px solid var(--border);
   box-shadow: var(--shadow-card);
 }
 
 @utility hairline {
-  border: 1px solid oklch(0.98 0.003 90 / 8%);
+  border: 1px solid var(--border);
 }
 
 @utility hero-overlay {
@@ -187,7 +212,7 @@
 
 @utility filter-input {
   width: 100%;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   border: 1px solid var(--border);
   background: var(--input);
   padding: 0.6rem 0.85rem;
@@ -196,7 +221,7 @@
   outline: none;
   transition: border-color 0.15s;
   &:focus {
-    border-color: var(--gold);
+    border-color: var(--brand-soft);
   }
 }
 
@@ -205,30 +230,54 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: 999px;
-  background: var(--gradient-gold);
-  color: var(--primary-foreground);
+  border-radius: 8px;
+  background: var(--cta);
+  color: var(--cta-foreground);
   font-weight: 700;
   letter-spacing: 0.01em;
   padding: 0.875rem 1.5rem;
-  box-shadow: 0 20px 40px -20px oklch(0.83 0.13 85 / 0.55), 0 4px 14px -6px oklch(0 0 0 / 0.5);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  box-shadow: 0 2px 6px rgb(255 107 53 / 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  &:hover {
+    background: var(--cta-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgb(255 107 53 / 0.4);
+  }
 }
 @utility btn-primary-hover {
-  &:hover { transform: translateY(-1px); box-shadow: 0 28px 60px -22px oklch(0.83 0.13 85 / 0.6); }
+  &:hover {
+    background: var(--cta-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgb(255 107 53 / 0.4);
+  }
+}
+
+@utility btn-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--brand);
+  background: transparent;
+  color: var(--brand);
+  font-weight: 600;
+  padding: 0.8rem 1.4rem;
+  transition: background 0.2s ease, color 0.2s ease;
+  &:hover { background: var(--brand); color: var(--brand-foreground); }
 }
 
 @utility skeleton {
   position: relative;
   overflow: hidden;
-  background: oklch(0.2 0.006 260);
+  background: #eef2f7;
 }
 @utility skeleton-shimmer {
   &::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, transparent, oklch(0.98 0.003 90 / 0.05), transparent);
+    background: linear-gradient(90deg, transparent, rgb(26 54 93 / 0.06), transparent);
     animation: mab-shimmer 1.6s infinite;
   }
 }
@@ -282,14 +331,14 @@
 /* ====== Premium refinement additions ====== */
 
 @utility glass {
-  background: linear-gradient(180deg, oklch(0.98 0.003 90 / 0.05), oklch(0.98 0.003 90 / 0.02));
+  background: rgb(255 255 255 / 0.9);
   backdrop-filter: blur(20px) saturate(140%);
   -webkit-backdrop-filter: blur(20px) saturate(140%);
-  border: 1px solid oklch(0.98 0.003 90 / 8%);
+  border: 1px solid var(--border);
 }
 
 @utility ring-gold-soft {
-  box-shadow: 0 0 0 1px oklch(0.83 0.13 85 / 0.18), 0 20px 50px -24px oklch(0 0 0 / 0.6);
+  box-shadow: 0 0 0 1px rgb(0 119 182 / 0.25), var(--shadow-card);
 }
 
 @utility text-balance {
@@ -302,8 +351,8 @@
               border-color 0.5s ease;
   &:hover {
     transform: translateY(-4px);
-    box-shadow: var(--shadow-luxe);
-    border-color: oklch(0.83 0.13 85 / 0.28);
+    box-shadow: var(--shadow-float);
+    border-color: rgb(0 119 182 / 0.35);
   }
 }
 
@@ -316,8 +365,8 @@
 }
 
 @keyframes mab-gold-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 oklch(0.83 0.13 85 / 0.35); }
-  50% { box-shadow: 0 0 0 8px oklch(0.83 0.13 85 / 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgb(255 107 53 / 0.45); }
+  50% { box-shadow: 0 0 0 8px rgb(255 107 53 / 0); }
 }
 @utility animate-gold-pulse {
   animation: mab-gold-pulse 2.4s ease-out infinite;
@@ -332,7 +381,7 @@
     right: 0;
     bottom: -6px;
     height: 1px;
-    background: var(--gradient-gold);
+    background: var(--cta);
     transform: scaleX(0);
     transform-origin: right;
     transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -345,9 +394,9 @@
 }
 
 @utility header-scrolled {
-  background: oklch(0.11 0.005 260 / 0.85);
-  box-shadow: 0 8px 30px -12px oklch(0 0 0 / 0.6);
-  border-bottom-color: oklch(0.83 0.13 85 / 0.18);
+  background: rgb(26 54 93 / 0.97);
+  box-shadow: 0 6px 20px -12px rgb(16 35 60 / 0.5);
+  border-bottom-color: rgb(255 255 255 / 0.12);
 }
 
 /* Typography rhythm on small screens */
@@ -355,3 +404,18 @@
   h1 { letter-spacing: -0.03em; }
 }
 
+
+@utility btn-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--brand);
+  color: var(--brand);
+  background: transparent;
+  font-weight: 700;
+  padding: 0.75rem 1rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  &:hover { background: var(--brand); color: var(--brand-foreground); }
+}

@@ -77,16 +77,16 @@ function Home() {
             className="h-full w-full object-cover animate-kenburns"
           />
           <div className="absolute inset-0 hero-overlay" />
-          <div className="absolute inset-0 bg-background/40" />
+          <div className="absolute inset-0 bg-brand/35" />
         </div>
 
         <div className="mx-auto max-w-7xl px-5 pb-10 pt-14 md:px-8 md:pb-16 md:pt-28">
           <div className="max-w-3xl animate-rise">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-white/75 backdrop-blur">
-              <Sparkles className="h-3 w-3 text-gold" /> Premium Travel Marketplace
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-brand/50 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-white/85 backdrop-blur">
+              <Sparkles className="h-3 w-3 text-cta" /> Premium Travel Marketplace
             </div>
             <h1 className="mt-6 font-display text-[2.6rem] font-extrabold leading-[1.02] tracking-tight text-white text-balance sm:text-5xl md:text-7xl">
-              Transformando <span className="font-serif font-normal text-gold-gradient">milhas</span>
+              Transformando <span className="font-serif font-normal text-white">milhas</span>
               <br className="hidden sm:block" /> em <span className="font-serif font-normal">oportunidades.</span>
             </h1>
             <p className="mt-5 max-w-xl text-lg font-semibold leading-snug text-white text-balance md:text-2xl">
@@ -98,7 +98,7 @@ function Home() {
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link
                 to="/solicitar"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl gold-gradient px-7 py-4 text-sm font-semibold text-primary-foreground shadow-luxe transition-transform hover:-translate-y-0.5"
+                className="btn-primary min-h-12 px-7 py-4 text-sm"
               >
                 Solicitar orçamento <ArrowRight className="h-4 w-4" />
               </Link>
@@ -106,7 +106,7 @@ function Home() {
                 href={heroMilesLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-whatsapp px-7 py-4 text-sm font-bold uppercase tracking-wide text-whatsapp-foreground transition-transform hover:-translate-y-0.5"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-whatsapp px-7 py-4 text-sm font-bold uppercase tracking-wide text-whatsapp-foreground transition-transform hover:-translate-y-0.5"
               >
                 <MessageCircle className="h-4 w-4" /> {t("hero.milesCta")}
               </a>
@@ -121,9 +121,9 @@ function Home() {
             className="mx-auto mt-8 flex max-w-6xl flex-wrap items-center justify-center gap-x-8 gap-y-3 text-[11px] uppercase tracking-[0.22em] text-white/55 animate-rise md:mt-12"
             style={{ animationDelay: "300ms" }}
           >
-            <span className="inline-flex items-center gap-2"><span className="h-1 w-1 rounded-full bg-gold" /> MAB Score exclusivo</span>
-            <span className="inline-flex items-center gap-2"><span className="h-1 w-1 rounded-full bg-gold" /> Preços monitorados 24/7</span>
-            <span className="inline-flex items-center gap-2"><span className="h-1 w-1 rounded-full bg-gold" /> Curadoria editorial</span>
+            <span className="inline-flex items-center gap-2"><span className="h-1 w-1 rounded-full bg-cta" /> MAB Score exclusivo</span>
+            <span className="inline-flex items-center gap-2"><span className="h-1 w-1 rounded-full bg-cta" /> Preços monitorados 24/7</span>
+            <span className="inline-flex items-center gap-2"><span className="h-1 w-1 rounded-full bg-cta" /> Curadoria editorial</span>
           </div>
         </div>
       </section>
@@ -132,7 +132,7 @@ function Home() {
       <section className="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
         <div className="flex items-end justify-between gap-6">
           <div>
-            <div className="text-[10px] uppercase tracking-[0.28em] text-gold">
+            <div className="text-[10px] uppercase tracking-[0.28em] text-brand-soft">
               Curadoria da semana
             </div>
             <h2 className="mt-3 font-display text-3xl font-bold leading-tight tracking-tight md:text-5xl">
@@ -144,7 +144,7 @@ function Home() {
           </div>
           <Link
             to="/deals"
-            className="hidden shrink-0 items-center gap-2 text-sm font-medium text-gold hover:text-gold-soft md:inline-flex"
+            className="hidden shrink-0 items-center gap-2 text-sm font-medium text-brand-soft hover:text-brand md:inline-flex"
           >
             Ver todas as ofertas <ArrowRight className="h-4 w-4" />
           </Link>
@@ -153,7 +153,7 @@ function Home() {
         {curated.isLoading ? (
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="aspect-[5/4] animate-pulse rounded-3xl bg-card/40" />
+              <div key={i} className="aspect-[5/4] animate-pulse rounded-3xl bg-muted" />
             ))}
           </div>
         ) : featured.length > 0 ? (
@@ -165,28 +165,28 @@ function Home() {
             ))}
           </div>
         ) : (
-          <div className="mt-10 rounded-3xl border border-dashed border-gold/15 bg-card/30 p-10 text-center">
+          <div className="mt-10 rounded-3xl border border-dashed border-border bg-muted p-10 text-center">
             <div className="text-sm text-muted-foreground">
               Ainda não há ofertas em cache para esta semana.
             </div>
-            <Link to="/search" className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-gold">
+            <Link to="/search" className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-brand-soft">
               Buscar voos agora <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         )}
 
         <div className="mt-8 md:hidden">
-          <Link to="/deals" className="inline-flex items-center gap-2 text-sm font-medium text-gold">
+          <Link to="/deals" className="inline-flex items-center gap-2 text-sm font-medium text-brand-soft">
             Ver todas as ofertas <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </section>
 
       {/* ============================== INSPIRE ============================== */}
-      <section className="border-t border-white/5 bg-background/60">
+      <section className="border-t border-border bg-secondary">
         <div className="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
           <div className="max-w-2xl">
-            <div className="text-[10px] uppercase tracking-[0.28em] text-gold">
+            <div className="text-[10px] uppercase tracking-[0.28em] text-brand-soft">
               Inspiração
             </div>
             <h2 className="mt-3 font-display text-3xl font-bold leading-tight tracking-tight md:text-5xl">
@@ -214,8 +214,8 @@ function Home() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent" />
 
-                <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/40 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-white/85 backdrop-blur-md">
-                  <MapPin className="h-3 w-3 text-gold" /> {meta.country}
+                <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full border border-border bg-brand/60 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-white/85 backdrop-blur-md">
+                  <MapPin className="h-3 w-3 text-cta" /> {meta.country}
                 </div>
 
                 <div className="absolute inset-x-0 bottom-0 p-5">
@@ -225,7 +225,7 @@ function Home() {
                   <p className="mt-2 text-[13px] leading-relaxed text-white/75 line-clamp-2">
                     {meta.description}
                   </p>
-                  <div className="mt-4 inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-gold">
+                  <div className="mt-4 inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-cta">
                     Explorar destino
                     <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
                   </div>

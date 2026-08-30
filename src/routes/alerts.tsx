@@ -37,7 +37,7 @@ function Alerts() {
       <Header />
       <div className="mx-auto max-w-4xl px-4 py-10 md:px-8">
         <div className="flex items-center gap-3">
-          <Bell className="h-6 w-6 text-gold" />
+          <Bell className="h-6 w-6 text-brand" />
           <div>
             <h1 className="font-display text-3xl md:text-4xl">{t("alerts.title")}</h1>
             <p className="text-sm text-muted-foreground">{t("alerts.subtitle")}</p>
@@ -55,7 +55,7 @@ function Alerts() {
             </label>
             <button
               onClick={add}
-              className="inline-flex items-center justify-center gap-2 rounded-xl gold-gradient text-primary-foreground font-semibold px-6 py-3 shadow-luxe hover:opacity-95"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-cta text-primary-foreground font-semibold px-6 py-3 shadow-luxe hover:opacity-95"
             >
               <Plus className="h-4 w-4" /> {t("alerts.create")}
             </button>
@@ -64,7 +64,7 @@ function Alerts() {
 
         <div className="mt-8">
           {alerts.length === 0 ? (
-            <div className="text-center text-sm text-muted-foreground py-12 border border-dashed border-gold/20 rounded-2xl">
+            <div className="text-center text-sm text-muted-foreground py-12 border border-dashed border-border rounded-2xl">
               {t("account.empty.alerts")}
             </div>
           ) : (
@@ -76,7 +76,7 @@ function Alerts() {
                     <div className="text-xs text-muted-foreground">Criado em {new Date(a.createdAt).toLocaleDateString("pt-BR")}</div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <span className="text-gold font-semibold">≤ {formatBRL(a.targetPriceBRL)}</span>
+                    <span className="text-brand font-semibold">≤ {formatBRL(a.targetPriceBRL)}</span>
                     <button
                       onClick={() => setAlerts(alerts.filter((x) => x.id !== a.id))}
                       className="text-muted-foreground hover:text-destructive"

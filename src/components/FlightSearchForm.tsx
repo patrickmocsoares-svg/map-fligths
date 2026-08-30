@@ -148,7 +148,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
   return (
     <form
       onSubmit={submit}
-      className={`rounded-3xl border border-white/10 bg-card/85 p-4 backdrop-blur-2xl sm:p-5 md:p-7 ${compact ? "shadow-card" : "shadow-luxe"}`}
+      className={`rounded-3xl border border-border bg-card p-4 sm:p-5 md:p-7 ${compact ? "shadow-card" : "shadow-luxe"}`}
     >
       {/* Top control bar */}
       <div className="flex flex-wrap items-center gap-2">
@@ -168,8 +168,8 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
           onClick={() => setFlexible((f) => !f)}
           className={`ml-auto inline-flex min-h-[36px] items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition ${
             flexible
-              ? "border-gold/60 bg-gold/10 text-gold"
-              : "border-border text-muted-foreground hover:border-gold/40 hover:text-gold"
+              ? "border-border bg-accent text-brand"
+              : "border-border text-muted-foreground hover:border-border hover:text-cta"
           }`}
           aria-pressed={flexible}
         >
@@ -196,7 +196,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
               <button
                 type="button"
                 onClick={() => swapLeg(i)}
-                className="hidden md:grid place-items-center rounded-full border border-gold/30 text-gold hover:bg-gold/10 transition h-10 w-10 self-end mb-1"
+                className="hidden md:grid place-items-center rounded-full border border-border text-brand hover:bg-accent transition h-10 w-10 self-end mb-1"
                 aria-label="Trocar origem e destino"
               >
                 <ArrowLeftRight className="h-4 w-4" />
@@ -216,7 +216,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
                 type="button"
                 onClick={() => removeLeg(i)}
                 disabled={legs.length <= 2}
-                className="justify-self-end md:justify-self-auto rounded-full border border-border text-muted-foreground hover:text-foreground hover:border-gold/40 h-11 w-11 grid place-items-center disabled:opacity-30 disabled:cursor-not-allowed"
+                className="justify-self-end md:justify-self-auto rounded-full border border-border text-muted-foreground hover:text-foreground hover:border-border h-11 w-11 grid place-items-center disabled:opacity-30 disabled:cursor-not-allowed"
                 aria-label="Remover trecho"
               >
                 <X className="h-4 w-4" />
@@ -226,7 +226,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
           <button
             type="button"
             onClick={addLeg}
-            className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-dashed border-gold/40 px-4 py-2 text-xs uppercase tracking-widest text-gold hover:bg-gold/5 transition"
+            className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-dashed border-border px-4 py-2 text-xs uppercase tracking-widest text-brand hover:bg-accent transition"
           >
             <Plus className="h-3.5 w-3.5" /> Adicionar trecho
           </button>
@@ -242,7 +242,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
           <button
             type="button"
             onClick={swap}
-            className="hidden md:grid place-items-center rounded-full border border-gold/30 text-gold hover:bg-gold/10 transition h-10 w-10 self-end mb-1"
+            className="hidden md:grid place-items-center rounded-full border border-border text-brand hover:bg-accent transition h-10 w-10 self-end mb-1"
             aria-label="Trocar origem e destino"
           >
             <ArrowLeftRight className="h-4 w-4" />
@@ -251,7 +251,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
           <button
             type="button"
             onClick={swap}
-            className="md:hidden mx-auto -my-1 grid h-9 w-9 place-items-center rounded-full border border-gold/30 bg-card text-gold"
+            className="md:hidden mx-auto -my-1 grid h-9 w-9 place-items-center rounded-full border border-border bg-card text-brand"
             aria-label="Trocar origem e destino"
           >
             <ArrowLeftRight className="h-4 w-4" />
@@ -280,7 +280,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
       {error && (
         <div
           role="alert"
-          className="mt-5 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-center text-xs font-medium text-red-300"
+          className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-center text-xs font-medium text-red-700"
         >
           {error}
         </div>
@@ -406,7 +406,7 @@ function PassengerMenu({
             <button
               type="button"
               onClick={close}
-              className="w-full rounded-lg gold-gradient py-2 text-xs font-bold uppercase tracking-widest text-primary-foreground"
+              className="w-full rounded-lg bg-cta py-2 text-xs font-bold uppercase tracking-widest text-primary-foreground"
             >
               Confirmar
             </button>
@@ -467,7 +467,7 @@ function StepButton({
     <button
       type="button"
       {...rest}
-      className="grid h-11 w-11 md:h-8 md:w-8 place-items-center rounded-full border border-gold/40 text-lg md:text-base text-gold hover:bg-gold/10 active:bg-gold/20 disabled:opacity-30 disabled:cursor-not-allowed transition"
+      className="grid h-11 w-11 md:h-8 md:w-8 place-items-center rounded-full border border-border text-lg md:text-base text-brand hover:bg-accent active:bg-accent disabled:opacity-30 disabled:cursor-not-allowed transition"
     >
       {children}
     </button>
@@ -521,10 +521,10 @@ function Menu({
         type="button"
         onClick={() => setOpen((o) => !o)}
         className={`inline-flex min-h-[36px] items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition ${
-          open ? "border-gold text-gold" : "border-border text-foreground hover:border-gold/40"
+          open ? "border-border text-brand" : "border-border text-foreground hover:border-border"
         }`}
       >
-        <span className="text-gold/70">{icon}</span>
+        <span className="text-brand">{icon}</span>
         <span className="truncate max-w-[9rem]">{label}</span>
         <ChevronDown className="h-3.5 w-3.5 opacity-70" />
       </button>
@@ -543,9 +543,9 @@ function Menu({
             onClick={close}
             className="absolute inset-0 bg-black/60 animate-fade"
           />
-          <div className="absolute inset-x-0 bottom-0 max-h-[85vh] overflow-hidden rounded-t-3xl border-t border-white/10 bg-card shadow-luxe animate-slide-up flex flex-col">
+          <div className="absolute inset-x-0 bottom-0 max-h-[85vh] overflow-hidden rounded-t-3xl border-t border-border bg-card shadow-luxe animate-slide-up flex flex-col">
             <div className="flex items-center justify-between px-5 pt-3 pb-2">
-              <div className="mx-auto h-1.5 w-10 rounded-full bg-white/15" />
+              <div className="mx-auto h-1.5 w-10 rounded-full bg-border" />
             </div>
             <div className="flex items-center justify-between px-5 pb-3">
               <h3 className="font-display text-lg font-bold">{sheetTitle ?? label}</h3>
@@ -562,11 +562,11 @@ function Menu({
               {children(close)}
             </div>
             {showConfirm && (
-              <div className="border-t border-white/5 bg-card px-4 pt-3 safe-bottom">
+              <div className="border-t border-border bg-card px-4 pt-3 safe-bottom">
                 <button
                   type="button"
                   onClick={close}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl gold-gradient px-4 py-3.5 text-sm font-bold uppercase tracking-[0.18em] text-primary-foreground shadow-luxe"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cta px-4 py-3.5 text-sm font-bold uppercase tracking-[0.18em] text-primary-foreground shadow-luxe"
                 >
                   <Check className="h-4 w-4" /> Confirmar
                 </button>
@@ -593,7 +593,7 @@ function MenuItem({
       type="button"
       onClick={onClick}
       className={`block w-full rounded-lg px-4 py-3 md:py-2 text-left text-base md:text-sm transition ${
-        selected ? "bg-gold/10 text-gold" : "text-foreground hover:bg-muted/40"
+        selected ? "bg-accent text-brand" : "text-foreground hover:bg-muted/40"
       }`}
     >
       {children}
@@ -615,17 +615,17 @@ function DateField({
   min?: string;
 }) {
   return (
-    <label className="block min-w-0 rounded-xl border border-border bg-input/50 px-4 py-3 focus-within:border-gold transition">
+    <label className="block min-w-0 rounded-xl border border-border bg-input px-4 py-3 focus-within:border-border transition">
       <div className="flex items-center justify-between text-[10px] uppercase tracking-widest text-muted-foreground">
         <span>{label}</span>
-        <Calendar className="h-3.5 w-3.5 text-gold/70" />
+        <Calendar className="h-3.5 w-3.5 text-brand" />
       </div>
       <input
         type="date"
         value={value}
         min={min}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-1 w-full min-w-0 bg-transparent text-base font-semibold text-foreground outline-none [color-scheme:dark]"
+        className="mt-1 w-full min-w-0 bg-transparent text-base font-semibold text-foreground outline-none [color-scheme:light]"
       />
     </label>
   );

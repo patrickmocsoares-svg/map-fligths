@@ -83,18 +83,18 @@ export function WhatsAppSavingsModal({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="animate-rise relative max-h-[92vh] w-full overflow-y-auto rounded-t-3xl border border-gold/20 bg-card p-7 shadow-luxe sm:max-w-[500px] sm:rounded-3xl sm:p-9"
+        className="animate-rise relative max-h-[92vh] w-full overflow-y-auto rounded-t-3xl border border-border bg-card p-7 shadow-luxe sm:max-w-[500px] sm:rounded-3xl sm:p-9"
       >
         <button
           onClick={onClose}
           aria-label="Fechar"
-          className="absolute right-4 top-4 rounded-full border border-white/10 p-2 text-muted-foreground transition hover:text-foreground"
+          className="absolute right-4 top-4 rounded-full border border-border p-2 text-muted-foreground transition hover:text-foreground"
         >
           <X className="h-4 w-4" />
         </button>
 
-        <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl border border-gold/30 bg-gold/10">
-          <Plane className="h-6 w-6 -rotate-45 text-gold" />
+        <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl border border-border bg-accent">
+          <Plane className="h-6 w-6 -rotate-45 text-brand" />
         </div>
 
         <h2 className="mt-5 text-center font-display text-2xl font-bold leading-tight sm:text-3xl">
@@ -104,8 +104,8 @@ export function WhatsAppSavingsModal({
         <p className="mt-3 text-center text-sm text-muted-foreground">
           Você viu o preço real de{" "}
           <span className="font-semibold text-foreground">{priceLabel}</span> para{" "}
-          <span className="font-mono text-gold">{context.origin}</span> →{" "}
-          <span className="font-mono text-gold">{context.destination}</span>.
+          <span className="font-mono text-brand">{context.origin}</span> →{" "}
+          <span className="font-mono text-brand">{context.destination}</span>.
         </p>
 
         <p className="mt-4 text-center text-sm leading-relaxed text-muted-foreground">
@@ -128,7 +128,7 @@ export function WhatsAppSavingsModal({
 
         <button
           onClick={onClose}
-          className="mt-3 w-full rounded-2xl border border-white/10 px-6 py-3.5 text-sm font-semibold text-muted-foreground transition hover:text-foreground"
+          className="mt-3 w-full rounded-2xl border border-border px-6 py-3.5 text-sm font-semibold text-muted-foreground transition hover:text-foreground"
         >
           Ver outras opções
         </button>

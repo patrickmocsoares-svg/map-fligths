@@ -24,7 +24,7 @@ export const Route = createFileRoute("/_authenticated/admin/configuracoes")({
 });
 
 const field =
-  "w-full rounded-xl border border-white/10 bg-background/60 px-3 py-2.5 text-sm outline-none focus:border-gold/50";
+  "w-full rounded-xl border border-border bg-background/60 px-3 py-2.5 text-sm outline-none focus:border-border";
 
 function SettingsPage() {
   const fetchSettings = useServerFn(getPublicSettingsFn);
@@ -58,7 +58,7 @@ function SettingsPage() {
   if (q.isLoading) {
     return (
       <div className="grid place-items-center py-24">
-        <Loader2 className="h-6 w-6 animate-spin text-gold" />
+        <Loader2 className="h-6 w-6 animate-spin text-brand" />
       </div>
     );
   }
@@ -71,8 +71,8 @@ function SettingsPage() {
       </p>
 
       <div className="mt-7 grid gap-5 lg:grid-cols-[1.1fr_1fr]">
-        <section className="rounded-2xl border border-white/10 bg-card/40 p-5">
-          <h2 className="mb-4 text-[10px] uppercase tracking-[0.24em] text-gold">
+        <section className="rounded-2xl border border-border bg-card/40 p-5">
+          <h2 className="mb-4 text-[10px] uppercase tracking-[0.24em] text-brand">
             Motor de precificação
           </h2>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -120,7 +120,7 @@ function SettingsPage() {
             </Field>
           </div>
 
-          <h2 className="mb-4 mt-8 text-[10px] uppercase tracking-[0.24em] text-gold">
+          <h2 className="mb-4 mt-8 text-[10px] uppercase tracking-[0.24em] text-brand">
             Canais de atendimento
           </h2>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -152,7 +152,7 @@ function SettingsPage() {
           <button
             onClick={() => mutation.mutate(form)}
             disabled={mutation.isPending}
-            className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl gold-gradient px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-luxe disabled:opacity-60"
+            className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cta px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-luxe disabled:opacity-60"
           >
             {mutation.isPending ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -162,13 +162,13 @@ function SettingsPage() {
             Salvar configurações
           </button>
           {mutation.isSuccess ? (
-            <p className="mt-2 text-center text-xs text-emerald-300">Configurações salvas.</p>
+            <p className="mt-2 text-center text-xs text-emerald-700">Configurações salvas.</p>
           ) : null}
           {error ? <p className="mt-2 text-center text-xs text-destructive">{error}</p> : null}
         </section>
 
-        <section className="h-fit rounded-2xl border border-gold/20 bg-card/40 p-5">
-          <h2 className="mb-4 text-[10px] uppercase tracking-[0.24em] text-gold">
+        <section className="h-fit rounded-2xl border border-border bg-card/40 p-5">
+          <h2 className="mb-4 text-[10px] uppercase tracking-[0.24em] text-brand">
             Simulação · tarifa de {formatBRL(2000)}
           </h2>
           <dl className="space-y-2 text-sm">
@@ -177,11 +177,11 @@ function SettingsPage() {
             <Line label="Markup" value={formatBRL(preview.markup)} />
             <Line label="Taxa de embarque" value={formatBRL(preview.airportTax)} />
           </dl>
-          <div className="mt-4 border-t border-white/10 pt-4">
+          <div className="mt-4 border-t border-border pt-4">
             <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
               Preço ao cliente
             </div>
-            <div className="mt-1 font-display text-3xl font-extrabold tracking-tight text-gold">
+            <div className="mt-1 font-display text-3xl font-extrabold tracking-tight text-brand">
               {formatBRL(preview.clientPrice)}
             </div>
             <div className="mt-1 text-xs text-muted-foreground">

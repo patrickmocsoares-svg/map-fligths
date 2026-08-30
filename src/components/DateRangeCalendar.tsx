@@ -108,7 +108,7 @@ export function DateRangeCalendar({
     const days = new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate();
     return (
       <div key={iso(first)} className="min-w-0">
-        <div className={`mb-2 text-center text-sm font-semibold ${light ? "text-slate-900" : "text-foreground"}`}>
+        <div className={`mb-2 text-center text-sm font-semibold ${light ? "text-foreground" : "text-foreground"}`}>
           {MONTHS[m.getMonth()]} {m.getFullYear()}
         </div>
         <div className="grid grid-cols-7 text-center text-[10px] uppercase tracking-wider text-muted-foreground">
@@ -140,13 +140,13 @@ export function DateRangeCalendar({
                   disabled
                     ? "cursor-not-allowed opacity-30"
                     : light
-                      ? "text-slate-800 hover:bg-sky-100"
-                      : "text-foreground hover:bg-gold/15",
-                  inRange ? (light ? "bg-sky-100 text-sky-700" : "bg-gold/10 text-gold") : "",
+                      ? "text-foreground hover:bg-accent"
+                      : "text-foreground hover:bg-accent",
+                  inRange ? (light ? "bg-accent text-brand" : "bg-accent text-brand") : "",
                   isStart || isEnd
                     ? light
-                      ? "bg-sky-600 font-bold text-white hover:bg-sky-700"
-                      : "gold-gradient font-bold text-primary-foreground hover:opacity-90"
+                      ? "bg-cta font-bold text-cta-foreground hover:bg-cta-hover"
+                      : "bg-cta font-bold text-primary-foreground hover:opacity-90"
                     : "",
                 ].join(" ")}
               >
@@ -164,17 +164,17 @@ export function DateRangeCalendar({
       {!light && (
         <div className="flex items-center justify-between text-[10px] uppercase tracking-widest text-muted-foreground">
           <span>{range ? `${labelDepart} · ${labelReturn}` : labelDepart}</span>
-          <Calendar className="h-3.5 w-3.5 text-gold/70" />
+          <Calendar className="h-3.5 w-3.5 text-brand" />
         </div>
       )}
       <div
         className={
           light
-            ? "flex h-full items-center gap-2 truncate text-sm font-medium text-slate-900"
+            ? "flex h-full items-center gap-2 truncate text-sm font-medium text-foreground"
             : "mt-1 truncate text-base font-semibold text-foreground"
         }
       >
-        {light && <Calendar className="h-4 w-4 shrink-0 text-sky-600" />}
+        {light && <Calendar className="h-4 w-4 shrink-0 text-brand-soft" />}
         {depart ? fmt(depart) : "Selecionar data"}
         {range ? ` — ${ret ? fmt(ret) : "volta"}` : ""}
       </div>
@@ -192,21 +192,21 @@ export function DateRangeCalendar({
         onClick={() => setOpen((o) => !o)}
         className={
           light
-            ? `block h-11 w-full min-w-0 rounded-xl border bg-white px-4 text-left text-sm text-slate-900 transition ${open ? "border-sky-500" : "border-sky-200"}`
-            : `block w-full min-w-0 rounded-xl border bg-input/50 px-4 py-3 text-left transition ${open ? "border-gold" : "border-border"}`
+            ? `block h-11 w-full min-w-0 rounded-xl border bg-white px-4 text-left text-sm text-foreground transition ${open ? "border-brand-soft" : "border-border"}`
+            : `block w-full min-w-0 rounded-xl border bg-input/50 px-4 py-3 text-left transition ${open ? "border-border" : "border-border"}`
         }
       >
         {summary}
       </button>
 
       {open && !isMobile && (
-        <div className={`absolute left-0 z-50 mt-2 w-[36rem] max-w-[90vw] rounded-2xl border p-4 shadow-xl ${light ? "border-sky-200 bg-white text-slate-900" : "border-border bg-card shadow-luxe"}`}>
+        <div className={`absolute left-0 z-50 mt-2 w-[36rem] max-w-[90vw] rounded-2xl border p-4 shadow-xl ${light ? "border-border bg-white text-foreground" : "border-border bg-card shadow-luxe"}`}>
           <div className="mb-3 flex items-center justify-between">
             <button
               type="button"
               onClick={() => setCursor((c) => addMonths(c, -1))}
               disabled={iso(cursor) <= iso(startOfMonth(today))}
-              className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground hover:text-gold disabled:opacity-30"
+              className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground hover:text-cta disabled:opacity-30"
             >
               ←
             </button>
@@ -216,7 +216,7 @@ export function DateRangeCalendar({
             <button
               type="button"
               onClick={() => setCursor((c) => addMonths(c, 1))}
-              className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground hover:text-gold"
+              className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground hover:text-cta"
             >
               →
             </button>
@@ -233,9 +233,9 @@ export function DateRangeCalendar({
             onClick={() => setOpen(false)}
             className="absolute inset-0 bg-black/60 animate-fade"
           />
-          <div className="absolute inset-x-0 bottom-0 flex max-h-[90vh] flex-col overflow-hidden rounded-t-3xl border-t border-white/10 bg-card shadow-luxe animate-slide-up">
+          <div className="absolute inset-x-0 bottom-0 flex max-h-[90vh] flex-col overflow-hidden rounded-t-3xl border-t border-border bg-card shadow-luxe animate-slide-up">
             <div className="pt-3">
-              <div className="mx-auto h-1.5 w-10 rounded-full bg-white/15" />
+              <div className="mx-auto h-1.5 w-10 rounded-full bg-border" />
             </div>
             <div className="flex items-center justify-between px-5 py-3">
               <div className="min-w-0">
@@ -257,11 +257,11 @@ export function DateRangeCalendar({
               </button>
             </div>
             <div className="flex-1 overflow-y-auto px-4 pb-2">{body}</div>
-            <div className="border-t border-white/5 bg-card px-4 pt-3 safe-bottom">
+            <div className="border-t border-border bg-card px-4 pt-3 safe-bottom">
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl gold-gradient px-4 py-3.5 text-sm font-bold uppercase tracking-[0.18em] text-primary-foreground"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cta px-4 py-3.5 text-sm font-bold uppercase tracking-[0.18em] text-primary-foreground"
               >
                 <Check className="h-4 w-4" /> Confirmar
               </button>

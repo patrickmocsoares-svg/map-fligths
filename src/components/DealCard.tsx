@@ -72,9 +72,9 @@ export function DealCard({ deal }: { deal: RealDeal }) {
           </h3>
           <div className="mt-2 flex items-center gap-2 text-[11px] text-white/75">
             <span className="font-mono tracking-wider">{deal.originCode}</span>
-            <span className="h-px w-6 bg-gold/60" />
-            <Plane className="h-3 w-3 text-gold" />
-            <span className="h-px w-6 bg-gold/60" />
+            <span className="h-px w-6 bg-brand/40" />
+            <Plane className="h-3 w-3 text-brand" />
+            <span className="h-px w-6 bg-brand/40" />
             <span className="font-mono tracking-wider">{deal.destinationCode}</span>
           </div>
         </div>
@@ -140,7 +140,7 @@ export function DealCard({ deal }: { deal: RealDeal }) {
                 Buscar voos para {deal.destinationCity}
               </div>
             </div>
-            <ArrowRight className="h-4 w-4 text-gold transition-transform group-hover:translate-x-1" />
+            <ArrowRight className="h-4 w-4 text-brand transition-transform group-hover:translate-x-1" />
           </div>
         )}
       </div>

@@ -39,15 +39,15 @@ export const Route = createFileRoute("/_authenticated/admin/")({
 
 function statusPill(status: string) {
   const map: Record<string, string> = {
-    novo: "border-gold/30 bg-gold/10 text-gold",
-    em_analise: "border-white/15 bg-white/5 text-foreground",
-    cotacao_enviada: "border-sky-400/30 bg-sky-400/10 text-sky-300",
-    aguardando_pagamento: "border-amber-400/30 bg-amber-400/10 text-amber-300",
-    pago: "border-emerald-400/30 bg-emerald-400/10 text-emerald-300",
-    emitido: "border-emerald-500/40 bg-emerald-500/15 text-emerald-200",
+    novo: "border-border bg-accent text-brand",
+    em_analise: "border-border bg-muted text-foreground",
+    cotacao_enviada: "border-sky-400/30 bg-sky-400/10 text-sky-700",
+    aguardando_pagamento: "border-amber-400/30 bg-amber-400/10 text-amber-700",
+    pago: "border-emerald-400/30 bg-emerald-400/10 text-emerald-700",
+    emitido: "border-emerald-500/40 bg-emerald-500/15 text-emerald-800",
     cancelado: "border-destructive/30 bg-destructive/10 text-destructive",
   };
-  return map[status] ?? "border-white/15 bg-white/5 text-muted-foreground";
+  return map[status] ?? "border-border bg-muted text-muted-foreground";
 }
 
 function AdminDashboard() {
@@ -85,7 +85,7 @@ function AdminDashboard() {
   const total = orders.data?.total ?? 0;
   const pages = Math.max(1, Math.ceil(total / 15));
   const field =
-    "w-full rounded-xl border border-white/10 bg-background/60 px-3 py-2.5 text-sm outline-none focus:border-gold/50";
+    "w-full rounded-xl border border-border bg-background/60 px-3 py-2.5 text-sm outline-none focus:border-border";
 
   return (
     <div>
@@ -138,7 +138,7 @@ function AdminDashboard() {
               setPage(1);
             }}
             className={`rounded-full border px-3 py-1.5 text-[11px] font-medium transition ${
-              status === s ? "border-gold bg-gold/15 text-gold" : statusPill(s)
+              status === s ? "border-border bg-accent text-brand" : statusPill(s)
             }`}
           >
             {STATUS_LABELS[s]} · {stats.data?.byStatus[s] ?? 0}
@@ -147,7 +147,7 @@ function AdminDashboard() {
       </div>
 
       {/* Filters */}
-      <div className="mt-6 grid gap-3 rounded-2xl border border-white/10 bg-card/40 p-4 sm:grid-cols-2 lg:grid-cols-6">
+      <div className="mt-6 grid gap-3 rounded-2xl border border-border bg-card/40 p-4 sm:grid-cols-2 lg:grid-cols-6">
         <div className="relative sm:col-span-2">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
@@ -204,22 +204,22 @@ function AdminDashboard() {
       <div className="mt-6 space-y-3">
         {orders.isLoading ? (
           <div className="grid place-items-center py-16">
-            <Loader2 className="h-5 w-5 animate-spin text-gold" />
+            <Loader2 className="h-5 w-5 animate-spin text-brand" />
           </div>
         ) : rows.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-white/10 p-12 text-center text-sm text-muted-foreground">
+          <div className="rounded-2xl border border-dashed border-border p-12 text-center text-sm text-muted-foreground">
             Nenhum pedido encontrado com esses filtros.
           </div>
         ) : (
           rows.map((o) => (
             <div
               key={o.id}
-              className="rounded-2xl border border-white/10 bg-card/40 p-4 transition hover:border-gold/25 md:p-5"
+              className="rounded-2xl border border-border bg-card/40 p-4 transition hover:border-border md:p-5"
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="font-mono text-sm font-semibold text-gold">{o.protocol}</span>
+                    <span className="font-mono text-sm font-semibold text-brand">{o.protocol}</span>
                     <span
                       className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${statusPill(o.status)}`}
                     >
@@ -249,7 +249,7 @@ function AdminDashboard() {
                       )}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-3 py-2 text-xs font-medium text-emerald-300"
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-3 py-2 text-xs font-medium text-emerald-700"
                     >
                       <MessageCircle className="h-3.5 w-3.5" /> Falar com cliente
                     </a>
@@ -257,7 +257,7 @@ function AdminDashboard() {
                   <Link
                     to="/admin/pedidos/$id"
                     params={{ id: o.id }}
-                    className="inline-flex items-center gap-1.5 rounded-xl gold-gradient px-4 py-2 text-xs font-semibold text-primary-foreground"
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-cta px-4 py-2 text-xs font-semibold text-primary-foreground"
                   >
                     Abrir <ArrowRight className="h-3.5 w-3.5" />
                   </Link>
@@ -274,7 +274,7 @@ function AdminDashboard() {
           <button
             disabled={page <= 1}
             onClick={() => setPage((p) => p - 1)}
-            className="rounded-xl border border-white/10 px-4 py-2 text-xs disabled:opacity-40"
+            className="rounded-xl border border-border px-4 py-2 text-xs disabled:opacity-40"
           >
             Anterior
           </button>
@@ -284,7 +284,7 @@ function AdminDashboard() {
           <button
             disabled={page >= pages}
             onClick={() => setPage((p) => p + 1)}
-            className="rounded-xl border border-white/10 px-4 py-2 text-xs disabled:opacity-40"
+            className="rounded-xl border border-border px-4 py-2 text-xs disabled:opacity-40"
           >
             Próxima
           </button>
@@ -306,9 +306,9 @@ function Kpi({
   hint?: string;
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-card/40 p-5">
+    <div className="rounded-2xl border border-border bg-card/40 p-5">
       <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-        <span className="text-gold">{icon}</span> {label}
+        <span className="text-brand">{icon}</span> {label}
       </div>
       <div className="mt-2 font-display text-2xl font-extrabold tracking-tight">{value}</div>
       {hint ? <div className="mt-1 text-[11px] text-muted-foreground/80">{hint}</div> : null}

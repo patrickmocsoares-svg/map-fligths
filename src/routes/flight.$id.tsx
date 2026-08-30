@@ -299,23 +299,23 @@ function Detail({
           <Link
             to="/search"
             search={params}
-            className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full bg-black/40 px-3 py-1.5 text-xs text-white/90 backdrop-blur hover:text-gold transition"
+            className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full bg-black/40 px-3 py-1.5 text-xs text-white/90 backdrop-blur hover:text-cta transition"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Voltar
           </Link>
         </div>
         <div className="relative mx-auto flex h-full max-w-6xl flex-col justify-end px-4 pb-6 md:px-8 md:pb-8">
-          <div className="text-[10px] font-medium uppercase tracking-[0.32em] text-gold">
+          <div className="text-[10px] font-medium uppercase tracking-[0.32em] text-brand">
             Detalhes da oferta
           </div>
           <h1 className="mt-2 font-display text-3xl font-bold leading-tight sm:text-4xl md:text-6xl">
             <span className="block sm:inline">{origin?.city ?? offer.outbound.segments[0].originCode}</span>
-            <span className="mx-2 font-serif italic font-normal text-gold-gradient sm:mx-3">→</span>
+            <span className="mx-2 font-serif italic font-normal text-brand sm:mx-3">→</span>
             <span className="block sm:inline">{destination?.city ?? offer.outbound.segments.at(-1)!.destinationCode}</span>
           </h1>
           <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-white/70">
             <span className="inline-flex items-center gap-1.5">
-              <Plane className="h-3.5 w-3.5 text-gold" /> {offer.airline.name}
+              <Plane className="h-3.5 w-3.5 text-brand" /> {offer.airline.name}
             </span>
             <span className="hidden sm:inline">·</span>
             <span>{cabinLabel(offer.cabin)}</span>
@@ -377,7 +377,7 @@ function Detail({
               <div className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
                 Preço total
               </div>
-              <div className="mt-1 font-display text-5xl font-extrabold tracking-tight text-gold-gradient">
+              <div className="mt-1 font-display text-5xl font-extrabold tracking-tight text-brand">
                 {offer.currency === "BRL"
                   ? formatBRL(offer.price)
                   : `${offer.currency} ${offer.price.toFixed(0)}`}
@@ -389,7 +389,7 @@ function Detail({
               </div>
 
               {offer.miles && (
-                <div className="mt-3 flex items-center gap-2 rounded-lg border border-gold/25 bg-gold/5 px-3 py-2 text-xs text-gold-soft">
+                <div className="mt-3 flex items-center gap-2 rounded-lg border border-border bg-accent px-3 py-2 text-xs text-brand-soft">
                   <Sparkles className="h-3.5 w-3.5" />
                   Ou {formatMiles(offer.miles)} {t("misc.miles")}
                 </div>
@@ -417,7 +417,7 @@ function Detail({
                   target="_blank"
                   rel="noopener sponsored"
                   onClick={handleAffiliateClick}
-                  className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl gold-gradient px-4 py-3.5 text-sm font-bold text-primary-foreground shadow-luxe transition hover:opacity-95"
+                  className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cta px-4 py-3.5 text-sm font-bold text-primary-foreground shadow-luxe transition hover:opacity-95"
                 >
                   Continuar para compra <ArrowRight className="h-4 w-4" />
                 </a>
@@ -428,7 +428,7 @@ function Detail({
                   : `Você será direcionado a ${affiliatePartnerName}.`}
               </p>
               {offer.provider === "travelpayouts" && (
-                <p className="mt-2 rounded-md border border-gold/20 bg-gold/5 px-3 py-2 text-center text-[10px] leading-relaxed text-muted-foreground">
+                <p className="mt-2 rounded-md border border-border bg-accent px-3 py-2 text-center text-[10px] leading-relaxed text-muted-foreground">
                   Preço indicativo. O valor final será confirmado pelo parceiro no momento da compra.
                 </p>
               )}
@@ -438,8 +438,8 @@ function Detail({
                   onClick={toggleSave}
                   className={`inline-flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs transition ${
                     isSaved
-                      ? "border-gold text-gold bg-gold/10"
-                      : "border-border text-muted-foreground hover:text-gold hover:border-gold/40"
+                      ? "border-border text-brand bg-accent"
+                      : "border-border text-muted-foreground hover:text-cta hover:border-border"
                   }`}
                 >
                   {isSaved ? <Check className="h-3.5 w-3.5" /> : <Heart className="h-3.5 w-3.5" />}
@@ -447,14 +447,14 @@ function Detail({
                 </button>
                 <button
                   onClick={() => setShowAlert((v) => !v)}
-                  className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border px-3 py-2 text-xs text-muted-foreground transition hover:text-gold hover:border-gold/40"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border px-3 py-2 text-xs text-muted-foreground transition hover:text-cta hover:border-border"
                 >
                   <Bell className="h-3.5 w-3.5" /> {t("flight.alert")}
                 </button>
               </div>
 
               {showAlert && (
-                <div className="mt-3 rounded-lg border border-gold/20 p-3">
+                <div className="mt-3 rounded-lg border border-border p-3">
                   <label className="text-[10px] uppercase tracking-widest text-muted-foreground">
                     {t("alerts.target")}
                   </label>
@@ -462,11 +462,11 @@ function Detail({
                     type="number"
                     value={target}
                     onChange={(e) => setTarget(Number(e.target.value))}
-                    className="mt-1 w-full rounded-md border border-border bg-input px-3 py-2 text-sm outline-none focus:border-gold"
+                    className="mt-1 w-full rounded-md border border-border bg-input px-3 py-2 text-sm outline-none focus:border-border"
                   />
                   <button
                     onClick={createAlert}
-                    className="mt-2 w-full rounded-md gold-gradient py-2 text-xs font-semibold text-primary-foreground"
+                    className="mt-2 w-full rounded-md bg-cta py-2 text-xs font-semibold text-primary-foreground"
                   >
                     {t("alerts.create")}
                   </button>
@@ -517,11 +517,11 @@ function Detail({
       </div>
 
       {/* Sticky mobile CTA */}
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-card/95 backdrop-blur-xl safe-bottom lg:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 backdrop-blur-xl safe-bottom lg:hidden">
         <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 pt-3">
           <div className="min-w-0 flex-1">
             <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">Total</div>
-            <div className="truncate font-display text-2xl font-extrabold tracking-tight text-gold-gradient">
+            <div className="truncate font-display text-2xl font-extrabold tracking-tight text-brand">
               {offer.currency === "BRL"
                 ? formatBRL(offer.price)
                 : `${offer.currency} ${offer.price.toFixed(0)}`}
@@ -541,7 +541,7 @@ function Detail({
               target="_blank"
               rel="noopener sponsored"
               onClick={handleAffiliateClick}
-              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl gold-gradient px-5 py-3.5 text-sm font-bold text-primary-foreground shadow-luxe"
+              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-cta px-5 py-3.5 text-sm font-bold text-primary-foreground shadow-luxe"
             >
               Continuar <ArrowRight className="h-4 w-4" />
             </a>
@@ -578,7 +578,7 @@ function ItineraryCard({
       <div className="flex items-baseline justify-between gap-3">
 
         <div>
-          <div className="text-[10px] font-semibold uppercase tracking-[0.24em] text-gold">
+          <div className="text-[10px] font-semibold uppercase tracking-[0.24em] text-brand">
             {title}
           </div>
           <div className="mt-1 font-display text-xl font-bold">{formatDate(date)}</div>
@@ -618,7 +618,7 @@ function ItineraryCard({
                   <div className="mt-0.5 text-[11px] text-muted-foreground">{formatShortDate(dep)}</div>
                 </div>
                 <div className="flex flex-1 items-center gap-3">
-                  <span className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+                  <span className="h-px flex-1 bg-gradient-to-r from-transparent via-cta/40 to-transparent" />
                   <div className="text-center">
                     <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                       {seg.airlineCode} {seg.flightNumber}
@@ -628,7 +628,7 @@ function ItineraryCard({
                       {seg.aircraft ? ` · ${seg.aircraft}` : ""}
                     </div>
                   </div>
-                  <span className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+                  <span className="h-px flex-1 bg-gradient-to-r from-transparent via-cta/40 to-transparent" />
                 </div>
                 <div className="text-right">
                   <div className="font-display text-2xl font-bold leading-none">{formatTime(arr)}</div>
@@ -640,7 +640,7 @@ function ItineraryCard({
               </div>
               {layover != null && (
                 <div className="mt-4 flex items-center gap-2 rounded-lg border border-border/60 bg-muted/20 px-3 py-2 text-[11px] text-muted-foreground">
-                  <Clock className="h-3 w-3 text-gold" />
+                  <Clock className="h-3 w-3 text-brand" />
                   Conexão em {seg.destinationCode} · {Math.floor(layover / 60)}h
                   {(layover % 60).toString().padStart(2, "0")}
                 </div>
@@ -691,7 +691,7 @@ function FareRow({
   return (
     <li className="flex items-center justify-between rounded-lg border border-border/50 bg-muted/10 px-3 py-2.5">
       <span className="inline-flex items-center gap-2 text-muted-foreground">
-        <span className="text-gold">{icon}</span>
+        <span className="text-brand">{icon}</span>
         {label}
       </span>
       <span className="font-medium text-foreground">{value}</span>
@@ -728,14 +728,14 @@ function Fallback({
         (action.to ? (
           <Link
             to={action.to}
-            className="mt-6 inline-flex items-center gap-2 rounded-full gold-gradient px-5 py-2.5 text-sm font-semibold text-primary-foreground"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-cta px-5 py-2.5 text-sm font-semibold text-primary-foreground"
           >
             {action.label} <ArrowRight className="h-4 w-4" />
           </Link>
         ) : (
           <button
             onClick={action.onClick}
-            className="mt-6 inline-flex items-center gap-2 rounded-full gold-gradient px-5 py-2.5 text-sm font-semibold text-primary-foreground"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-cta px-5 py-2.5 text-sm font-semibold text-primary-foreground"
           >
             {action.label} <ArrowRight className="h-4 w-4" />
           </button>

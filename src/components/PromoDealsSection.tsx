@@ -97,11 +97,11 @@ export function PromoDealsSection() {
   );
 
   return (
-    <section className="border-t border-white/5 bg-background">
+    <section className="border-t border-border bg-background">
       <div className="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-gold">
+            <div className="inline-flex items-center gap-2 rounded-full border border-cta/40 bg-cta/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-cta">
               <Flame className="h-3 w-3" /> Promoções relâmpago
             </div>
             <h2 className="mt-4 font-display text-3xl font-bold leading-tight tracking-tight md:text-5xl">
@@ -115,7 +115,7 @@ export function PromoDealsSection() {
           <button
             type="button"
             onClick={() => setRound((r) => r + 1)}
-            className="inline-flex shrink-0 items-center gap-2 rounded-xl border border-gold/25 px-4 py-3 text-sm font-semibold text-gold transition-colors hover:bg-gold/10"
+            className="btn-brand shrink-0 text-sm"
           >
             <RefreshCw className="h-4 w-4" /> Ver outras ofertas
           </button>
@@ -129,8 +129,8 @@ export function PromoDealsSection() {
               onClick={() => setFilter(f.key)}
               className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition-colors ${
                 filter === f.key
-                  ? "gold-gradient text-primary-foreground"
-                  : "border border-white/10 text-muted-foreground hover:border-gold/40 hover:text-gold"
+                  ? "bg-cta text-cta-foreground"
+                  : "border border-border text-muted-foreground hover:border-brand hover:text-brand"
               }`}
             >
               {f.label}
@@ -163,11 +163,11 @@ export function PromoDealsSection() {
                       loading="lazy"
                       className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/25 to-transparent" />
-                    <span className="absolute left-4 top-4 rounded-full bg-destructive px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-destructive-foreground shadow-lg">
+                    <div className="absolute inset-0 bg-gradient-to-t from-brand/95 via-brand/30 to-transparent" />
+                    <span className="absolute left-4 top-4 rounded-lg bg-cta px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-cta-foreground shadow-lg">
                       -{discount}%
                     </span>
-                    <span className="absolute right-4 top-4 rounded-full bg-background/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-gold backdrop-blur">
+                    <span className="absolute right-4 top-4 rounded-full bg-white/85 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-brand backdrop-blur">
                       {isDomesticPromo(code) ? "Nacional" : "Internacional"}
                     </span>
                     <div className="absolute bottom-4 left-4 right-4">
@@ -184,22 +184,22 @@ export function PromoDealsSection() {
                   <div className="mt-4 flex items-end justify-between gap-3">
                     <div>
                       <div className="text-xs text-muted-foreground line-through">{brl(was)}</div>
-                      <div className="font-display text-3xl font-extrabold leading-none text-gold">
+                      <div className="font-display text-3xl font-extrabold leading-none text-brand">
                         {brl(price)}
                       </div>
                       <div className="mt-1 text-[11px] text-muted-foreground">
                         estimativa a partir de · por pessoa
                       </div>
                     </div>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-white/5 px-2.5 py-1 text-[10px] font-medium text-white/70">
-                      <Timer className="h-3 w-3 text-gold" /> {urgency}
+                    <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-[10px] font-medium text-muted-foreground">
+                      <Timer className="h-3 w-3 text-cta" /> {urgency}
                     </span>
                   </div>
 
                   <button
                     type="button"
                     onClick={() => setOpenCode(code)}
-                    className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-gold/30 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-gold transition-colors hover:bg-gold/10"
+                    className="btn-brand mt-4 w-full px-4 py-2.5 text-xs uppercase tracking-[0.16em]"
                   >
                     <Plane className="h-4 w-4" /> Ver voos desta promoção
                   </button>
@@ -208,7 +208,7 @@ export function PromoDealsSection() {
                     href={whatsappLink(msg, settings.whatsappNumber)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-whatsapp px-4 py-3 text-sm font-bold text-whatsapp-foreground transition-transform hover:-translate-y-0.5"
+                    className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-whatsapp px-4 py-3 text-sm font-bold text-whatsapp-foreground transition-transform hover:-translate-y-0.5"
                   >
                     <MessageCircle className="h-4 w-4" /> QUERO ECONOMIZAR
                   </a>
@@ -239,7 +239,7 @@ export function PromoDealsSection() {
                 {offers.map((o) => {
                   const msg = `Olá! Vi a promoção ${ORIGIN} → ${selected.city} (${selected.code}) com ${o.airlineName}, saindo ${o.depart}, por cerca de ${brl(o.price)}. Quero economizar com milhas.`;
                   return (
-                    <div key={o.id} className="rounded-2xl border border-white/10 bg-card/60 p-4">
+                    <div key={o.id} className="rounded-2xl border border-border bg-card p-4">
                       <div className="flex items-start justify-between gap-3">
                         <div>
                           <div className="text-sm font-semibold">{o.airlineName}</div>
@@ -248,7 +248,7 @@ export function PromoDealsSection() {
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-display text-2xl font-extrabold leading-none text-gold">
+                          <div className="font-display text-2xl font-extrabold leading-none text-brand">
                             {brl(o.price)}
                           </div>
                           <div className="text-[10px] text-muted-foreground">estimativa</div>
@@ -256,19 +256,19 @@ export function PromoDealsSection() {
                       </div>
                       <div className="mt-3 flex items-center gap-3 text-sm text-muted-foreground">
                         <span className="font-medium text-foreground">{o.depart}</span>
-                        <span className="h-px flex-1 bg-white/10" />
+                        <span className="h-px flex-1 bg-muted" />
                         <span className="text-[11px] uppercase tracking-wide">
                           {o.durationLabel} ·{" "}
                           {o.stops === 0 ? "direto" : `${o.stops} parada${o.stops > 1 ? "s" : ""}`}
                         </span>
-                        <span className="h-px flex-1 bg-white/10" />
+                        <span className="h-px flex-1 bg-muted" />
                         <span className="font-medium text-foreground">{o.arrive}</span>
                       </div>
                       <a
                         href={whatsappLink(msg, settings.whatsappNumber)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-whatsapp px-4 py-2.5 text-sm font-bold text-whatsapp-foreground transition-transform hover:-translate-y-0.5"
+                        className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-whatsapp px-4 py-2.5 text-sm font-bold text-whatsapp-foreground transition-transform hover:-translate-y-0.5"
                       >
                         <MessageCircle className="h-4 w-4" /> QUERO ECONOMIZAR
                       </a>

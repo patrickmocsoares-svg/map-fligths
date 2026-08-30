@@ -61,20 +61,20 @@ function AuthPage() {
   }
 
   const field =
-    "w-full rounded-xl border border-white/10 bg-background/60 px-4 py-3 text-[15px] outline-none transition-colors focus:border-gold/50";
+    "w-full rounded-xl border border-border bg-background/60 px-4 py-3 text-[15px] outline-none transition-colors focus:border-border";
 
   return (
     <div className="grid min-h-screen place-items-center px-5 py-14">
       <div className="w-full max-w-sm">
         <Link to="/" className="flex items-center justify-center gap-2.5">
-          <span className="grid h-9 w-9 place-items-center rounded-lg gold-gradient text-primary-foreground shadow-luxe">
+          <span className="grid h-9 w-9 place-items-center rounded-lg bg-cta text-primary-foreground shadow-luxe">
             <Plane className="h-4 w-4" strokeWidth={2.5} />
           </span>
           <span className="font-display text-lg tracking-tight">MAB Flights</span>
         </Link>
 
-        <div className="mt-8 rounded-3xl border border-white/10 bg-card/50 p-6 md:p-8">
-          <div className="inline-flex items-center gap-2 rounded-full border border-gold/20 bg-gold/5 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-gold">
+        <div className="mt-8 rounded-3xl border border-border bg-card/50 p-6 md:p-8">
+          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-accent px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-brand">
             <Lock className="h-3 w-3" /> Área restrita
           </div>
           <h1 className="mt-4 font-display text-2xl font-bold tracking-tight">
@@ -119,7 +119,7 @@ function AuthPage() {
               </p>
             ) : null}
             {info ? (
-              <p className="rounded-xl border border-gold/25 bg-gold/5 px-3 py-2 text-xs text-gold-soft">
+              <p className="rounded-xl border border-border bg-accent px-3 py-2 text-xs text-brand-soft">
                 {info}
               </p>
             ) : null}
@@ -127,7 +127,7 @@ function AuthPage() {
             <button
               type="submit"
               disabled={busy}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl gold-gradient px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-luxe disabled:opacity-60"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cta px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-luxe disabled:opacity-60"
             >
               {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
               {mode === "signin" ? "Entrar" : "Criar conta"}

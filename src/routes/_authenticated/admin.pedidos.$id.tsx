@@ -33,7 +33,7 @@ export const Route = createFileRoute("/_authenticated/admin/pedidos/$id")({
 });
 
 const field =
-  "w-full rounded-xl border border-white/10 bg-background/60 px-3 py-2.5 text-sm outline-none focus:border-gold/50";
+  "w-full rounded-xl border border-border bg-background/60 px-3 py-2.5 text-sm outline-none focus:border-border";
 
 function OrderDetail() {
   const { id } = Route.useParams();
@@ -103,7 +103,7 @@ function OrderDetail() {
   if (q.isLoading) {
     return (
       <div className="grid place-items-center py-24">
-        <Loader2 className="h-6 w-6 animate-spin text-gold" />
+        <Loader2 className="h-6 w-6 animate-spin text-brand" />
       </div>
     );
   }
@@ -126,7 +126,7 @@ function OrderDetail() {
 
       <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <div className="font-mono text-sm font-semibold text-gold">{order.protocol}</div>
+          <div className="font-mono text-sm font-semibold text-brand">{order.protocol}</div>
           <h1 className="mt-1 font-display text-2xl font-bold tracking-tight md:text-3xl">
             {order.origin_iata} → {order.destination_iata}
           </h1>
@@ -143,7 +143,7 @@ function OrderDetail() {
               )}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-2.5 text-xs font-medium text-emerald-300"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-2.5 text-xs font-medium text-emerald-700"
             >
               <MessageCircle className="h-4 w-4" /> Falar no WhatsApp
             </a>
@@ -151,7 +151,7 @@ function OrderDetail() {
           <button
             onClick={() => eticket.mutate()}
             disabled={eticket.isPending}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-white/12 px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-border px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground disabled:opacity-50"
           >
             <Mail className="h-4 w-4" />
             {eticket.isSuccess ? "E-ticket na fila" : "Enviar e-ticket"}
@@ -194,7 +194,7 @@ function OrderDetail() {
               value={order.budget_brl ? formatBRL(Number(order.budget_brl)) : "—"}
             />
             {order.notes ? (
-              <div className="mt-3 rounded-xl border border-white/10 bg-background/50 p-3 text-sm text-muted-foreground">
+              <div className="mt-3 rounded-xl border border-border bg-background/50 p-3 text-sm text-muted-foreground">
                 {order.notes}
               </div>
             ) : null}
@@ -207,7 +207,7 @@ function OrderDetail() {
               <ol className="space-y-3">
                 {history.map((h) => (
                   <li key={h.id} className="flex gap-3">
-                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-cta" />
                     <div>
                       <div className="text-sm">
                         {h.from_status
@@ -249,7 +249,7 @@ function OrderDetail() {
                 <button
                   type="button"
                   onClick={autoQuote}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-gold/30 bg-gold/10 px-4 py-2.5 text-xs font-semibold text-gold"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-accent px-4 py-2.5 text-xs font-semibold text-brand"
                 >
                   <Sparkles className="h-3.5 w-3.5" /> Calcular automaticamente
                 </button>
@@ -309,9 +309,9 @@ function OrderDetail() {
             </div>
 
             {realPrice && finalPrice ? (
-              <div className="mt-4 rounded-xl border border-gold/20 bg-gold/5 p-3 text-sm">
+              <div className="mt-4 rounded-xl border border-border bg-accent p-3 text-sm">
                 Economia estimada do cliente:{" "}
-                <strong className="text-gold">
+                <strong className="text-brand">
                   {formatBRL(Math.max(0, Number(realPrice) - Number(finalPrice)))}
                 </strong>{" "}
                 {Number(realPrice) > 0
@@ -370,7 +370,7 @@ function OrderDetail() {
                 })
               }
               disabled={mutation.isPending}
-              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl gold-gradient px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-luxe disabled:opacity-60"
+              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cta px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-luxe disabled:opacity-60"
             >
               {mutation.isPending ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -380,7 +380,7 @@ function OrderDetail() {
               Salvar pedido
             </button>
             {mutation.isSuccess ? (
-              <p className="mt-2 text-center text-xs text-emerald-300">Alterações salvas.</p>
+              <p className="mt-2 text-center text-xs text-emerald-700">Alterações salvas.</p>
             ) : null}
             {mutation.isError ? (
               <p className="mt-2 text-center text-xs text-destructive">
@@ -396,8 +396,8 @@ function OrderDetail() {
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-2xl border border-white/10 bg-card/40 p-5">
-      <h2 className="mb-4 text-[10px] uppercase tracking-[0.24em] text-gold">{title}</h2>
+    <section className="rounded-2xl border border-border bg-card/40 p-5">
+      <h2 className="mb-4 text-[10px] uppercase tracking-[0.24em] text-brand">{title}</h2>
       {children}
     </section>
   );
@@ -405,7 +405,7 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex justify-between gap-4 border-b border-white/5 py-2 text-sm last:border-0">
+    <div className="flex justify-between gap-4 border-b border-border py-2 text-sm last:border-0">
       <span className="text-muted-foreground">{label}</span>
       <span className="text-right font-medium">{value}</span>
     </div>

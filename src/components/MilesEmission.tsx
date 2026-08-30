@@ -50,8 +50,8 @@ export function MilesOfferCTA({ ctx }: { ctx: MilesContext }) {
   const estimated = ctx.price ? Math.round(ctx.price * 0.6) : null;
 
   return (
-    <div className="rounded-2xl border border-gold/25 bg-gold/[0.06] p-4">
-      <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-gold">
+    <div className="rounded-2xl border border-border bg-cta/[0.06] p-4">
+      <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-brand">
         <Plane className="h-3.5 w-3.5" /> {t("miles.cta.title")}
       </div>
       <p className="mt-1.5 text-sm text-foreground">{t("miles.cta.text")}</p>
@@ -59,7 +59,7 @@ export function MilesOfferCTA({ ctx }: { ctx: MilesContext }) {
       {estimated != null && (
         <p className="mt-2 text-sm text-foreground">
           <span className="text-muted-foreground">{t("miles.cta.from")} </span>
-          <strong className="text-gold">{fmtPrice(estimated, ctx.currency)}*</strong>
+          <strong className="text-brand">{fmtPrice(estimated, ctx.currency)}*</strong>
         </p>
       )}
       <a href={href} target="_blank" rel="noopener noreferrer" className={`${whatsBtn} mt-3`}>
@@ -74,11 +74,11 @@ export function MilesOfferCTA({ ctx }: { ctx: MilesContext }) {
 export function MilesReferencePrice({ ctx }: { ctx: MilesContext }) {
   const t = useT();
   return (
-    <div className="rounded-2xl border border-white/10 bg-card p-5">
+    <div className="rounded-2xl border border-border bg-card p-5">
       <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
         {t("miles.reference.title")}
       </div>
-      <div className="mt-1 font-display text-4xl font-extrabold text-gold">
+      <div className="mt-1 font-display text-4xl font-extrabold text-brand">
         {fmtPrice(ctx.price, ctx.currency)}
       </div>
       <p className="mt-2 text-xs text-muted-foreground">{t("miles.reference.note")}</p>
@@ -94,8 +94,8 @@ export function MilesNoResults({ ctx }: { ctx: MilesContext }) {
   const t = useT();
   const href = useMilesLink(ctx);
   return (
-    <div className="rounded-3xl border border-gold/25 bg-gold/[0.06] p-6">
-      <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-gold">
+    <div className="rounded-3xl border border-border bg-cta/[0.06] p-6">
+      <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-brand">
         <Plane className="h-3.5 w-3.5" /> {t("miles.none.title")}
       </div>
       <p className="mt-2 text-sm text-foreground">{t("miles.none.text")}</p>
@@ -111,8 +111,8 @@ export function MilesBanner({ ctx }: { ctx: MilesContext }) {
   const t = useT();
   const href = useMilesLink(ctx);
   return (
-    <section className="overflow-hidden rounded-3xl border border-gold/20 bg-card/70 p-6 md:p-8">
-      <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-gold">
+    <section className="overflow-hidden rounded-3xl border border-border bg-card/70 p-6 md:p-8">
+      <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-brand">
         <Gem className="h-3.5 w-3.5" /> {t("miles.banner.title")}
       </div>
       <h3 className="mt-3 font-display text-2xl font-bold leading-tight md:text-3xl">
