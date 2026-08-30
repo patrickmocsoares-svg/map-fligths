@@ -108,7 +108,7 @@ export function DateRangeCalendar({
     const days = new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate();
     return (
       <div key={iso(first)} className="min-w-0">
-        <div className={`mb-2 text-center text-sm font-semibold ${light ? "text-slate-900" : "text-foreground"}`}>
+        <div className={`mb-2 text-center text-sm font-semibold ${light ? "text-foreground" : "text-foreground"}`}>
           {MONTHS[m.getMonth()]} {m.getFullYear()}
         </div>
         <div className="grid grid-cols-7 text-center text-[10px] uppercase tracking-wider text-muted-foreground">
@@ -140,12 +140,12 @@ export function DateRangeCalendar({
                   disabled
                     ? "cursor-not-allowed opacity-30"
                     : light
-                      ? "text-slate-800 hover:bg-sky-100"
+                      ? "text-foreground hover:bg-accent"
                       : "text-foreground hover:bg-gold/15",
-                  inRange ? (light ? "bg-sky-100 text-sky-700" : "bg-gold/10 text-gold") : "",
+                  inRange ? (light ? "bg-accent text-brand" : "bg-gold/10 text-gold") : "",
                   isStart || isEnd
                     ? light
-                      ? "bg-sky-600 font-bold text-white hover:bg-sky-700"
+                      ? "bg-cta font-bold text-cta-foreground hover:bg-cta-hover"
                       : "gold-gradient font-bold text-primary-foreground hover:opacity-90"
                     : "",
                 ].join(" ")}
@@ -170,11 +170,11 @@ export function DateRangeCalendar({
       <div
         className={
           light
-            ? "flex h-full items-center gap-2 truncate text-sm font-medium text-slate-900"
+            ? "flex h-full items-center gap-2 truncate text-sm font-medium text-foreground"
             : "mt-1 truncate text-base font-semibold text-foreground"
         }
       >
-        {light && <Calendar className="h-4 w-4 shrink-0 text-sky-600" />}
+        {light && <Calendar className="h-4 w-4 shrink-0 text-brand-soft" />}
         {depart ? fmt(depart) : "Selecionar data"}
         {range ? ` — ${ret ? fmt(ret) : "volta"}` : ""}
       </div>
@@ -192,7 +192,7 @@ export function DateRangeCalendar({
         onClick={() => setOpen((o) => !o)}
         className={
           light
-            ? `block h-11 w-full min-w-0 rounded-xl border bg-white px-4 text-left text-sm text-slate-900 transition ${open ? "border-sky-500" : "border-sky-200"}`
+            ? `block h-11 w-full min-w-0 rounded-xl border bg-white px-4 text-left text-sm text-foreground transition ${open ? "border-brand-soft" : "border-border"}`
             : `block w-full min-w-0 rounded-xl border bg-input/50 px-4 py-3 text-left transition ${open ? "border-gold" : "border-border"}`
         }
       >
@@ -200,7 +200,7 @@ export function DateRangeCalendar({
       </button>
 
       {open && !isMobile && (
-        <div className={`absolute left-0 z-50 mt-2 w-[36rem] max-w-[90vw] rounded-2xl border p-4 shadow-xl ${light ? "border-sky-200 bg-white text-slate-900" : "border-border bg-card shadow-luxe"}`}>
+        <div className={`absolute left-0 z-50 mt-2 w-[36rem] max-w-[90vw] rounded-2xl border p-4 shadow-xl ${light ? "border-border bg-white text-foreground" : "border-border bg-card shadow-luxe"}`}>
           <div className="mb-3 flex items-center justify-between">
             <button
               type="button"

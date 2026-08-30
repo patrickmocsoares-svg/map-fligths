@@ -162,7 +162,7 @@ function SettingsPage() {
             Salvar configurações
           </button>
           {mutation.isSuccess ? (
-            <p className="mt-2 text-center text-xs text-emerald-300">Configurações salvas.</p>
+            <p className="mt-2 text-center text-xs text-emerald-700">Configurações salvas.</p>
           ) : null}
           {error ? <p className="mt-2 text-center text-xs text-destructive">{error}</p> : null}
         </section>

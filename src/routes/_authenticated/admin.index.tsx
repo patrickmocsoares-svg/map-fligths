@@ -41,10 +41,10 @@ function statusPill(status: string) {
   const map: Record<string, string> = {
     novo: "border-gold/30 bg-gold/10 text-gold",
     em_analise: "border-border bg-muted text-foreground",
-    cotacao_enviada: "border-sky-400/30 bg-sky-400/10 text-sky-300",
-    aguardando_pagamento: "border-amber-400/30 bg-amber-400/10 text-amber-300",
-    pago: "border-emerald-400/30 bg-emerald-400/10 text-emerald-300",
-    emitido: "border-emerald-500/40 bg-emerald-500/15 text-emerald-200",
+    cotacao_enviada: "border-sky-400/30 bg-sky-400/10 text-sky-700",
+    aguardando_pagamento: "border-amber-400/30 bg-amber-400/10 text-amber-700",
+    pago: "border-emerald-400/30 bg-emerald-400/10 text-emerald-700",
+    emitido: "border-emerald-500/40 bg-emerald-500/15 text-emerald-800",
     cancelado: "border-destructive/30 bg-destructive/10 text-destructive",
   };
   return map[status] ?? "border-border bg-muted text-muted-foreground";
@@ -249,7 +249,7 @@ function AdminDashboard() {
                       )}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-3 py-2 text-xs font-medium text-emerald-300"
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-3 py-2 text-xs font-medium text-emerald-700"
                     >
                       <MessageCircle className="h-3.5 w-3.5" /> Falar com cliente
                     </a>

@@ -280,7 +280,7 @@ export function FlightSearchForm({ compact = false }: { compact?: boolean }) {
       {error && (
         <div
           role="alert"
-          className="mt-5 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-center text-xs font-medium text-red-300"
+          className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-center text-xs font-medium text-red-700"
         >
           {error}
         </div>
