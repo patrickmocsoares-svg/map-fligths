@@ -90,6 +90,7 @@ function RequestPage() {
   const [form, setForm] = useState<OrderRequestInput>(emptyForm);
   const [errors, setErrors] = useState<Errors>({});
   const [result, setResult] = useState<OrderCreated | null>(null);
+  const { settings } = useSettings();
 
   const waNumber = settings?.whatsapp_number;
 
