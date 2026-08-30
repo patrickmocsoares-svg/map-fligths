@@ -142,19 +142,21 @@ function RequestPage() {
               <CheckCircle2 className="h-6 w-6" />
             </div>
             <h1 className="mt-6 font-display text-3xl font-bold leading-tight tracking-tight md:text-4xl">
-              Solicitação recebida com sucesso.
+              Solicitação recebida com sucesso! ✈️
             </h1>
             <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
-              Nossa equipe analisará as informações fornecidas e preparará seu orçamento de
-              acordo com os dados da sua viagem.
+              Nossa equipe recebeu os dados da sua viagem e iniciará a análise das melhores
+              opções para você.
             </p>
             <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
               Após a análise, o orçamento será encaminhado ao e-mail informado e também
               disponibilizado por meio do WhatsApp para maior comodidade.
             </p>
             <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
-              Agradecemos por escolher a TRIPmoc.
+              Agradecemos pela confiança e em breve entraremos em contato com as melhores
+              opções para sua viagem.
             </p>
+
             <p className="mt-4 text-xs text-muted-foreground/80">
               Atendimento: {settings?.businessHours ?? SUPPORT_HOURS}
             </p>
