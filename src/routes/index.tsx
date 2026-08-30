@@ -170,13 +170,12 @@ function Home() {
             ))}
           </div>
         ) : (
-          <div className="mt-10 rounded-3xl border border-dashed border-border bg-muted p-10 text-center">
-            <div className="text-sm text-muted-foreground">
-              Ainda não há ofertas em cache para esta semana.
-            </div>
-            <Link to="/search" className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-brand-soft">
-              Buscar voos agora <ArrowRight className="h-4 w-4" />
-            </Link>
+          <div className="mt-10">
+            <p className="mb-5 text-sm text-muted-foreground">
+              Sem tarifa em tempo real neste momento — veja oportunidades com preço indicativo e
+              fale com um consultor.
+            </p>
+            <RecoveryOffers scope="international" />
           </div>
         )}
 
