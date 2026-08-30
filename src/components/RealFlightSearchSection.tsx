@@ -146,7 +146,7 @@ export function RealFlightSearchSection() {
   };
 
   const field =
-    "w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/30";
+    "w-full rounded-lg border border-border bg-card px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-brand-soft focus:ring-2 focus:ring-brand-soft/30";
   const labelCls = "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-brand-foreground/80";
 
   return (
