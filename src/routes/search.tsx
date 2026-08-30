@@ -368,7 +368,7 @@ function FlightRow({
           <button
             type="button"
             onClick={onWantSavings}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-whatsapp px-5 py-3 text-xs font-bold uppercase tracking-wide text-whatsapp-foreground shadow-luxe transition hover:brightness-110 active:scale-[0.99] md:w-auto"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-cta hover:bg-cta-hover px-5 py-3 text-xs font-bold uppercase tracking-wide text-cta-foreground shadow-luxe transition hover:brightness-110 active:scale-[0.99] md:w-auto"
           >
             <MessageCircle className="h-4 w-4" /> Quero economizar
           </button>

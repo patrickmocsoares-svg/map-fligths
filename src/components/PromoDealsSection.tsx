@@ -208,7 +208,7 @@ export function PromoDealsSection() {
                     href={whatsappLink(msg, settings.whatsappNumber)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-whatsapp px-4 py-3 text-sm font-bold text-whatsapp-foreground transition-transform hover:-translate-y-0.5"
+                    className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-cta hover:bg-cta-hover px-4 py-3 text-sm font-bold text-cta-foreground transition-transform hover:-translate-y-0.5"
                   >
                     <MessageCircle className="h-4 w-4" /> QUERO ECONOMIZAR
                   </a>
@@ -268,7 +268,7 @@ export function PromoDealsSection() {
                         href={whatsappLink(msg, settings.whatsappNumber)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-whatsapp px-4 py-2.5 text-sm font-bold text-whatsapp-foreground transition-transform hover:-translate-y-0.5"
+                        className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-cta hover:bg-cta-hover px-4 py-2.5 text-sm font-bold text-cta-foreground transition-transform hover:-translate-y-0.5"
                       >
                         <MessageCircle className="h-4 w-4" /> QUERO ECONOMIZAR
                       </a>
