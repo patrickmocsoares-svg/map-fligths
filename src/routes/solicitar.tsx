@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
@@ -7,7 +7,6 @@ import {
   CheckCircle2,
   Loader2,
   MapPin,
-  MessageCircle,
   Plane,
   ShieldCheck,
   Sparkles,
@@ -23,7 +22,7 @@ import {
   type OrderCreated,
   type OrderRequestInput,
 } from "@/lib/orders/schema";
-import { whatsappLink, SUPPORT_HOURS } from "@/lib/contact-config";
+import { SUPPORT_HOURS } from "@/lib/contact-config";
 import { useSettings } from "@/hooks/useSettings";
 
 export const Route = createFileRoute("/solicitar")({
@@ -446,18 +445,18 @@ function RequestPage() {
 
           {mutation.isError ? (
             <div className="mt-7 rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-              Não conseguimos enviar sua solicitação agora. Tente novamente em instantes.
+              Não foi possível enviar sua solicitação neste momento. Por favor, tente novamente em alguns instantes.
             </div>
           ) : null}
 
           <button
             type="submit"
-            disabled={mutation.isPending}
+            disabled={mutation.isPending || Boolean(result)}
             className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cta px-8 py-4 text-sm font-semibold text-primary-foreground shadow-luxe transition-transform hover:-translate-y-0.5 disabled:opacity-60"
           >
             {mutation.isPending ? (
               <>
-                <Loader2 className="h-4 w-4 animate-spin" /> Enviando…
+                <Loader2 className="h-4 w-4 animate-spin" /> Enviando solicitação…
               </>
             ) : (
               <>
