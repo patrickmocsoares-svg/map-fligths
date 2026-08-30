@@ -155,7 +155,7 @@
 
   .font-serif { font-family: var(--font-serif); font-style: italic; letter-spacing: -0.01em; }
 
-  ::selection { background: oklch(0.83 0.13 85 / 0.35); color: var(--foreground); }
+  ::selection { background: rgb(255 107 53 / 0.25); color: var(--foreground); }
 
   :focus-visible {
     outline: 2px solid var(--gold);
