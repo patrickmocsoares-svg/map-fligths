@@ -141,12 +141,12 @@ export function DateRangeCalendar({
                     ? "cursor-not-allowed opacity-30"
                     : light
                       ? "text-foreground hover:bg-accent"
-                      : "text-foreground hover:bg-gold/15",
-                  inRange ? (light ? "bg-accent text-brand" : "bg-gold/10 text-gold") : "",
+                      : "text-foreground hover:bg-accent",
+                  inRange ? (light ? "bg-accent text-brand" : "bg-accent text-brand") : "",
                   isStart || isEnd
                     ? light
                       ? "bg-cta font-bold text-cta-foreground hover:bg-cta-hover"
-                      : "gold-gradient font-bold text-primary-foreground hover:opacity-90"
+                      : "bg-cta font-bold text-primary-foreground hover:opacity-90"
                     : "",
                 ].join(" ")}
               >
@@ -164,7 +164,7 @@ export function DateRangeCalendar({
       {!light && (
         <div className="flex items-center justify-between text-[10px] uppercase tracking-widest text-muted-foreground">
           <span>{range ? `${labelDepart} · ${labelReturn}` : labelDepart}</span>
-          <Calendar className="h-3.5 w-3.5 text-gold/70" />
+          <Calendar className="h-3.5 w-3.5 text-brand" />
         </div>
       )}
       <div
@@ -193,7 +193,7 @@ export function DateRangeCalendar({
         className={
           light
             ? `block h-11 w-full min-w-0 rounded-xl border bg-white px-4 text-left text-sm text-foreground transition ${open ? "border-brand-soft" : "border-border"}`
-            : `block w-full min-w-0 rounded-xl border bg-input/50 px-4 py-3 text-left transition ${open ? "border-gold" : "border-border"}`
+            : `block w-full min-w-0 rounded-xl border bg-input/50 px-4 py-3 text-left transition ${open ? "border-border" : "border-border"}`
         }
       >
         {summary}
@@ -206,7 +206,7 @@ export function DateRangeCalendar({
               type="button"
               onClick={() => setCursor((c) => addMonths(c, -1))}
               disabled={iso(cursor) <= iso(startOfMonth(today))}
-              className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground hover:text-gold disabled:opacity-30"
+              className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground hover:text-cta disabled:opacity-30"
             >
               ←
             </button>
@@ -216,7 +216,7 @@ export function DateRangeCalendar({
             <button
               type="button"
               onClick={() => setCursor((c) => addMonths(c, 1))}
-              className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground hover:text-gold"
+              className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground hover:text-cta"
             >
               →
             </button>
@@ -261,7 +261,7 @@ export function DateRangeCalendar({
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl gold-gradient px-4 py-3.5 text-sm font-bold uppercase tracking-[0.18em] text-primary-foreground"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cta px-4 py-3.5 text-sm font-bold uppercase tracking-[0.18em] text-primary-foreground"
               >
                 <Check className="h-4 w-4" /> Confirmar
               </button>

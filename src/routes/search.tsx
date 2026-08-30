@@ -163,14 +163,14 @@ function SearchResults() {
         {/* Header row */}
         <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
           <div>
-            <div className="text-[10px] uppercase tracking-[0.28em] text-gold">
+            <div className="text-[10px] uppercase tracking-[0.28em] text-brand">
               {t("results.title")}
             </div>
             <h1 className="mt-2 font-display text-3xl font-bold leading-tight md:text-4xl">
               {params.origin && params.destination ? (
                 <>
                   <span className="font-mono">{params.origin}</span>
-                  <span className="mx-3 font-serif font-normal text-gold-gradient">→</span>
+                  <span className="mx-3 font-serif font-normal text-brand">→</span>
                   <span className="font-mono">{params.destination}</span>
                 </>
               ) : (
@@ -191,7 +191,7 @@ function SearchResults() {
                 onClick={() => setSort(s)}
                 className={`rounded-full px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider transition ${
                   sort === s
-                    ? "bg-gold text-primary-foreground shadow"
+                    ? "bg-cta text-primary-foreground shadow"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -284,11 +284,11 @@ function FlightRow({
 
   return (
     <div
-      className="group relative block overflow-hidden rounded-2xl card-luxe transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/30 hover:shadow-luxe animate-rise"
+      className="group relative block overflow-hidden rounded-2xl card-luxe transition-all duration-300 hover:-translate-y-0.5 hover:border-border hover:shadow-luxe animate-rise"
       style={{ animationDelay: `${index * 40}ms` }}
     >
       {isBest && (
-        <span className="absolute left-0 top-0 rounded-br-lg bg-gold px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-primary-foreground">
+        <span className="absolute left-0 top-0 rounded-br-lg bg-cta px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-primary-foreground">
           Melhor preço
         </span>
       )}
@@ -324,9 +324,9 @@ function FlightRow({
               {dh}h{dm.toString().padStart(2, "0")}
             </div>
             <div className="relative flex w-full items-center">
-              <span className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-              <Plane className="h-3.5 w-3.5 rotate-90 text-gold" />
-              <span className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+              <span className="h-px flex-1 bg-gradient-to-r from-transparent via-cta/40 to-transparent" />
+              <Plane className="h-3.5 w-3.5 rotate-90 text-brand" />
+              <span className="h-px flex-1 bg-gradient-to-r from-transparent via-cta/40 to-transparent" />
             </div>
             <div className="text-[10px] text-muted-foreground">
               {o.stops === 0
@@ -355,7 +355,7 @@ function FlightRow({
                 ? formatBRL(o.price)
                 : `${o.currency} ${o.price.toFixed(0)}`}
             </div>
-            <div className="mt-1.5 inline-flex items-center gap-1 rounded-full border border-gold/25 bg-gold/5 px-2.5 py-1 text-[10px] font-medium text-gold-soft">
+            <div className="mt-1.5 inline-flex items-center gap-1 rounded-full border border-border bg-accent px-2.5 py-1 text-[10px] font-medium text-brand-soft">
               <Sparkles className="h-2.5 w-2.5" /> 💰 Economia estimada com milhas: até 40%
             </div>
             <div className="mt-1 flex items-center justify-end gap-1 text-[10px] text-muted-foreground">
@@ -375,7 +375,7 @@ function FlightRow({
             to="/flight/$id"
             params={{ id: o.id }}
             search={(prev: Record<string, unknown>) => ({ ...prev })}
-            className="inline-flex items-center gap-1 self-center text-[11px] font-semibold text-muted-foreground transition hover:text-gold md:self-end"
+            className="inline-flex items-center gap-1 self-center text-[11px] font-semibold text-muted-foreground transition hover:text-cta md:self-end"
           >
             Ver detalhes <ArrowRight className="h-3 w-3" />
           </Link>
@@ -421,7 +421,7 @@ function SkeletonRow() {
 function EmptyState({ title, body }: { title: string; body: string }) {
   return (
     <div className="rounded-2xl card-luxe p-16 text-center">
-      <SearchX className="mx-auto h-10 w-10 text-gold/60" />
+      <SearchX className="mx-auto h-10 w-10 text-brand" />
       <h2 className="mt-4 font-display text-2xl font-bold">{title}</h2>
       <p className="mt-2 text-sm text-muted-foreground">{body}</p>
     </div>
@@ -465,7 +465,7 @@ function NoOffersState({
   return (
     <div className="space-y-10">
       <div className="rounded-3xl card-luxe p-10 text-center">
-        <SearchX className="mx-auto h-10 w-10 text-gold/60" />
+        <SearchX className="mx-auto h-10 w-10 text-brand" />
         <h2 className="mt-4 font-display text-2xl font-bold">
           Nenhuma oferta disponível para esta rota e data.
         </h2>
@@ -480,7 +480,7 @@ function NoOffersState({
 
       {dates.length > 0 && (
         <section>
-          <div className="mb-4 flex items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-gold">
+          <div className="mb-4 flex items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-brand">
             <CalendarDays className="h-3.5 w-3.5" /> Datas próximas com tarifa
           </div>
           <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
@@ -493,7 +493,7 @@ function NoOffersState({
                     search: { origin, destination, depart: d.date } as never,
                   })
                 }
-                className="group flex items-center justify-between rounded-2xl border border-gold/15 bg-card/50 p-4 text-left transition hover:border-gold/40"
+                className="group flex items-center justify-between rounded-2xl border border-border bg-card/50 p-4 text-left transition hover:border-border"
               >
                 <div>
                   <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
@@ -517,7 +517,7 @@ function NoOffersState({
 
       {suggestions.length > 0 && (
         <section>
-          <div className="mb-4 flex items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-gold">
+          <div className="mb-4 flex items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-brand">
             <Sparkles className="h-3.5 w-3.5" /> Destinos populares partindo de {origin}
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

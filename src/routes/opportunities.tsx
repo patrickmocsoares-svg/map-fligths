@@ -48,7 +48,7 @@ const REASON_META: Record<
   unusual_low: {
     label: "Preço incomum",
     icon: Flame,
-    className: "text-gold border-gold/40 bg-gold/10",
+    className: "text-brand border-border bg-accent",
   },
   price_drop: {
     label: "Queda recente",
@@ -84,7 +84,7 @@ function OpportunitiesPage() {
       <Header />
       <main className="flex-1">
         {/* Hero */}
-        <section className="relative overflow-hidden border-b border-gold/10 bg-gradient-to-b from-black to-background">
+        <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-black to-background">
           <div
             className="absolute inset-0 opacity-30"
             style={{
@@ -93,7 +93,7 @@ function OpportunitiesPage() {
             }}
           />
           <div className="relative mx-auto max-w-7xl px-4 py-14 md:px-8 md:py-20">
-            <div className="inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/5 px-3 py-1 text-[11px] uppercase tracking-[0.24em] text-gold">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-accent px-3 py-1 text-[11px] uppercase tracking-[0.24em] text-brand">
               <Sparkles className="h-3 w-3" /> MAB Discovery Engine
             </div>
             <h1 className="mt-4 font-display text-4xl font-bold tracking-tight text-white md:text-6xl">
@@ -114,8 +114,8 @@ function OpportunitiesPage() {
                       onClick={() => setRegion(r)}
                       className={`rounded-full border px-3.5 py-1.5 text-xs transition ${
                         active
-                          ? "border-gold bg-gold/15 text-gold"
-                          : "border-gold/15 text-white/70 hover:text-white hover:border-gold/30"
+                          ? "border-border bg-accent text-brand"
+                          : "border-border text-white/70 hover:text-white hover:border-border"
                       }`}
                     >
                       {r === "all" ? "Todas as regiões" : REGION_LABEL[r]}
@@ -128,7 +128,7 @@ function OpportunitiesPage() {
                   query.refetch();
                   router.invalidate();
                 }}
-                className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-gold/20 px-3 py-1.5 text-xs text-white/70 hover:text-gold hover:border-gold/40 transition"
+                className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs text-white/70 hover:text-cta hover:border-border transition"
               >
                 <RefreshCw className={`h-3 w-3 ${query.isFetching ? "animate-spin" : ""}`} />
                 Atualizar
@@ -149,7 +149,7 @@ function OpportunitiesPage() {
             </div>
           ) : filtered.length === 0 ? (
             <div className="rounded-3xl border border-border/60 bg-card/50 p-10 text-center">
-              <Sparkles className="mx-auto h-6 w-6 text-gold" />
+              <Sparkles className="mx-auto h-6 w-6 text-brand" />
               <h2 className="mt-3 font-display text-xl">Nenhuma oportunidade nessa região agora</h2>
               <p className="mt-1 text-sm text-muted-foreground">
                 O motor está observando. Volte em breve — as oportunidades aparecem assim que os
@@ -182,7 +182,7 @@ function OpportunityCard({ o }: { o: OpportunityInsight }) {
         pax: 1,
         cabin: "economy" as const,
       }}
-      className="group block overflow-hidden rounded-3xl card-luxe transition-all duration-500 hover:-translate-y-1 hover:shadow-luxe hover:border-gold/25"
+      className="group block overflow-hidden rounded-3xl card-luxe transition-all duration-500 hover:-translate-y-1 hover:shadow-luxe hover:border-border"
     >
       <div className="relative aspect-[5/4] overflow-hidden">
         <img
@@ -211,9 +211,9 @@ function OpportunityCard({ o }: { o: OpportunityInsight }) {
           </h3>
           <div className="mt-2 flex items-center gap-2 text-[11px] text-white/75">
             <span className="font-mono tracking-wider">{o.origin}</span>
-            <span className="h-px w-6 bg-gold/60" />
-            <Plane className="h-3 w-3 text-gold" />
-            <span className="h-px w-6 bg-gold/60" />
+            <span className="h-px w-6 bg-accent" />
+            <Plane className="h-3 w-3 text-brand" />
+            <span className="h-px w-6 bg-accent" />
             <span className="font-mono tracking-wider">{o.destination}</span>
           </div>
         </div>

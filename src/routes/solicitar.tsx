@@ -69,13 +69,13 @@ const emptyForm: OrderRequestInput = {
 };
 
 const fieldBase =
-  "w-full rounded-xl border border-border bg-background/60 px-4 py-3 text-[15px] text-foreground outline-none transition-colors placeholder:text-muted-foreground/60 focus:border-gold/50";
+  "w-full rounded-xl border border-border bg-background/60 px-4 py-3 text-[15px] text-foreground outline-none transition-colors placeholder:text-muted-foreground/60 focus:border-border";
 
 function Label({ children, required }: { children: React.ReactNode; required?: boolean }) {
   return (
     <span className="mb-2 block text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
       {children}
-      {required ? <span className="text-gold"> *</span> : null}
+      {required ? <span className="text-brand"> *</span> : null}
     </span>
   );
 }
@@ -137,8 +137,8 @@ function RequestPage() {
       <div className="min-h-screen">
         <Header />
         <main className="mx-auto max-w-3xl px-5 py-14 md:px-8 md:py-20">
-          <div className="animate-rise rounded-3xl border border-gold/20 bg-card/50 p-7 md:p-10">
-            <div className="grid h-12 w-12 place-items-center rounded-2xl gold-gradient text-primary-foreground shadow-luxe">
+          <div className="animate-rise rounded-3xl border border-border bg-card/50 p-7 md:p-10">
+            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-cta text-primary-foreground shadow-luxe">
               <CheckCircle2 className="h-6 w-6" />
             </div>
             <h1 className="mt-6 font-display text-3xl font-bold leading-tight tracking-tight md:text-4xl">
@@ -153,7 +153,7 @@ function RequestPage() {
               <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
                 Protocolo
               </div>
-              <div className="mt-1 font-display text-2xl font-bold tracking-tight text-gold">
+              <div className="mt-1 font-display text-2xl font-bold tracking-tight text-brand">
                 {result.protocol}
               </div>
             </div>
@@ -164,7 +164,7 @@ function RequestPage() {
               </div>
               <div className="mt-3 flex items-center gap-3 font-display text-xl font-semibold">
                 {result.summary.origin}
-                <Plane className="h-4 w-4 text-gold" />
+                <Plane className="h-4 w-4 text-brand" />
                 {result.summary.destination}
               </div>
               <dl className="mt-4 grid grid-cols-2 gap-4 text-sm">
@@ -196,7 +196,7 @@ function RequestPage() {
                 href={wa}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl gold-gradient px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-luxe transition-transform hover:-translate-y-0.5"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-cta px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-luxe transition-transform hover:-translate-y-0.5"
               >
                 <MessageCircle className="h-4 w-4" /> Falar no WhatsApp
               </a>
@@ -219,11 +219,11 @@ function RequestPage() {
       <Header />
       <main className="mx-auto max-w-4xl px-5 py-12 md:px-8 md:py-16">
         <div className="max-w-2xl animate-rise">
-          <div className="inline-flex items-center gap-2 rounded-full border border-gold/20 bg-gold/5 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-gold">
+          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-accent px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-brand">
             <Sparkles className="h-3 w-3" /> Emissão com milhas
           </div>
           <h1 className="mt-5 font-display text-[2.2rem] font-extrabold leading-[1.05] tracking-tight md:text-5xl">
-            Solicitar <span className="font-serif font-normal text-gold-gradient">orçamento</span>
+            Solicitar <span className="font-serif font-normal text-brand">orçamento</span>
           </h1>
           <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
             Conte para onde quer ir. Nossa equipe cota as melhores combinações em milhas e
@@ -441,7 +441,7 @@ function RequestPage() {
           <button
             type="submit"
             disabled={mutation.isPending}
-            className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl gold-gradient px-8 py-4 text-sm font-semibold text-primary-foreground shadow-luxe transition-transform hover:-translate-y-0.5 disabled:opacity-60"
+            className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cta px-8 py-4 text-sm font-semibold text-primary-foreground shadow-luxe transition-transform hover:-translate-y-0.5 disabled:opacity-60"
           >
             {mutation.isPending ? (
               <>
@@ -455,7 +455,7 @@ function RequestPage() {
           </button>
 
           <p className="mt-4 flex items-center justify-center gap-2 text-center text-xs text-muted-foreground">
-            <ShieldCheck className="h-3.5 w-3.5 text-gold" />
+            <ShieldCheck className="h-3.5 w-3.5 text-brand" />
             Seus dados são usados apenas para elaborar o orçamento. Resposta em até 1 hora no
             horário de atendimento.
           </p>

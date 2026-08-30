@@ -34,7 +34,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
   if (guard.isLoading) {
     return (
       <div className="grid min-h-screen place-items-center">
-        <Loader2 className="h-6 w-6 animate-spin text-gold" />
+        <Loader2 className="h-6 w-6 animate-spin text-brand" />
       </div>
     );
   }
@@ -43,7 +43,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
     return (
       <div className="grid min-h-screen place-items-center px-5">
         <div className="max-w-sm rounded-3xl border border-border bg-card/50 p-8 text-center">
-          <ShieldAlert className="mx-auto h-8 w-8 text-gold" />
+          <ShieldAlert className="mx-auto h-8 w-8 text-brand" />
           <h1 className="mt-4 font-display text-xl font-bold">Acesso não autorizado</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             Sua conta não possui o papel de administrador. Peça a um administrador para liberar
@@ -62,15 +62,15 @@ export function AdminShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-40 border-b border-gold/10 bg-background/85 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 md:px-8">
           <Link to="/" className="flex items-center gap-2.5">
-            <span className="grid h-8 w-8 place-items-center rounded-lg gold-gradient text-primary-foreground">
+            <span className="grid h-8 w-8 place-items-center rounded-lg bg-cta text-primary-foreground">
               <Plane className="h-3.5 w-3.5" strokeWidth={2.5} />
             </span>
             <span className="flex flex-col leading-none">
               <span className="font-display text-base tracking-tight">MAB Flights</span>
-              <span className="text-[10px] uppercase tracking-[0.22em] text-gold/70">Admin</span>
+              <span className="text-[10px] uppercase tracking-[0.22em] text-brand">Admin</span>
             </span>
           </Link>
           <div className="flex items-center gap-1.5 overflow-x-auto">
@@ -82,7 +82,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
                   to={n.to}
                   className={`inline-flex shrink-0 items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-medium transition ${
                     active
-                      ? "bg-gold text-primary-foreground"
+                      ? "bg-cta text-primary-foreground"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >

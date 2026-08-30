@@ -79,12 +79,12 @@ export function AirportAutocomplete({ label, value, onChange, icon, placeholder 
     <div className="relative" ref={wrapRef}>
       <div
         className={`block rounded-xl border bg-input/50 px-4 py-3 transition ${
-          open ? "border-gold" : "border-border"
+          open ? "border-border" : "border-border"
         }`}
       >
         <div className="flex items-center justify-between text-[10px] uppercase tracking-widest text-muted-foreground">
           <span>{label}</span>
-          <span className="text-gold/70">{icon ?? <Plane className="h-4 w-4" />}</span>
+          <span className="text-brand">{icon ?? <Plane className="h-4 w-4" />}</span>
         </div>
 
         {open ? (
@@ -151,10 +151,10 @@ export function AirportAutocomplete({ label, value, onChange, icon, placeholder 
                 onMouseEnter={() => setHighlight(i)}
                 onClick={() => pick(a)}
                 className={`flex w-full items-center gap-3 px-4 py-3 text-left transition ${
-                  active ? "bg-gold/10" : "hover:bg-muted/40"
+                  active ? "bg-accent" : "hover:bg-muted/40"
                 }`}
               >
-                <span className="grid h-9 w-12 shrink-0 place-items-center rounded-md border border-gold/30 text-xs font-bold text-gold">
+                <span className="grid h-9 w-12 shrink-0 place-items-center rounded-md border border-border text-xs font-bold text-brand">
                   {a.code}
                 </span>
                 <span className="min-w-0 flex-1">

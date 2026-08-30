@@ -124,7 +124,7 @@ function DealsPage() {
     <div className="min-h-screen">
       <Header />
 
-      <section className="relative overflow-hidden border-b border-gold/10">
+      <section className="relative overflow-hidden border-b border-border">
         <div aria-hidden className="absolute inset-0 opacity-40" style={{ background: "var(--gradient-obsidian)" }} />
         <div
           aria-hidden
@@ -132,11 +132,11 @@ function DealsPage() {
           style={{ background: "var(--gradient-gold)", opacity: 0.12 }}
         />
         <div className="relative mx-auto max-w-7xl px-4 py-10 md:px-8 md:py-14">
-          <div className="inline-flex items-center gap-2 rounded-full border border-gold/20 bg-gold/5 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-gold-soft">
+          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-accent px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-brand-soft">
             <Sparkles className="h-3 w-3" /> MAB Deals
           </div>
           <h1 className="mt-4 font-display text-4xl leading-tight md:text-6xl">
-            <span className="text-gold-gradient">As melhores oportunidades</span>
+            <span className="text-brand">As melhores oportunidades</span>
             <br className="hidden md:block" /> de viagem, monitoradas em tempo real.
           </h1>
           <p className="mt-3 max-w-2xl text-sm text-muted-foreground md:text-base">
@@ -147,7 +147,7 @@ function DealsPage() {
 
       <div className="mx-auto max-w-7xl px-4 py-8 md:px-8">
         <div className="-mx-4 overflow-x-auto px-4 md:mx-0 md:px-0">
-          <div className="flex min-w-max gap-1 rounded-full border border-gold/15 bg-card/60 p-1 backdrop-blur">
+          <div className="flex min-w-max gap-1 rounded-full border border-border bg-card/60 p-1 backdrop-blur">
             {tabs.map((tb) => {
               const active = tab === tb.id;
               return (
@@ -155,7 +155,7 @@ function DealsPage() {
                   key={tb.id}
                   onClick={() => setTab(tb.id)}
                   className={`rounded-full px-4 py-2 text-xs font-medium uppercase tracking-wider transition ${
-                    active ? "bg-gold text-primary-foreground shadow-luxe" : "text-muted-foreground hover:text-foreground"
+                    active ? "bg-cta text-primary-foreground shadow-luxe" : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   {tb.label}
@@ -168,12 +168,12 @@ function DealsPage() {
         <div className="mt-4 flex items-center justify-between gap-3">
           <button
             onClick={() => setShowFilters((v) => !v)}
-            className="inline-flex items-center gap-2 rounded-full border border-gold/20 bg-card/40 px-3 py-1.5 text-xs text-foreground hover:border-gold/40"
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-3 py-1.5 text-xs text-foreground hover:border-border"
           >
-            <Filter className="h-3.5 w-3.5 text-gold" />
+            <Filter className="h-3.5 w-3.5 text-brand" />
             Filtros
             {activeFilters > 0 && (
-              <span className="ml-1 rounded-full bg-gold px-1.5 text-[10px] font-bold text-primary-foreground">
+              <span className="ml-1 rounded-full bg-cta px-1.5 text-[10px] font-bold text-primary-foreground">
                 {activeFilters}
               </span>
             )}
@@ -184,7 +184,7 @@ function DealsPage() {
         </div>
 
         {showFilters && (
-          <div className="mt-3 rounded-2xl border border-gold/15 bg-card/60 p-4 backdrop-blur">
+          <div className="mt-3 rounded-2xl border border-border bg-card/60 p-4 backdrop-blur">
             <div className="grid gap-4 sm:grid-cols-3">
               <Field label="Aeroporto de origem">
                 <select value={origin} onChange={(e) => setOrigin(e.target.value)} className="filter-input">
@@ -219,7 +219,7 @@ function DealsPage() {
             {activeFilters > 0 && (
               <button
                 onClick={reset}
-                className="mt-4 inline-flex items-center gap-1 text-xs text-gold-soft hover:text-gold"
+                className="mt-4 inline-flex items-center gap-1 text-xs text-brand-soft hover:text-cta"
               >
                 <X className="h-3 w-3" /> Limpar filtros
               </button>
@@ -230,7 +230,7 @@ function DealsPage() {
         <div className="mt-10 space-y-14">
           {query.isLoading && (
             <div className="flex items-center justify-center py-16 text-sm text-muted-foreground">
-              <Loader2 className="mr-2 h-4 w-4 animate-spin text-gold" /> Carregando ofertas monitoradas…
+              <Loader2 className="mr-2 h-4 w-4 animate-spin text-brand" /> Carregando ofertas monitoradas…
             </div>
           )}
 
@@ -239,7 +239,7 @@ function DealsPage() {
               <section key={section.id}>
                 <div className="mb-5 flex items-end justify-between">
                   <div>
-                    <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-gold-soft">
+                    <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-brand-soft">
                       <section.icon className="h-3.5 w-3.5" />
                       Seção
                     </div>
@@ -251,7 +251,7 @@ function DealsPage() {
                 </div>
 
                 {section.items.length === 0 ? (
-                  <div className="rounded-2xl border border-dashed border-gold/15 bg-card/30 p-8 text-center text-sm text-muted-foreground">
+                  <div className="rounded-2xl border border-dashed border-border bg-card/30 p-8 text-center text-sm text-muted-foreground">
                     Sem ofertas em cache para os filtros atuais. Ajuste a origem ou faça uma busca direta.
                   </div>
                 ) : (
