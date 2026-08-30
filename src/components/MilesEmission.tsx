@@ -107,7 +107,7 @@ export function MilesNoResults({ ctx }: { ctx: MilesContext }) {
         Consulte agora uma opção de emissão para sua viagem.
       </p>
       <a href={href} target="_blank" rel="noopener noreferrer" className={`${whatsBtn} mt-5 md:max-w-sm`}>
-        <MessageCircle className="h-4 w-4" /> 🟢 CONFERIR OFERTA
+        <MessageCircle className="h-4 w-4" /> CONFERIR OFERTA
       </a>
       <p className="mt-3 text-[10px] leading-relaxed text-muted-foreground">
         Disponibilidade, quantidade de milhas, taxas e valor final são confirmados antes da emissão.
