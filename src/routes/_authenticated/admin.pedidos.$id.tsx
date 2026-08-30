@@ -50,6 +50,7 @@ function OrderDetail() {
 
   const order = q.data?.order;
   const history = q.data?.history ?? [];
+  const notifications = q.data?.notifications ?? [];
 
   const [status, setStatus] = useState("novo");
   const [statusNote, setStatusNote] = useState("");
@@ -228,6 +229,48 @@ function OrderDetail() {
                   </li>
                 ))}
               </ol>
+            )}
+          </Card>
+
+          <Card title="Notificações da equipe">
+            {notifications.length === 0 ? (
+              <p className="text-sm text-muted-foreground">
+                Nenhuma notificação registrada para este pedido.
+              </p>
+            ) : (
+              <ul className="space-y-3">
+                {notifications.map((n) => {
+                  const ok = n.status === "sent";
+                  const label =
+                    n.template === "whatsapp_order"
+                      ? "WhatsApp da equipe"
+                      : n.template === "admin_order_email"
+                        ? "E-mail da equipe"
+                        : n.template;
+                  return (
+                    <li key={n.id} className="text-sm">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-medium">{label}</span>
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+                            ok
+                              ? "bg-emerald-500/12 text-emerald-700"
+                              : "bg-red-500/12 text-red-700"
+                          }`}
+                        >
+                          {ok ? "Enviado" : n.status === "queued" ? "Na fila" : "Falhou"}
+                        </span>
+                      </div>
+                      <div className="text-[11px] text-muted-foreground">
+                        {new Date(n.created_at).toLocaleString("pt-BR")}
+                      </div>
+                      {n.error ? (
+                        <div className="mt-1 text-xs text-red-700/80">Motivo: {n.error}</div>
+                      ) : null}
+                    </li>
+                  );
+                })}
+              </ul>
             )}
           </Card>
         </div>

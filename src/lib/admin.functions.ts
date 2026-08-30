@@ -191,6 +191,12 @@ export const getOrderFn = createServerFn({ method: "POST" })
       .eq("order_id", data.id)
       .order("created_at", { ascending: false });
 
+    const { data: notifications } = await supabaseAdmin
+      .from("email_logs")
+      .select("id, template, to_email, status, error, created_at")
+      .eq("order_id", data.id)
+      .order("created_at", { ascending: false });
+
     return {
       order: order as unknown as AdminOrder,
       history: (history ?? []) as {
@@ -199,6 +205,14 @@ export const getOrderFn = createServerFn({ method: "POST" })
         to_status: string;
         changed_by: string | null;
         note: string | null;
+        created_at: string;
+      }[],
+      notifications: (notifications ?? []) as {
+        id: string;
+        template: string;
+        to_email: string;
+        status: string;
+        error: string | null;
         created_at: string;
       }[],
     };

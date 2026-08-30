@@ -73,9 +73,22 @@ export async function notifyBusinessWhatsApp(n: OrderNotification): Promise<{
   const message = buildOrderMessage(n);
   const to = (process.env["WHATSAPP_BUSINESS_NUMBER"] || FALLBACK_NUMBER).replace(/\D/g, "");
 
-  const token = process.env["WHATSAPP_TOKEN"];
+  const rawToken = (process.env["WHATSAPP_TOKEN"] ?? "").trim();
+  // Meta Cloud API access tokens are long and start with "EAA". Anything else is
+  // a placeholder/truncated value and would only produce a silent 401.
+  const tokenLooksValid = rawToken.length >= 40 && rawToken.startsWith("EAA");
+  const token = tokenLooksValid ? rawToken : undefined;
   const phoneNumberId = process.env["WHATSAPP_PHONE_NUMBER_ID"];
   const webhookUrl = process.env["WHATSAPP_WEBHOOK_URL"];
+
+  if (rawToken && !tokenLooksValid && !webhookUrl) {
+    return {
+      sent: false,
+      transport: "cloud-api",
+      error:
+        "Token da Meta inválido (deve começar com EAA e ser longo). Atualize WHATSAPP_TOKEN.",
+    };
+  }
 
   try {
     if (token && phoneNumberId) {
