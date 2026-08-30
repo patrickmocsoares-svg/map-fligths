@@ -50,6 +50,7 @@ function OrderDetail() {
 
   const order = q.data?.order;
   const history = q.data?.history ?? [];
+  const notifications = q.data?.notifications ?? [];
 
   const [status, setStatus] = useState("novo");
   const [statusNote, setStatusNote] = useState("");
