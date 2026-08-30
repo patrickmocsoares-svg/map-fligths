@@ -270,14 +270,14 @@
 @utility skeleton {
   position: relative;
   overflow: hidden;
-  background: oklch(0.2 0.006 260);
+  background: #eef2f7;
 }
 @utility skeleton-shimmer {
   &::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, transparent, oklch(0.98 0.003 90 / 0.05), transparent);
+    background: linear-gradient(90deg, transparent, rgb(26 54 93 / 0.06), transparent);
     animation: mab-shimmer 1.6s infinite;
   }
 }
@@ -331,14 +331,14 @@
 /* ====== Premium refinement additions ====== */
 
 @utility glass {
-  background: linear-gradient(180deg, oklch(0.98 0.003 90 / 0.05), oklch(0.98 0.003 90 / 0.02));
+  background: rgb(255 255 255 / 0.9);
   backdrop-filter: blur(20px) saturate(140%);
   -webkit-backdrop-filter: blur(20px) saturate(140%);
-  border: 1px solid oklch(0.98 0.003 90 / 8%);
+  border: 1px solid var(--border);
 }
 
 @utility ring-gold-soft {
-  box-shadow: 0 0 0 1px oklch(0.83 0.13 85 / 0.18), 0 20px 50px -24px oklch(0 0 0 / 0.6);
+  box-shadow: 0 0 0 1px rgb(0 119 182 / 0.25), var(--shadow-card);
 }
 
 @utility text-balance {
@@ -351,8 +351,8 @@
               border-color 0.5s ease;
   &:hover {
     transform: translateY(-4px);
-    box-shadow: var(--shadow-luxe);
-    border-color: oklch(0.83 0.13 85 / 0.28);
+    box-shadow: var(--shadow-float);
+    border-color: rgb(0 119 182 / 0.35);
   }
 }
 
@@ -365,8 +365,8 @@
 }
 
 @keyframes mab-gold-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 oklch(0.83 0.13 85 / 0.35); }
-  50% { box-shadow: 0 0 0 8px oklch(0.83 0.13 85 / 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgb(255 107 53 / 0.45); }
+  50% { box-shadow: 0 0 0 8px rgb(255 107 53 / 0); }
 }
 @utility animate-gold-pulse {
   animation: mab-gold-pulse 2.4s ease-out infinite;
@@ -381,7 +381,7 @@
     right: 0;
     bottom: -6px;
     height: 1px;
-    background: var(--gradient-gold);
+    background: var(--cta);
     transform: scaleX(0);
     transform-origin: right;
     transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -394,9 +394,9 @@
 }
 
 @utility header-scrolled {
-  background: oklch(0.11 0.005 260 / 0.85);
-  box-shadow: 0 8px 30px -12px oklch(0 0 0 / 0.6);
-  border-bottom-color: oklch(0.83 0.13 85 / 0.18);
+  background: rgb(26 54 93 / 0.97);
+  box-shadow: 0 6px 20px -12px rgb(16 35 60 / 0.5);
+  border-bottom-color: rgb(255 255 255 / 0.12);
 }
 
 /* Typography rhythm on small screens */
