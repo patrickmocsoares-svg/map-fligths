@@ -101,8 +101,11 @@ export async function notifyAdminByEmail(n: OrderEmailPayload): Promise<{
   }
 
   const text = buildOrderEmailText(n);
+  const html = `<pre style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;line-height:1.6;white-space:pre-wrap">${escapeHtml(
+    text,
+  )}</pre>`;
 
-  try {
+  const send = async (recipient: string) => {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -111,21 +114,37 @@ export async function notifyAdminByEmail(n: OrderEmailPayload): Promise<{
       },
       body: JSON.stringify({
         from,
-        to: [to],
+        to: [recipient],
         reply_to: n.email,
         subject: `✈️ Nova solicitação de orçamento — TRIPmoc #${n.protocol}`,
         text,
-        html: `<pre style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;line-height:1.6;white-space:pre-wrap">${escapeHtml(
-          text,
-        )}</pre>`,
+        html,
       }),
     });
+    const body = res.ok ? "" : await res.text();
+    return { ok: res.ok, status: res.status, body };
+  };
 
-    if (!res.ok) {
-      const body = await res.text();
-      return { sent: false, to, error: `${res.status} ${body.slice(0, 300)}` };
+  try {
+    const first = await send(to);
+    if (first.ok) return { sent: true, to };
+
+    // Resend em modo de teste (domínio ainda não verificado) só entrega para o
+    // e-mail dono da conta. Reenvia para lá para o pedido não se perder.
+    const accountEmail = (process.env["RESEND_ACCOUNT_EMAIL"] || "").trim();
+    const restricted =
+      first.status === 403 && first.body.includes("your own email address");
+    if (restricted && accountEmail && accountEmail.toLowerCase() !== to.toLowerCase()) {
+      const retry = await send(accountEmail);
+      if (retry.ok) return { sent: true, to: accountEmail };
+      return {
+        sent: false,
+        to: accountEmail,
+        error: `${retry.status} ${retry.body.slice(0, 300)}`,
+      };
     }
-    return { sent: true, to };
+
+    return { sent: false, to, error: `${first.status} ${first.body.slice(0, 300)}` };
   } catch (err) {
     return { sent: false, to, error: err instanceof Error ? err.message : "erro desconhecido" };
   }
