@@ -92,11 +92,11 @@ function Home() {
               <Sparkles className="h-3 w-3 text-cta" /> Premium Travel Marketplace
             </div>
             <h1 className="mt-6 font-display text-[2.15rem] font-extrabold leading-[1.08] tracking-tight text-white text-balance sm:text-5xl md:text-6xl">
-              Viaje de Executiva ou Econômica pagando até 60% menos com suas{" "}
-              <span className="text-mabgold">milhas</span>.
+              Viaje de Executiva ou Econômica pagando até 60% menos{" "}
+              <span className="text-mabgold">que a tarifa convencional</span>
             </h1>
             <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-white/85 text-balance md:text-lg">
-              Encontre a melhor forma de viajar com total transparência e economia.
+              Aqui você encontra formas inteligentes de reduzir o custo da passagem
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:max-w-sm">
               <Link
