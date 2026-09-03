@@ -120,9 +120,9 @@ export const createOrderFn = createServerFn({ method: "POST" })
     });
 
     if (!emailResult.sent) {
+      // O pedido já está salvo e visível no painel admin ("Notificações da equipe"),
+      // então a falha de e-mail não invalida a solicitação do cliente.
       console.error("[orders] admin e-mail not sent:", emailResult.error);
-      // O pedido está salvo, mas o cliente não pode ver "sucesso" sem confirmação de envio.
-      throw new Error("EMAIL_NOT_SENT");
     }
 
 
