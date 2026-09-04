@@ -6,6 +6,7 @@
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const cabin = z.enum(["economy", "premium", "business", "first"]);
 
@@ -28,12 +29,14 @@ export const searchFlightsFn = createServerFn({ method: "POST" })
   });
 
 /**
- * Health snapshot of every registered flight provider. Used by admin
- * surfaces to verify which upstream is currently serving real prices.
+ * Health snapshot of every registered flight provider. Admin-only: it
+ * reveals which upstream integrations are configured and pings them.
  */
-export const getFlightProvidersStatusFn = createServerFn({ method: "GET" }).handler(
-  async () => {
+export const getFlightProvidersStatusFn = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { assertAdmin } = await import("./security/guards.server");
+    await assertAdmin(context.supabase, context.userId);
     const { getFlightProvidersStatus } = await import("./flights");
     return getFlightProvidersStatus();
-  },
-);
+  });
