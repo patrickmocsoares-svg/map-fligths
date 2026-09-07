@@ -66,11 +66,45 @@ export function DateRangeCalendar({
   useEffect(() => {
     if (isMobile || !open) return;
     function onDown(e: MouseEvent) {
-      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+      const target = e.target as Node;
+      if (wrapRef.current?.contains(target)) return;
+      if (popRef.current?.contains(target)) return;
+      setOpen(false);
     }
     document.addEventListener("mousedown", onDown);
     return () => document.removeEventListener("mousedown", onDown);
   }, [isMobile, open]);
+
+  // Desktop popup is portalled to <body> and positioned so it never falls
+  // outside the viewport (previously it was clipped on the right edge).
+  useEffect(() => {
+    if (isMobile || !open) return;
+    function place() {
+      const anchor = wrapRef.current?.getBoundingClientRect();
+      if (!anchor) return;
+      const width = Math.min(576, window.innerWidth - 24);
+      const height = popRef.current?.offsetHeight ?? 420;
+      const left = Math.min(
+        Math.max(12, anchor.left),
+        Math.max(12, window.innerWidth - width - 12),
+      );
+      const below = anchor.bottom + 8;
+      const top =
+        below + height > window.innerHeight - 12
+          ? Math.max(12, anchor.top - height - 8)
+          : below;
+      setPos({ top, left });
+    }
+    place();
+    const raf = requestAnimationFrame(place);
+    window.addEventListener("resize", place);
+    window.addEventListener("scroll", place, true);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", place);
+      window.removeEventListener("scroll", place, true);
+    };
+  }, [isMobile, open, cursor, depart, ret]);
 
   useEffect(() => {
     if (!open || !isMobile) return;
