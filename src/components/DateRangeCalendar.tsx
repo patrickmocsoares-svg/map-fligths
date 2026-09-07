@@ -199,8 +199,13 @@ export function DateRangeCalendar({
         {summary}
       </button>
 
-      {open && !isMobile && (
-        <div className={`absolute left-0 z-50 mt-2 w-[36rem] max-w-[90vw] rounded-2xl border p-4 shadow-xl ${light ? "border-border bg-white text-foreground" : "border-border bg-card shadow-luxe"}`}>
+      {open && !isMobile && typeof document !== "undefined" && createPortal(
+        <div
+          ref={popRef}
+          style={{ top: pos.top, left: pos.left, width: 576 }}
+          className={`fixed z-[120] max-w-[95vw] rounded-2xl border p-4 shadow-xl ${light ? "border-border bg-white text-foreground" : "border-border bg-card shadow-luxe"}`}
+        >
+
           <div className="mb-3 flex items-center justify-between">
             <button
               type="button"
