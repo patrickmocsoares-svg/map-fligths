@@ -227,7 +227,8 @@ export function DateRangeCalendar({
             </button>
           </div>
           {body}
-        </div>
+        </div>,
+        document.body,
       )}
 
       {open && isMobile && typeof document !== "undefined" && createPortal(
