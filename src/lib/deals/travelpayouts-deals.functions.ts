@@ -137,6 +137,29 @@ const curatedSchema = z.object({
   limit: z.number().int().min(1).max(60).optional(),
 });
 
+/** Curated routes we always try to price, so both sections stay populated. */
+const DOMESTIC_TARGETS = [
+  "GIG", "BSB", "CNF", "POA", "SSA", "REC", "FOR", "FLN",
+  "CWB", "NAT", "MCZ", "IGU", "VIX", "MAO", "JPA", "BPS",
+];
+const INTERNATIONAL_TARGETS = [
+  "LIS", "MAD", "CDG", "FCO", "LHR", "MIA", "JFK", "MCO",
+  "LAX", "MEX", "CUN", "EZE", "SCL", "BOG", "LIM", "MVD", "DXB",
+];
+
+function routeUrl(origin: string, destination?: string, limit = 10) {
+  const url = new URL(LATEST_URL);
+  url.searchParams.set("origin", origin);
+  if (destination) url.searchParams.set("destination", destination);
+  url.searchParams.set("currency", "brl");
+  url.searchParams.set("period_type", "year");
+  url.searchParams.set("sorting", "price");
+  url.searchParams.set("one_way", "false");
+  url.searchParams.set("page", "1");
+  url.searchParams.set("limit", String(limit));
+  return url;
+}
+
 export const getCuratedDealsFn = createServerFn({ method: "GET" })
   .inputValidator((raw: unknown) => curatedSchema.parse(raw ?? {}))
   .handler(async ({ data }): Promise<RealDeal[]> => {
@@ -144,15 +167,17 @@ export const getCuratedDealsFn = createServerFn({ method: "GET" })
     const limit = data.limit ?? 30;
     const key = `curated:${origin}:${limit}`;
     return cache(key, TTL_MS, async () => {
-      const url = new URL(LATEST_URL);
-      url.searchParams.set("origin", origin);
-      url.searchParams.set("currency", "brl");
-      url.searchParams.set("period_type", "year");
-      url.searchParams.set("sorting", "price");
-      url.searchParams.set("one_way", "false");
-      url.searchParams.set("page", "1");
-      url.searchParams.set("limit", String(limit));
-      const items = await tpFetch(url);
+      const targets = [...DOMESTIC_TARGETS, ...INTERNATIONAL_TARGETS].filter(
+        (t) => t !== origin && normalizeCode(t) !== normalizeCode(origin),
+      );
+
+      const results = await Promise.all([
+        // Broad sweep (cheapest routes from this origin).
+        tpFetch(routeUrl(origin, undefined, 60)),
+        // Per-destination sweeps keep domestic AND international populated.
+        ...targets.map((dest) => tpFetch(routeUrl(origin, dest, 8), dest)),
+      ]);
+      const items = results.flat();
 
       // Group by destination: keep cheapest per route, compute avg over sample.
       const byDest = new Map<string, { items: TpItem[] }>();
