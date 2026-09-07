@@ -54,6 +54,8 @@ export function DateRangeCalendar({
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const popRef = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState({ top: 0, left: 0 });
   const today = useMemo(() => {
     const t = new Date();
     return new Date(t.getFullYear(), t.getMonth(), t.getDate());
@@ -64,11 +66,45 @@ export function DateRangeCalendar({
   useEffect(() => {
     if (isMobile || !open) return;
     function onDown(e: MouseEvent) {
-      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+      const target = e.target as Node;
+      if (wrapRef.current?.contains(target)) return;
+      if (popRef.current?.contains(target)) return;
+      setOpen(false);
     }
     document.addEventListener("mousedown", onDown);
     return () => document.removeEventListener("mousedown", onDown);
   }, [isMobile, open]);
+
+  // Desktop popup is portalled to <body> and positioned so it never falls
+  // outside the viewport (previously it was clipped on the right edge).
+  useEffect(() => {
+    if (isMobile || !open) return;
+    function place() {
+      const anchor = wrapRef.current?.getBoundingClientRect();
+      if (!anchor) return;
+      const width = Math.min(576, window.innerWidth - 24);
+      const height = popRef.current?.offsetHeight ?? 420;
+      const left = Math.min(
+        Math.max(12, anchor.left),
+        Math.max(12, window.innerWidth - width - 12),
+      );
+      const below = anchor.bottom + 8;
+      const top =
+        below + height > window.innerHeight - 12
+          ? Math.max(12, anchor.top - height - 8)
+          : below;
+      setPos({ top, left });
+    }
+    place();
+    const raf = requestAnimationFrame(place);
+    window.addEventListener("resize", place);
+    window.addEventListener("scroll", place, true);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", place);
+      window.removeEventListener("scroll", place, true);
+    };
+  }, [isMobile, open, cursor, depart, ret]);
 
   useEffect(() => {
     if (!open || !isMobile) return;
@@ -199,8 +235,13 @@ export function DateRangeCalendar({
         {summary}
       </button>
 
-      {open && !isMobile && (
-        <div className={`absolute left-0 z-50 mt-2 w-[36rem] max-w-[90vw] rounded-2xl border p-4 shadow-xl ${light ? "border-border bg-white text-foreground" : "border-border bg-card shadow-luxe"}`}>
+      {open && !isMobile && typeof document !== "undefined" && createPortal(
+        <div
+          ref={popRef}
+          style={{ top: pos.top, left: pos.left, width: 576 }}
+          className={`fixed z-[120] max-w-[95vw] rounded-2xl border p-4 shadow-xl ${light ? "border-border bg-white text-foreground" : "border-border bg-card shadow-luxe"}`}
+        >
+
           <div className="mb-3 flex items-center justify-between">
             <button
               type="button"
@@ -222,7 +263,8 @@ export function DateRangeCalendar({
             </button>
           </div>
           {body}
-        </div>
+        </div>,
+        document.body,
       )}
 
       {open && isMobile && typeof document !== "undefined" && createPortal(
