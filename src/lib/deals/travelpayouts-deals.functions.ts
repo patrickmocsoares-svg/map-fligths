@@ -217,7 +217,9 @@ export const getCuratedDealsFn = createServerFn({ method: "GET" })
           foundAt: cheapest.found_at ?? new Date().toISOString(),
         });
       }
-      return deals.sort((a, b) => (a.price ?? Infinity) - (b.price ?? Infinity));
+      return deals
+        .sort((a, b) => (a.price ?? Infinity) - (b.price ?? Infinity))
+        .slice(0, Math.max(limit, 24));
     });
   });
 
