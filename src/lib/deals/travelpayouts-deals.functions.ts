@@ -23,6 +23,25 @@ function cache<T>(key: string, ttl: number, load: () => Promise<T>): Promise<T> 
   });
 }
 
+type TpRaw = {
+  origin?: string;
+  destination?: string;
+  /** v3 `get_latest_prices` returns `value`; other endpoints use `price`. */
+  price?: number;
+  value?: number;
+  airline?: string;
+  gate?: string;
+  departure_at?: string;
+  depart_date?: string;
+  return_at?: string;
+  return_date?: string;
+  transfers?: number;
+  number_of_changes?: number;
+  duration?: number;
+  duration_to?: number;
+  found_at?: string;
+};
+
 type TpItem = {
   origin: string;
   destination: string;
@@ -36,7 +55,48 @@ type TpItem = {
   found_at?: string;
 };
 
-async function tpFetch(url: URL): Promise<TpItem[]> {
+/**
+ * Travelpayouts answers with *city* codes (SAO, RIO, ORL…) even when the
+ * request used an airport code. Map them back to the airport codes our
+ * destination catalog knows about.
+ */
+const CITY_TO_AIRPORT: Record<string, string> = {
+  SAO: "GRU",
+  RIO: "GIG",
+  BHZ: "CNF",
+  ORL: "MCO",
+  NYC: "JFK",
+  LON: "LHR",
+  PAR: "CDG",
+  ROM: "FCO",
+  BUE: "EZE",
+};
+
+function normalizeCode(code?: string): string {
+  const c = (code ?? "").toUpperCase();
+  return CITY_TO_AIRPORT[c] ?? c;
+}
+
+function normalizeItem(raw: TpRaw, fallbackDest?: string): TpItem | null {
+  const price = typeof raw.value === "number" ? raw.value : raw.price;
+  if (typeof price !== "number" || !Number.isFinite(price) || price <= 0) return null;
+  const destination = normalizeCode(raw.destination) || (fallbackDest ?? "");
+  if (!destination) return null;
+  return {
+    origin: normalizeCode(raw.origin),
+    destination: fallbackDest ?? destination,
+    price,
+    airline: raw.airline,
+    departure_at: raw.departure_at ?? raw.depart_date,
+    return_at: raw.return_at ?? raw.return_date,
+    transfers: raw.transfers ?? raw.number_of_changes ?? 0,
+    duration: raw.duration,
+    duration_to: raw.duration_to,
+    found_at: raw.found_at,
+  };
+}
+
+async function tpFetch(url: URL, fallbackDest?: string): Promise<TpItem[]> {
   const token = process.env.TRAVELPAYOUTS_TOKEN;
   if (!token) return [];
   try {
@@ -47,9 +107,11 @@ async function tpFetch(url: URL): Promise<TpItem[]> {
       console.warn("[deals][tp] upstream not ok", { status: res.status, url: url.toString() });
       return [];
     }
-    const json = (await res.json()) as { success?: boolean; data?: TpItem[] };
+    const json = (await res.json()) as { success?: boolean; data?: TpRaw[] };
     if (json.success === false) return [];
-    return json.data ?? [];
+    return (json.data ?? [])
+      .map((it) => normalizeItem(it, fallbackDest))
+      .filter((it): it is TpItem => it !== null);
   } catch (e) {
     console.warn("[deals][tp] fetch failed", { message: (e as Error).message });
     return [];
