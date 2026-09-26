@@ -33,7 +33,10 @@ function safeEqual(a: string, b: string): boolean {
  * discovery hook. Never falls back to the public publishable key.
  */
 export function isValidHookSecret(provided: string | null | undefined): boolean {
-  const expected = process.env.DISCOVERY_HOOK_SECRET;
-  if (!expected || !provided) return false;
-  return safeEqual(provided, expected);
+  // Trim both sides: values pasted into hosting dashboards often carry a
+  // trailing newline/space, which would otherwise cause a spurious 401.
+  const expected = process.env.DISCOVERY_HOOK_SECRET?.trim();
+  const got = provided?.trim();
+  if (!expected || !got) return false;
+  return safeEqual(got, expected);
 }
