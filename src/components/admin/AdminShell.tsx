@@ -2,13 +2,14 @@ import { type ReactNode } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { LayoutDashboard, Settings, LogOut, ShieldAlert, Loader2, Plane } from "lucide-react";
+import { LayoutDashboard, Settings, LogOut, ShieldAlert, Loader2, Plane, Activity } from "lucide-react";
 import { isAdminFn } from "@/lib/admin.functions";
 import { supabase } from "@/integrations/supabase/client";
 
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { to: "/admin/configuracoes", label: "Configurações", icon: Settings },
+  { to: "/admin/diagnostico", label: "Diagnóstico", icon: Activity },
 ] as const;
 
 export function AdminShell({ children }: { children: ReactNode }) {
