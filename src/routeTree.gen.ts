@@ -9,50 +9,29 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SolicitarRouteImport } from './routes/solicitar'
-import { Route as SearchRouteImport } from './routes/search'
-import { Route as OpportunitiesRouteImport } from './routes/opportunities'
-import { Route as DealsRouteImport } from './routes/deals'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AlertsRouteImport } from './routes/alerts'
-import { Route as AccountRouteImport } from './routes/account'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AccountRouteImport } from './routes/account'
+import { Route as AlertsRouteImport } from './routes/alerts'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as DealsRouteImport } from './routes/deals'
+import { Route as OpportunitiesRouteImport } from './routes/opportunities'
+import { Route as SearchRouteImport } from './routes/search'
+import { Route as SolicitarRouteImport } from './routes/solicitar'
 import { Route as FlightIdRouteImport } from './routes/flight.$id'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
-import { Route as AuthenticatedAdminDiagnosticoRouteImport } from './routes/_authenticated/admin.diagnostico'
 import { Route as AuthenticatedAdminConfiguracoesRouteImport } from './routes/_authenticated/admin.configuracoes'
-import { Route as ApiPublicHooksDiscoverPricesRouteImport } from './routes/api/public/hooks/discover-prices'
+import { Route as AuthenticatedAdminDiagnosticoRouteImport } from './routes/_authenticated/admin.diagnostico'
 import { Route as AuthenticatedAdminPedidosIdRouteImport } from './routes/_authenticated/admin.pedidos.$id'
+import { Route as ApiPublicHooksDiscoverPricesRouteImport } from './routes/api/public/hooks/discover-prices'
 
-const SolicitarRoute = SolicitarRouteImport.update({
-  id: '/solicitar',
-  path: '/solicitar',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SearchRoute = SearchRouteImport.update({
-  id: '/search',
-  path: '/search',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OpportunitiesRoute = OpportunitiesRouteImport.update({
-  id: '/opportunities',
-  path: '/opportunities',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DealsRoute = DealsRouteImport.update({
-  id: '/deals',
-  path: '/deals',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AlertsRoute = AlertsRouteImport.update({
-  id: '/alerts',
-  path: '/alerts',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountRoute = AccountRouteImport.update({
@@ -60,13 +39,34 @@ const AccountRoute = AccountRouteImport.update({
   path: '/account',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
+const AlertsRoute = AlertsRouteImport.update({
+  id: '/alerts',
+  path: '/alerts',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DealsRoute = DealsRouteImport.update({
+  id: '/deals',
+  path: '/deals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OpportunitiesRoute = OpportunitiesRouteImport.update({
+  id: '/opportunities',
+  path: '/opportunities',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SolicitarRoute = SolicitarRouteImport.update({
+  id: '/solicitar',
+  path: '/solicitar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FlightIdRoute = FlightIdRouteImport.update({
@@ -79,16 +79,22 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminConfiguracoesRoute =
+  AuthenticatedAdminConfiguracoesRouteImport.update({
+    id: '/admin/configuracoes',
+    path: '/admin/configuracoes',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminDiagnosticoRoute =
   AuthenticatedAdminDiagnosticoRouteImport.update({
     id: '/admin/diagnostico',
     path: '/admin/diagnostico',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedAdminConfiguracoesRoute =
-  AuthenticatedAdminConfiguracoesRouteImport.update({
-    id: '/admin/configuracoes',
-    path: '/admin/configuracoes',
+const AuthenticatedAdminPedidosIdRoute =
+  AuthenticatedAdminPedidosIdRouteImport.update({
+    id: '/admin/pedidos/$id',
+    path: '/admin/pedidos/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const ApiPublicHooksDiscoverPricesRoute =
@@ -96,12 +102,6 @@ const ApiPublicHooksDiscoverPricesRoute =
     id: '/api/public/hooks/discover-prices',
     path: '/api/public/hooks/discover-prices',
     getParentRoute: () => rootRouteImport,
-  } as any)
-const AuthenticatedAdminPedidosIdRoute =
-  AuthenticatedAdminPedidosIdRouteImport.update({
-    id: '/admin/pedidos/$id',
-    path: '/admin/pedidos/$id',
-    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -222,53 +222,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/solicitar': {
-      id: '/solicitar'
-      path: '/solicitar'
-      fullPath: '/solicitar'
-      preLoaderRoute: typeof SolicitarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/search': {
-      id: '/search'
-      path: '/search'
-      fullPath: '/search'
-      preLoaderRoute: typeof SearchRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/opportunities': {
-      id: '/opportunities'
-      path: '/opportunities'
-      fullPath: '/opportunities'
-      preLoaderRoute: typeof OpportunitiesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/deals': {
-      id: '/deals'
-      path: '/deals'
-      fullPath: '/deals'
-      preLoaderRoute: typeof DealsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/alerts': {
-      id: '/alerts'
-      path: '/alerts'
-      fullPath: '/alerts'
-      preLoaderRoute: typeof AlertsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/account': {
-      id: '/account'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof AccountRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -278,11 +236,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/alerts': {
+      id: '/alerts'
+      path: '/alerts'
+      fullPath: '/alerts'
+      preLoaderRoute: typeof AlertsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/deals': {
+      id: '/deals'
+      path: '/deals'
+      fullPath: '/deals'
+      preLoaderRoute: typeof DealsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/opportunities': {
+      id: '/opportunities'
+      path: '/opportunities'
+      fullPath: '/opportunities'
+      preLoaderRoute: typeof OpportunitiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solicitar': {
+      id: '/solicitar'
+      path: '/solicitar'
+      fullPath: '/solicitar'
+      preLoaderRoute: typeof SolicitarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/flight/$id': {
@@ -299,6 +299,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/configuracoes': {
+      id: '/_authenticated/admin/configuracoes'
+      path: '/admin/configuracoes'
+      fullPath: '/admin/configuracoes'
+      preLoaderRoute: typeof AuthenticatedAdminConfiguracoesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/diagnostico': {
       id: '/_authenticated/admin/diagnostico'
       path: '/admin/diagnostico'
@@ -306,11 +313,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminDiagnosticoRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/admin/configuracoes': {
-      id: '/_authenticated/admin/configuracoes'
-      path: '/admin/configuracoes'
-      fullPath: '/admin/configuracoes'
-      preLoaderRoute: typeof AuthenticatedAdminConfiguracoesRouteImport
+    '/_authenticated/admin/pedidos/$id': {
+      id: '/_authenticated/admin/pedidos/$id'
+      path: '/admin/pedidos/$id'
+      fullPath: '/admin/pedidos/$id'
+      preLoaderRoute: typeof AuthenticatedAdminPedidosIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/api/public/hooks/discover-prices': {
@@ -319,13 +326,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/public/hooks/discover-prices'
       preLoaderRoute: typeof ApiPublicHooksDiscoverPricesRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/admin/pedidos/$id': {
-      id: '/_authenticated/admin/pedidos/$id'
-      path: '/admin/pedidos/$id'
-      fullPath: '/admin/pedidos/$id'
-      preLoaderRoute: typeof AuthenticatedAdminPedidosIdRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
