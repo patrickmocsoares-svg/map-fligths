@@ -57,7 +57,7 @@ export const Route = createFileRoute("/search")({
       <Header />
       <div className="mx-auto max-w-3xl px-4 py-16 text-center">
         <h1 className="font-display text-2xl">Não foi possível carregar os resultados</h1>
-        <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
+        <p className="mt-2 text-sm text-muted-foreground">{error instanceof Error ? error.message : String(error)}</p>
       </div>
       <Footer />
     </div>
