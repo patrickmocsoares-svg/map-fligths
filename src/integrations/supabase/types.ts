@@ -80,6 +80,30 @@ export type Database = {
         }
         Relationships: []
       }
+      diagnostic_runs: {
+        Row: {
+          checked_at: string
+          id: string
+          overall: string
+          run_by: string | null
+          sections: Json
+        }
+        Insert: {
+          checked_at?: string
+          id?: string
+          overall: string
+          run_by?: string | null
+          sections: Json
+        }
+        Update: {
+          checked_at?: string
+          id?: string
+          overall?: string
+          run_by?: string | null
+          sections?: Json
+        }
+        Relationships: []
+      }
       email_logs: {
         Row: {
           created_at: string
