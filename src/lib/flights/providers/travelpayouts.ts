@@ -13,6 +13,22 @@
  *   TRAVELPAYOUTS_TOKEN   - API token (header: `X-Access-Token`)
  *   TRAVELPAYOUTS_MARKER  - optional affiliate marker id
  */
+const AIRLINE_NAMES: Record<string, string> = {
+  LA: "LATAM", JJ: "LATAM", G3: "GOL", AD: "Azul", "2Z": "Voepass", H2: "Sky Airline",
+  AR: "Aerolíneas Argentinas", AV: "Avianca", CM: "Copa Airlines", AM: "Aeroméxico",
+  JA: "JetSMART", P5: "Wingo", AA: "American Airlines", UA: "United Airlines",
+  DL: "Delta", B6: "JetBlue", AC: "Air Canada", NK: "Spirit", F9: "Frontier",
+  TP: "TAP Air Portugal", IB: "Iberia", UX: "Air Europa", AF: "Air France", KL: "KLM",
+  LH: "Lufthansa", LX: "Swiss", OS: "Austrian", BA: "British Airways", AZ: "ITA Airways",
+  VY: "Vueling", FR: "Ryanair", U2: "easyJet", TK: "Turkish Airlines", EK: "Emirates",
+  QR: "Qatar Airways", EY: "Etihad", ET: "Ethiopian Airlines", AT: "Royal Air Maroc",
+  SA: "South African Airways", LY: "El Al", SQ: "Singapore Airlines", NH: "ANA", JL: "Japan Airlines",
+};
+
+function airlineDisplayName(code: string): string {
+  return AIRLINE_NAMES[code?.toUpperCase()] ?? code;
+}
+
 import type {
   FlightItinerary,
   FlightOffer,
@@ -86,48 +102,19 @@ function buildItinerary(
   // 1-stop cache hit) so the neutral FlightOffer contract stays satisfied.
   const safeTotal = Math.max(45, totalMin || 120);
   const segments: FlightSegment[] = [];
-  if (stops <= 0) {
-    segments.push({
-      airlineCode,
-      airlineName: airlineCode,
-      flightNumber,
-      originCode: originIata,
-      destinationCode: destinationIata,
-      departureTime: departureAt,
-      arrivalTime: addMinutes(departureAt, safeTotal),
-      durationMin: safeTotal,
-      cabin,
-    });
-  } else {
-    const layover = 75;
-    const leg = Math.max(45, Math.floor((safeTotal - layover) / 2));
-    const midDep = addMinutes(departureAt, leg);
-    const midArr = addMinutes(midDep, layover);
-    segments.push(
-      {
-        airlineCode,
-        airlineName: airlineCode,
-        flightNumber,
-        originCode: originIata,
-        destinationCode: "___",
-        departureTime: departureAt,
-        arrivalTime: midDep,
-        durationMin: leg,
-        cabin,
-      },
-      {
-        airlineCode,
-        airlineName: airlineCode,
-        flightNumber,
-        originCode: "___",
-        destinationCode: destinationIata,
-        departureTime: midArr,
-        arrivalTime: addMinutes(departureAt, safeTotal),
-        durationMin: Math.max(45, safeTotal - leg - layover),
-        cabin,
-      },
-    );
-  }
+  // The API does not expose connection airports, so we never invent them:
+  // one origin→destination segment, with the stop count on the itinerary.
+  segments.push({
+    airlineCode,
+    airlineName: airlineDisplayName(airlineCode),
+    flightNumber,
+    originCode: originIata,
+    destinationCode: destinationIata,
+    departureTime: departureAt,
+    arrivalTime: addMinutes(departureAt, safeTotal),
+    durationMin: safeTotal,
+    cabin,
+  });
   return { durationMin: safeTotal, stops: Math.max(0, stops), segments };
 }
 
@@ -180,7 +167,7 @@ function mapItem(
   return {
     id: `travelpayouts:${item.origin}-${item.destination}-${item.departure_at}-${idx}`,
     provider: "travelpayouts",
-    airline: { code: item.airline, name: item.airline },
+    airline: { code: item.airline, name: airlineDisplayName(item.airline) },
     flightNumber: String(item.flight_number),
     departureTime: head.departureTime,
     arrivalTime: tail.arrivalTime,
