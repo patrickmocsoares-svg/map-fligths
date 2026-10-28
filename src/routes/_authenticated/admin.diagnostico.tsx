@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { CheckCircle2, AlertTriangle, XCircle, Loader2, RefreshCw, Lock } from "lucide-react";
+import { DiagnosticsHistory } from "@/components/admin/DiagnosticsHistory";
 import { AdminShell } from "@/components/admin/AdminShell";
-import { runDiagnosticsFn, type CheckStatus } from "@/lib/diagnostics.functions";
+import { runDiagnosticsFn, listDiagnosticHistoryFn, type CheckStatus } from "@/lib/diagnostics.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/diagnostico")({
   head: () => ({
@@ -28,7 +29,18 @@ const ICON: Record<CheckStatus, { Icon: typeof CheckCircle2; cls: string; label:
 
 function DiagnosticsPage() {
   const run = useServerFn(runDiagnosticsFn);
-  const q = useQuery({ queryKey: ["admin-diagnostics"], queryFn: () => run(), retry: false });
+  const qc = useQueryClient();
+  const q = useQuery({
+    queryKey: ["admin-diagnostics"],
+    queryFn: async () => {
+      const r = await run();
+      qc.invalidateQueries({ queryKey: ["admin-diagnostics-history"] });
+      return r;
+    },
+    retry: false,
+  });
+  const listHistory = useServerFn(listDiagnosticHistoryFn);
+  const history = useQuery({ queryKey: ["admin-diagnostics-history"], queryFn: () => listHistory() });
 
   return (
     <div>
@@ -108,6 +120,8 @@ function DiagnosticsPage() {
           </p>
         </>
       )}
+
+      {history.data && <DiagnosticsHistory runs={history.data} />}
     </div>
   );
 }

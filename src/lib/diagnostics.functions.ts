@@ -223,5 +223,47 @@ export const runDiagnosticsFn = createServerFn({ method: "POST" })
       });
     }
 
-    return { checkedAt: new Date().toISOString(), sections };
+    const checkedAt = new Date().toISOString();
+    const overall: CheckStatus = sections.some((x) => x.status === "error")
+      ? "error"
+      : sections.some((x) => x.status === "warn")
+        ? "warn"
+        : "ok";
+    try {
+      await context.supabase.from("diagnostic_runs").insert({
+        checked_at: checkedAt,
+        overall,
+        run_by: context.userId,
+        sections: sections.map(({ id, title, status, message, latencyMs }) => ({
+          id, title, status, message, latencyMs: latencyMs ?? null,
+        })),
+      });
+    } catch (e) {
+      console.error("[diagnostics] could not save run", e);
+    }
+    return { checkedAt, sections };
+  });
+
+export type DiagHistoryRun = {
+  id: string;
+  checkedAt: string;
+  overall: CheckStatus;
+  sections: { id: string; title: string; status: CheckStatus; message: string; latencyMs: number | null }[];
+};
+
+export const listDiagnosticHistoryFn = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase
+      .from("diagnostic_runs")
+      .select("id, checked_at, overall, sections")
+      .order("checked_at", { ascending: false })
+      .limit(100);
+    if (error) throw new Error(error.message);
+    return (data ?? []).map((r) => ({
+      id: r.id,
+      checkedAt: r.checked_at,
+      overall: r.overall as CheckStatus,
+      sections: (r.sections as DiagHistoryRun["sections"]) ?? [],
+    })) as DiagHistoryRun[];
   });
